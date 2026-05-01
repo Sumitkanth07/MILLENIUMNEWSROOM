@@ -46,6 +46,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('/footer/update', [FooterController::class, 'update'])->name('footer.update');
         Route::resource('navigation', NavigationController::class)->except(['show']);
         Route::resource('redirects', AdminRedirectController::class)->except(['show']);
+        Route::post('/upload-image', [ImageUploadController::class, 'store'])->name('upload.image');
         Route::post('/uploads/images', [ImageUploadController::class, 'store'])->name('images.store');
     });
 });

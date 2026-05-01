@@ -6,7 +6,7 @@
     @csrf @if($blog->exists) @method('PUT') @endif
     <label>Title <input name="title" value="{{ old('title', $blog->title) }}" required></label>
     <label>Excerpt <textarea name="excerpt" rows="3">{{ old('excerpt', $blog->excerpt) }}</textarea></label>
-    <label>Content <textarea class="tinymce" name="content" rows="14">{{ old('content', $blog->content) }}</textarea></label>
+    <label>Content <textarea id="content" name="content" rows="14">{{ old('content', $blog->content) }}</textarea></label>
     <label>Featured image <input name="image" type="file" accept="image/*"></label>
     <label>SEO title <input name="meta_title" value="{{ old('meta_title', $blog->meta_title) }}"></label>
     <label>SEO description <textarea name="meta_description" rows="3">{{ old('meta_description', $blog->meta_description) }}</textarea></label>
