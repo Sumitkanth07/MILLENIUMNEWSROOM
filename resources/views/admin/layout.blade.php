@@ -26,5 +26,7 @@
         @yield('content')
     </main>
     <script src="{{ asset('js/app.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tinymce@6/tinymce.min.js"></script>
+    @stack('scripts')
 </body>
 </html>

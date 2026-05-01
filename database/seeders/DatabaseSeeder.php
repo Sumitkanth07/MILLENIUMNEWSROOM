@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Blog;
 use App\Models\CalculatorSetting;
 use App\Models\City;
 use App\Models\FooterSetting;
@@ -18,7 +19,7 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        User::updateOrCreate(
+        $admin = User::updateOrCreate(
             ['email' => 'admin@navurja.test'],
             ['name' => 'Navurja Admin', 'password' => Hash::make('password'), 'is_admin' => true]
         );
@@ -31,6 +32,21 @@ class DatabaseSeeder extends Seeder
                 'phone' => '+91 9876543210',
                 'address' => 'New Delhi, India',
                 'copyright_text' => '© '.date('Y').' Navurja. All rights reserved.',
+            ]
+        );
+
+        Blog::updateOrCreate(
+            ['slug' => 'benefits-of-solar-panels'],
+            [
+                'user_id' => $admin->id,
+                'title' => 'Benefits of Solar Panels for Homes',
+                'excerpt' => 'Learn how solar panels help homeowners reduce energy bills, improve property value, and support a cleaner future.',
+                'content' => '<p>Solar panels are becoming an increasingly popular choice for homeowners looking to reduce their electricity bills and environmental impact. By converting sunlight into electricity, solar panels provide a clean and renewable energy source that can significantly lower monthly energy costs.</p><p>One of the major advantages of solar energy is its sustainability. Unlike fossil fuels, solar power does not produce harmful emissions, making it an eco-friendly solution for modern living. Additionally, installing solar panels can increase the value of your property and provide long-term financial benefits.</p><p>With advancements in technology, solar systems have become more efficient and affordable. Many governments also offer incentives and subsidies, making it easier for homeowners to switch to solar energy. Overall, investing in solar panels is a smart decision for both your wallet and the planet.</p>',
+                'image' => 'uploads/solar-panels-placeholder.svg',
+                'meta_title' => 'Benefits of Solar Panels for Homes | Navurja',
+                'meta_description' => 'Discover the main benefits of solar panels for homes, including lower bills, sustainability, property value, and long-term savings.',
+                'is_published' => true,
+                'published_at' => now(),
             ]
         );
 
