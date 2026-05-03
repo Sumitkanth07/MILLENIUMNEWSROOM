@@ -11,7 +11,7 @@ class BlogController extends Controller
         return view('blog.index', [
             'blogs' => Blog::where('is_published', true)->latest('published_at')->paginate(9),
             'metaTitle' => 'Blog | Navurja',
-            'metaDescription' => 'Solar guides, clean-energy ideas and practical savings advice from Navurja.',
+            'metaDescription' => 'Renewable energy, clean energy, sustainable energy and solar solutions insights from Navurja.',
         ]);
     }
 

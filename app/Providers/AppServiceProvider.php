@@ -36,19 +36,19 @@ class AppServiceProvider extends ServiceProvider
                 $hasFooter = false;
             }
 
-            $view->with('siteName', $hasSettings ? Setting::getValue('site_name', 'Navurja') : 'Navurja');
-            $view->with('siteTitle', $hasSettings ? Setting::getValue('site_title', 'Navurja | Solar Energy Solutions') : 'Navurja | Solar Energy Solutions');
+            $view->with('siteName', $hasSettings ? Setting::getValue('site_name', 'Navurja Renewable Energy Solutions') : 'Navurja Renewable Energy Solutions');
+            $view->with('siteTitle', $hasSettings ? Setting::getValue('site_title', 'Navurja | Renewable Energy Solutions') : 'Navurja | Renewable Energy Solutions');
             $view->with('tagline', $hasSettings ? Setting::getValue('tagline', 'Clean Energy for a Better Future') : 'Clean Energy for a Better Future');
             $view->with('primaryColor', $hasSettings ? Setting::getValue('primary_color', '#1f8f45') : '#1f8f45');
             $view->with('secondaryColor', $hasSettings ? Setting::getValue('secondary_color', '#f4b23b') : '#f4b23b');
             $view->with('logo', $hasSettings ? Setting::getValue('logo') : null);
             $view->with('navigationItems', $hasNavigation ? NavigationItem::where('is_active', true)->orderBy('sort_order')->get() : collect());
             $view->with('footerSetting', $hasFooter ? FooterSetting::current() : new FooterSetting([
-                'company_name' => 'Navurja',
+                'company_name' => 'Navurja Renewable Energy Solutions',
                 'email' => 'info@navurja.com',
                 'phone' => '+91 9876543210',
                 'address' => 'New Delhi, India',
-                'copyright_text' => '© '.date('Y').' Navurja. All rights reserved.',
+                'copyright_text' => '(c) '.date('Y').' Navurja Renewable Energy Solutions. All rights reserved.',
             ]));
         });
     }

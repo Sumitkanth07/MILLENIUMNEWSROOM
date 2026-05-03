@@ -36,7 +36,7 @@
     <footer class="footer site-footer">
         <div class="footer-column">
             <strong>{{ $footerSetting->company_name ?? $siteName }}</strong>
-            <span>{{ $tagline }}</span>
+            <span>Complete renewable energy services for clean, sustainable power.</span>
             <small>{{ $footerSetting->copyright_text }}</small>
         </div>
         <div class="footer-column">

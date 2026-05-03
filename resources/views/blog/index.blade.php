@@ -3,8 +3,8 @@
 @section('content')
 <section class="page-hero">
     <p class="eyebrow">Navurja Blog</p>
-    <h1>Solar energy guides and updates</h1>
-    <p>Helpful articles on rooftop solar, business savings and clean-energy decisions.</p>
+    <h1>Renewable energy guides and updates</h1>
+    <p>Helpful articles on renewable energy, clean energy, solar solutions and sustainable power decisions.</p>
 </section>
 <section class="section">
     <div class="card-grid">

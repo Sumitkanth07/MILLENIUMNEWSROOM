@@ -21,8 +21,8 @@ class FrontendController extends Controller
                 'services' => collect(),
                 'projects' => collect(),
                 'latestBlogs' => collect(),
-                'metaTitle' => 'Navurja | Solar Energy Solutions',
-                'metaDescription' => 'Clean Energy for a Better Future',
+                'metaTitle' => 'Navurja | Renewable Energy Solutions',
+                'metaDescription' => 'Renewable energy solutions for clean energy, sustainable energy, solar, wind and efficient power systems.',
             ]);
         }
 
@@ -31,7 +31,7 @@ class FrontendController extends Controller
             'services' => Service::where('is_active', true)->orderBy('sort_order')->get(),
             'projects' => Project::where('is_active', true)->orderBy('sort_order')->get(),
             'latestBlogs' => Blog::where('is_published', true)->latest('published_at')->take(3)->get(),
-            'metaTitle' => Setting::getValue('site_title', 'Navurja | Solar Energy Solutions'),
+            'metaTitle' => Setting::getValue('site_title', 'Navurja | Renewable Energy Solutions'),
             'metaDescription' => Setting::getValue('meta_description'),
         ]);
     }

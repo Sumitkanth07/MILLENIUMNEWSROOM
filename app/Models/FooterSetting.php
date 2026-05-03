@@ -17,11 +17,11 @@ class FooterSetting extends Model
     public static function current(): self
     {
         return static::firstOrCreate([], [
-            'company_name' => 'Navurja',
+            'company_name' => 'Navurja Renewable Energy Solutions',
             'email' => 'info@navurja.com',
             'phone' => '+91 9876543210',
             'address' => 'New Delhi, India',
-            'copyright_text' => '© '.date('Y').' Navurja. All rights reserved.',
+            'copyright_text' => '(c) '.date('Y').' Navurja Renewable Energy Solutions. All rights reserved.',
         ]);
     }
 }

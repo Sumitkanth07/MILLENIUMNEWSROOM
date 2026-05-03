@@ -11,7 +11,7 @@
 
 <section id="home" class="hero">
     <div class="hero-copy">
-        <p class="eyebrow">{{ $hero?->subtitle ?? 'Navurja Solar Energy Solutions' }}</p>
+        <p class="eyebrow">{{ $hero?->subtitle ?? 'Navurja Renewable Energy Solutions' }}</p>
         <h1>{{ $hero?->title ?? $tagline }}</h1>
         <p>{{ $hero?->content }}</p>
         <div class="hero-actions">
@@ -23,9 +23,9 @@
         @if($hero?->image)
             <img class="section-image hero-image" src="{{ asset('storage/'.$hero->image) }}" alt="{{ $hero->title }}">
         @else
-            <span>Solar ROI</span>
+            <span>Renewable ROI</span>
             <strong>25+ Years</strong>
-            <p>Clean power, lower bills and a brighter operating future.</p>
+            <p>Clean power from solar, wind and efficient systems for a brighter operating future.</p>
         @endif
     </div>
 </section>
@@ -78,7 +78,7 @@
 
 <section class="section">
     <div class="section-head">
-        <div><p class="eyebrow">Insights</p><h2>Solar Blog</h2></div>
+        <div><p class="eyebrow">Insights</p><h2>Clean Energy Blog</h2></div>
         <a href="{{ route('blog.index') }}">View all</a>
     </div>
     <div class="card-grid">
