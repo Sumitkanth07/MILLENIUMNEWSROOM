@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('footer_settings', function (Blueprint $table) {
             $table->id();
-            $table->string('company_name')->default('Navurja');
+            $table->string('company_name')->default('MILLENIUMNEWSROOM');
             $table->string('email')->nullable();
             $table->string('phone')->nullable();
             $table->text('address')->nullable();

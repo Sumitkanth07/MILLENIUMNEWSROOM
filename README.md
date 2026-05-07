@@ -1,59 +1,248 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# MILLENIUMNEWSROOM
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+MILLENIUMNEWSROOM is a Laravel-based premium news portal and CMS. It includes a modern public news frontend, dynamic article publishing, media management, SEO tooling, ad placement management, and an admin panel for editorial teams.
 
-## About Laravel
+## Features
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- Premium responsive news homepage with hero slider, headline mosaic, trending blocks, editor picks, latest news, category highlights, newsletter, and ad slots.
+- Dynamic post CMS with categories, subcategories, authors, tags, featured images, galleries, scheduling, breaking/featured/trending flags, and reading time.
+- TinyMCE editor with image upload support.
+- Media library with image previews, filename display, alt text, folder support, and secure image validation.
+- SEO tools: meta title, meta description, meta keywords, canonical URL, robots meta, Open Graph, Twitter cards, article schema, XML sitemap, news sitemap, robots.txt, and visual HTML sitemap.
+- Admin modules for posts, categories, authors, pages, homepage sections, navigation, footer, redirects, branding, media, and ad placements.
+- Google AdSense/HTML ad placement management for header, sidebar, in-content, and footer ads.
+- Frontend and admin dark mode support.
+- Demo content seeders for categories, author, homepage sections, ads, pages, and sample posts.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Tech Stack
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- Laravel 12
+- PHP 8.2+
+- Blade templates
+- Eloquent ORM
+- SQLite for local development by default
+- TinyMCE editor
+- Plain CSS, no Tailwind dependency
 
-## Learning Laravel
+## Screenshots
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+![Homepage preview](docs/screenshots/homepage.svg)
+![Article page preview](docs/screenshots/article-page.svg)
+![Admin dashboard preview](docs/screenshots/admin-dashboard.svg)
+![Post editor preview](docs/screenshots/post-editor.svg)
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Local Installation
 
-## Laravel Sponsors
+```bash
+git clone https://github.com/YOUR_USERNAME/milleniumnewsroom.git
+cd milleniumnewsroom
+composer install
+cp .env.example .env
+php artisan key:generate
+```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+For local SQLite:
 
-### Premium Partners
+```bash
+type nul > database/milleniumnewsroom.sqlite
+php artisan migrate --seed
+php artisan storage:link
+php artisan serve --host=127.0.0.1 --port=8000
+```
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+For Linux/macOS SQLite:
 
-## Contributing
+```bash
+touch database/milleniumnewsroom.sqlite
+php artisan migrate --seed
+php artisan storage:link
+php artisan serve
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Open:
 
-## Code of Conduct
+- Frontend: `http://127.0.0.1:8000`
+- Admin: `http://127.0.0.1:8000/admin/login`
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## Demo Admin Login
 
-## Security Vulnerabilities
+Seeded demo credentials:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```text
+Email: admin@milleniumnewsroom.test
+Password: password
+```
+
+Change this password before production use.
+
+## Environment Setup
+
+Copy `.env.example` to `.env`, then update:
+
+- `APP_URL`
+- `APP_ENV`
+- `APP_DEBUG=false` in production
+- Database credentials
+- Mail credentials
+- Queue/cache/session drivers
+
+For MySQL production, use:
+
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=milleniumnewsroom
+DB_USERNAME=your_database_user
+DB_PASSWORD=your_secure_password
+```
+
+## Database
+
+Run migrations and demo seed data:
+
+```bash
+php artisan migrate --seed
+```
+
+Fresh local reset:
+
+```bash
+php artisan migrate:fresh --seed
+```
+
+Seeders create:
+
+- Admin user
+- Categories
+- Author
+- Sample posts
+- Homepage sections
+- Pages
+- SEO settings
+- Ad placements
+- Footer settings
+
+## Storage And Uploads
+
+Uploaded images are stored on the `public` disk and served through Laravel's storage symlink.
+
+```bash
+php artisan storage:link
+```
+
+Make sure these directories are writable on hosting:
+
+```text
+storage
+bootstrap/cache
+```
+
+## Useful Routes
+
+- `/` homepage
+- `/blog` latest posts
+- `/blog/{slug}` article page
+- `/category/{slug}` category page
+- `/search` search page
+- `/sitemap` visual HTML sitemap
+- `/sitemap.xml` XML sitemap
+- `/news-sitemap.xml` Google News sitemap
+- `/robots.txt` robots rules
+- `/admin/login` admin login
+
+## Production Deployment
+
+On a VPS or hosting server:
+
+```bash
+git clone https://github.com/YOUR_USERNAME/milleniumnewsroom.git
+cd milleniumnewsroom
+composer install --no-dev --optimize-autoloader
+cp .env.example .env
+php artisan key:generate
+php artisan migrate --force
+php artisan storage:link
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+php artisan event:cache
+```
+
+Set the web root to:
+
+```text
+public/
+```
+
+Recommended production `.env` values:
+
+```env
+APP_ENV=production
+APP_DEBUG=false
+CACHE_STORE=database
+SESSION_DRIVER=database
+QUEUE_CONNECTION=database
+LOG_CHANNEL=stack
+```
+
+## GitHub Workflow
+
+Initialize and push to GitHub:
+
+```bash
+git init
+git add .
+git commit -m "Prepare MILLENIUMNEWSROOM for production"
+git branch -M main
+git remote add origin https://github.com/YOUR_USERNAME/milleniumnewsroom.git
+git push -u origin main
+```
+
+For team development:
+
+```bash
+git checkout -b feature/your-feature
+git add .
+git commit -m "Describe your change"
+git push -u origin feature/your-feature
+```
+
+## Security Checklist
+
+- Never commit `.env`.
+- Run `APP_DEBUG=false` in production.
+- Change demo admin password.
+- Use HTTPS in production.
+- Keep `vendor/`, `node_modules/`, cache files, logs, and uploaded runtime files out of Git.
+- Keep upload validation restricted to safe image MIME types.
+- Review any ad code before enabling it.
+- Keep Laravel and Composer dependencies updated.
+
+## Testing
+
+```bash
+php artisan test
+```
+
+Recommended pre-deployment checks:
+
+```bash
+php artisan migrate --pretend
+php artisan route:list --except-vendor
+php artisan config:clear
+php artisan cache:clear
+php artisan view:clear
+```
+
+## Performance Notes
+
+- CSS is lightweight and framework-free.
+- Images use lazy loading where possible.
+- Sitemaps and meta tags are generated dynamically.
+- Use Laravel cache commands in production.
+- Serve assets through a CDN when traffic grows.
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+This project is prepared for the MILLENIUMNEWSROOM website. Add your preferred license before publishing publicly.

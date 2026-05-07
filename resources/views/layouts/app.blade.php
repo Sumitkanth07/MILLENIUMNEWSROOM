@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="@yield('meta_description', 'Premium business news, markets, money and opinion coverage.')">
-    <title>@yield('title', 'MintWire - Business News, Markets and Money')</title>
+    <title>@yield('title', 'MILLENIUMNEWSROOM - Business News, Markets and Money')</title>
     @stack('head')
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     @stack('styles')

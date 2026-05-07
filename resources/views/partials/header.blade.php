@@ -34,7 +34,7 @@
 
     <div class="brand-bar">
         <div class="container brand-bar__inner">
-            <a class="brand-logo" href="{{ url('/') }}" aria-label="MintWire home">
+            <a class="brand-logo" href="{{ url('/') }}" aria-label="MILLENIUMNEWSROOM home">
                 Mint<span>Wire</span>
             </a>
             <div class="brand-meta">

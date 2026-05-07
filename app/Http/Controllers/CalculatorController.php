@@ -12,8 +12,8 @@ class CalculatorController extends Controller
         return view('calculator.show', [
             'setting' => CalculatorSetting::firstOrCreate([], ['electricity_rate' => 8, 'sun_hours' => 4.5, 'co2_factor' => 1.35]),
             'cities' => City::where('is_active', true)->orderBy('name')->get(),
-            'metaTitle' => 'Energy Savings Calculator | Navurja',
-            'metaDescription' => 'Estimate clean energy savings with a solar calculator, one of Navurja renewable energy solutions.',
+            'metaTitle' => 'Business Tools | MILLENIUMNEWSROOM',
+            'metaDescription' => 'Use MILLENIUMNEWSROOM tools and explainers for practical business and market decisions.',
         ]);
     }
 }

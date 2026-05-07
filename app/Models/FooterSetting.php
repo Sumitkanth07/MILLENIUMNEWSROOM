@@ -10,18 +10,32 @@ class FooterSetting extends Model
         'company_name',
         'email',
         'phone',
-        'address',
-        'copyright_text',
-    ];
+            'address',
+            'copyright_text',
+            'footer_menus',
+            'category_links',
+            'social_links',
+            'sitemap_links',
+        ];
+
+    protected function casts(): array
+    {
+        return [
+            'footer_menus' => 'array',
+            'category_links' => 'array',
+            'social_links' => 'array',
+            'sitemap_links' => 'array',
+        ];
+    }
 
     public static function current(): self
     {
         return static::firstOrCreate([], [
-            'company_name' => 'Navurja Renewable Energy Solutions',
-            'email' => 'info@navurja.com',
+            'company_name' => 'MILLENIUMNEWSROOM',
+            'email' => 'info@MILLENIUMNEWSROOM.com',
             'phone' => '+91 9876543210',
             'address' => 'New Delhi, India',
-            'copyright_text' => '(c) '.date('Y').' Navurja Renewable Energy Solutions. All rights reserved.',
+            'copyright_text' => '(c) '.date('Y').' MILLENIUMNEWSROOM. All rights reserved.',
         ]);
     }
 }

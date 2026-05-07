@@ -1,107 +1,107 @@
 @extends('frontend.layout')
 
 @section('content')
-@php
-    $hero = $sections['hero'] ?? null;
-    $about = $sections['about'] ?? null;
-    $serviceSection = $sections['services'] ?? null;
-    $projectSection = $sections['projects'] ?? null;
-    $contact = $sections['contact'] ?? null;
-@endphp
-
-<section id="home" class="hero">
-    <div class="hero-copy">
-        <p class="eyebrow">{{ $hero?->subtitle ?? 'Navurja Renewable Energy Solutions' }}</p>
-        <h1>{{ $hero?->title ?? $tagline }}</h1>
-        <p>{{ $hero?->content }}</p>
-        <div class="hero-actions">
-            <a class="btn primary" href="{{ $hero?->button_url ?? route('calculator.show') }}">{{ $hero?->button_text ?? 'Calculate Savings' }}</a>
-            <a class="btn ghost" href="#contact">Get Consultation</a>
-        </div>
-    </div>
-    <div class="hero-panel">
-        @if($hero?->image)
-            <img class="section-image hero-image" src="{{ asset('storage/'.$hero->image) }}" alt="{{ $hero->title }}">
-        @else
-            <span>Renewable ROI</span>
-            <strong>25+ Years</strong>
-            <p>Clean power from solar, wind and efficient systems for a brighter operating future.</p>
-        @endif
-    </div>
-</section>
-
-<section id="about" class="section split">
-    <div>
-        <p class="eyebrow">{{ $about?->subtitle }}</p>
-        <h2>{{ $about?->title }}</h2>
-        @if($about?->image)
-            <img class="section-image" src="{{ asset('storage/'.$about->image) }}" alt="{{ $about->title }}">
-        @endif
-    </div>
-    <p>{{ $about?->content }}</p>
-</section>
-
-<section id="services" class="section">
-    <p class="eyebrow">{{ $serviceSection?->subtitle }}</p>
-    <h2>{{ $serviceSection?->title }}</h2>
-    @if($serviceSection?->image)
-        <img class="section-image wide-image" src="{{ asset('storage/'.$serviceSection->image) }}" alt="{{ $serviceSection->title }}">
-    @endif
-    <div class="card-grid">
-        @foreach($services as $service)
-            <article class="card">
-                <span class="icon-dot">{{ strtoupper(substr($service->title, 0, 1)) }}</span>
-                <h3>{{ $service->title }}</h3>
-                <p>{{ $service->description }}</p>
+<section class="portal-home">
+    <div class="hero-slider" data-slider>
+        @foreach(($featuredPosts->isNotEmpty() ? $featuredPosts : $topHeadlines)->take(5) as $post)
+            <article class="hero-slide @if($loop->first) active @endif">
+                @if($post->featured_image || $post->image)<img src="{{ asset('storage/'.($post->featured_image ?: $post->image)) }}" alt="{{ $post->featured_image_alt ?: $post->title }}" loading="{{ $loop->first ? 'eager' : 'lazy' }}">@endif
+                <div class="hero-slide-copy">
+                    <span class="badge gold">{{ $post->category?->name ?? 'Featured' }}</span>
+                    <h1><a href="{{ route('blog.show', $post) }}">{{ $post->title }}</a></h1>
+                    <p>{{ $post->excerpt }}</p>
+                    <small>{{ optional($post->published_at)->format('M d, Y') }} · {{ number_format($post->views_count) }} views</small>
+                </div>
             </article>
         @endforeach
+        <button class="slider-btn prev" type="button" data-slide-prev aria-label="Previous story">‹</button>
+        <button class="slider-btn next" type="button" data-slide-next aria-label="Next story">›</button>
     </div>
-</section>
 
-<section id="projects" class="section soft">
-    <p class="eyebrow">{{ $projectSection?->subtitle }}</p>
-    <h2>{{ $projectSection?->title }}</h2>
-    @if($projectSection?->image)
-        <img class="section-image wide-image" src="{{ asset('storage/'.$projectSection->image) }}" alt="{{ $projectSection->title }}">
-    @endif
-    <div class="card-grid">
-        @foreach($projects as $project)
-            <article class="card project-card">
-                <div class="project-art"></div>
-                <h3>{{ $project->title }}</h3>
-                <p>{{ $project->location }} @if($project->capacity) • {{ $project->capacity }} @endif</p>
-                <small>{{ $project->description }}</small>
-            </article>
+    <div class="news-shell home-shell">
+        <x-ad-slot :ads="$ads" placement="header_ad" label="Header responsive ad" />
+        <div class="market-strip"><strong>Markets</strong><span>Nifty 50: 22,410.20</span><span>Sensex: 73,880.70</span><span>Gold: 72,450</span><span>USD/INR: 83.45</span></div>
+
+        <section class="spotlight-grid reveal">
+            <div class="top-headlines-panel">
+                <div class="section-head"><div><p class="eyebrow">Trending Now</p><h2>Top Headlines</h2></div></div>
+                <div class="headline-mosaic">
+                    @foreach($topHeadlines->take(6) as $post)
+                        <article class="mosaic-card @if($loop->first) large @endif">
+                            @if($post->featured_image || $post->image)<img src="{{ asset('storage/'.($post->featured_image ?: $post->image)) }}" alt="{{ $post->title }}" loading="lazy">@endif
+                            <div><span>{{ $post->category?->name }}</span><h3><a href="{{ route('blog.show', $post) }}">{{ $post->title }}</a></h3></div>
+                        </article>
+                    @endforeach
+                </div>
+            </div>
+            <aside class="sidebar active-sidebar">
+                <h2>Most Read</h2>
+                @foreach($mostRead as $post)
+                    <a class="trend" href="{{ route('blog.show', $post) }}"><strong>{{ $loop->iteration }}</strong><span>{{ $post->title }}<small>{{ number_format($post->views_count) }} views</small></span></a>
+                @endforeach
+                <x-ad-slot :ads="$ads" placement="sidebar_ad" label="Sidebar ad" />
+            </aside>
+        </section>
+
+        <section class="content-grid reveal">
+            <div>
+                <div class="section-head"><div><p class="eyebrow">Latest</p><h2>Fresh News Feed</h2></div><a href="{{ route('search') }}">View all</a></div>
+                <div class="article-list dense-feed">
+                    @foreach($latestBlogs as $post)
+                        <article class="list-card elevated">
+                            @if($post->featured_image || $post->image)<img src="{{ asset('storage/'.($post->featured_image ?: $post->image)) }}" alt="{{ $post->title }}" loading="lazy">@endif
+                            <div><span>{{ $post->category?->name }} · {{ optional($post->published_at)->format('M d, Y') }}</span><h3><a href="{{ route('blog.show', $post) }}">{{ $post->title }}</a></h3><p>{{ $post->excerpt }}</p></div>
+                        </article>
+                        @if($loop->iteration === 4)<x-ad-slot :ads="$ads" placement="in_content_ad" label="In-content responsive ad" />@endif
+                    @endforeach
+                </div>
+            </div>
+            <aside class="sidebar active-sidebar">
+                <h2>Editor's Pick</h2>
+                @foreach($editorPicks as $post)
+                    <a class="mini-pick" href="{{ route('blog.show', $post) }}"><span>{{ $post->category?->name }}</span><strong>{{ $post->title }}</strong></a>
+                @endforeach
+                <div class="newsletter glass"><h3>Morning Briefing</h3><p>Smart reads from MILLENIUMNEWSROOM, delivered daily.</p><input placeholder="Email address"><button class="btn primary">Subscribe</button></div>
+            </aside>
+        </section>
+
+        <section class="category-band popular-cats reveal">
+            <div class="section-head"><div><p class="eyebrow">Explore</p><h2>Popular Categories</h2></div></div>
+            <div class="pill-grid">@foreach($popularCategories as $category)<a href="{{ route('category.show', $category) }}">{{ $category->name }} <span>{{ $category->blogs_count }}</span></a>@endforeach</div>
+        </section>
+
+        @foreach($categories as $category)
+            @if($category->blogs->isNotEmpty())
+            <section class="category-band reveal">
+                <div class="section-head"><div><p class="eyebrow">{{ $category->name }}</p><h2>{{ $category->name }} Highlights</h2></div><a href="{{ route('category.show', $category) }}">More</a></div>
+                <div class="category-showcase">
+                    @foreach($category->blogs as $post)
+                        <article class="card story-card"><span>{{ $post->author?->name ?? 'News Desk' }}</span><h3><a href="{{ route('blog.show', $post) }}">{{ $post->title }}</a></h3><p>{{ $post->excerpt }}</p></article>
+                    @endforeach
+                </div>
+            </section>
+            @endif
         @endforeach
-    </div>
-</section>
 
-<section class="section">
-    <div class="section-head">
-        <div><p class="eyebrow">Insights</p><h2>Clean Energy Blog</h2></div>
-        <a href="{{ route('blog.index') }}">View all</a>
-    </div>
-    <div class="card-grid">
-        @forelse($latestBlogs as $blog)
-            <article class="card">
-                <h3><a href="{{ route('blog.show', $blog) }}">{{ $blog->title }}</a></h3>
-                <p>{{ $blog->excerpt }}</p>
-            </article>
-        @empty
-            <article class="card"><h3>Blog is ready</h3><p>Create your first post from the admin panel.</p></article>
-        @endforelse
+        <section class="category-band visual-section reveal">
+            <div class="section-head"><div><p class="eyebrow">Video & Photos</p><h2>Latest Visual Stories</h2></div></div>
+            <div class="card-grid">@foreach($featuredPosts->take(3) as $post)<article class="card video-card"><span>Video</span><h3>{{ $post->title }}</h3><p>{{ $post->excerpt }}</p></article>@endforeach</div>
+        </section>
+        <x-ad-slot :ads="$ads" placement="footer_ad" label="Footer responsive ad" />
     </div>
 </section>
-
-<section id="contact" class="section contact-band">
-    <div>
-        <p class="eyebrow">{{ $contact?->subtitle }}</p>
-        <h2>{{ $contact?->title }}</h2>
-        <p>{{ $contact?->content }}</p>
-        @if($contact?->image)
-            <img class="section-image contact-image" src="{{ asset('storage/'.$contact->image) }}" alt="{{ $contact->title }}">
-        @endif
-    </div>
-    <a class="btn primary" href="{{ $contact?->button_url ?? 'mailto:hello@navurja.test' }}">{{ $contact?->button_text ?? 'Contact Navurja' }}</a>
-</section>
+@push('scripts')
+<script>
+(() => {
+    const slides = [...document.querySelectorAll('.hero-slide')];
+    let index = 0;
+    const show = next => { slides[index]?.classList.remove('active'); index = (next + slides.length) % slides.length; slides[index]?.classList.add('active'); };
+    document.querySelector('[data-slide-next]')?.addEventListener('click', () => show(index + 1));
+    document.querySelector('[data-slide-prev]')?.addEventListener('click', () => show(index - 1));
+    if (slides.length > 1) setInterval(() => show(index + 1), 6500);
+    const observer = new IntersectionObserver(entries => entries.forEach(entry => entry.target.classList.toggle('visible', entry.isIntersecting)), {threshold:.12});
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+})();
+</script>
+@endpush
 @endsection

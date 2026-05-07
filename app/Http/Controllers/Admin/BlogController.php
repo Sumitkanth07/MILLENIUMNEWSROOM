@@ -3,75 +3,165 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Author;
 use App\Models\Blog;
+use App\Models\Category;
+use App\Models\Tag;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class BlogController extends Controller
 {
     public function index()
     {
-        return view('admin.blogs.index', ['blogs' => Blog::latest()->paginate(12)]);
+        return view('admin.blogs.index', [
+            'blogs' => Blog::with(['category', 'author'])->latest()->paginate(12),
+        ]);
     }
 
     public function create()
     {
-        return view('admin.blogs.form', ['blog' => new Blog()]);
+        return $this->formView(new Blog());
     }
 
     public function store(Request $request)
     {
         $data = $this->validated($request);
         $data['user_id'] = $request->user()->id;
-        $data['slug'] = Blog::uniqueSlug($data['title']);
-        $data['is_published'] = $request->boolean('is_published');
+        $data['category_id'] = $this->resolveCategory($request, $data['category_id'] ?? null);
+        $data['slug'] = Blog::uniqueSlug($data['slug'] ?: $data['title']);
+        $data['is_published'] = $request->boolean('is_published') || $data['status'] === 'published';
         $data['published_at'] = $data['is_published'] ? now() : null;
+        $data['status'] = $data['is_published'] ? 'published' : ($data['status'] ?? 'draft');
+        $data['is_featured'] = $request->boolean('is_featured');
+        $data['is_breaking'] = $request->boolean('is_breaking');
+        $data['is_trending'] = $request->boolean('is_trending');
+        $data['reading_time'] = $this->readingTime($data['content']);
+        unset($data['new_category_name'], $data['new_category_parent_id']);
 
-        if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('uploads', 'public');
-        }
+        $this->storeImages($request, $data);
 
-        Blog::create($data);
+        $blog = Blog::create($data);
+        $this->syncTags($blog, $request->input('tags'));
 
-        return redirect()->route('admin.blogs.index')->with('status', 'Blog created.');
+        return redirect()->route('admin.blogs.index')->with('status', 'Post created.');
     }
 
     public function edit(Blog $blog)
     {
-        return view('admin.blogs.form', compact('blog'));
+        return $this->formView($blog->load('tags'));
     }
 
     public function update(Request $request, Blog $blog)
     {
         $data = $this->validated($request);
-        $data['slug'] = Blog::uniqueSlug($data['title'], $blog->id);
-        $data['is_published'] = $request->boolean('is_published');
+        $data['category_id'] = $this->resolveCategory($request, $data['category_id'] ?? null);
+        $data['slug'] = Blog::uniqueSlug($data['slug'] ?: $data['title'], $blog->id);
+        $data['is_published'] = $request->boolean('is_published') || $data['status'] === 'published';
         $data['published_at'] = $data['is_published'] ? ($blog->published_at ?: now()) : null;
+        $data['status'] = $data['is_published'] ? 'published' : ($data['status'] ?? 'draft');
+        $data['is_featured'] = $request->boolean('is_featured');
+        $data['is_breaking'] = $request->boolean('is_breaking');
+        $data['is_trending'] = $request->boolean('is_trending');
+        $data['reading_time'] = $this->readingTime($data['content']);
+        unset($data['new_category_name'], $data['new_category_parent_id']);
 
-        if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('uploads', 'public');
-        }
-
+        $this->storeImages($request, $data, $blog);
         $blog->update($data);
+        $this->syncTags($blog, $request->input('tags'));
 
-        return redirect()->route('admin.blogs.index')->with('status', 'Blog updated.');
+        return redirect()->route('admin.blogs.index')->with('status', 'Post updated.');
     }
 
     public function destroy(Blog $blog)
     {
         $blog->delete();
 
-        return back()->with('status', 'Blog deleted.');
+        return back()->with('status', 'Post deleted.');
+    }
+
+    private function formView(Blog $blog)
+    {
+        return view('admin.blogs.form', [
+            'blog' => $blog,
+            'categories' => Category::with('parent')->orderBy('sort_order')->orderBy('name')->get(),
+            'authors' => Author::where('is_active', true)->orderBy('name')->get(),
+            'tagList' => $blog->exists ? $blog->tags->pluck('name')->implode(', ') : '',
+        ]);
     }
 
     private function validated(Request $request): array
     {
         return $request->validate([
             'title' => ['required', 'string', 'max:255'],
+            'slug' => ['nullable', 'string', 'max:255'],
             'excerpt' => ['nullable', 'string'],
             'content' => ['required', 'string'],
+            'category_id' => ['nullable', 'exists:categories,id'],
+            'author_id' => ['nullable', 'exists:authors,id'],
             'image' => ['nullable', 'image', 'max:4096'],
+            'featured_image' => ['nullable', 'image', 'max:4096'],
+            'gallery_images.*' => ['nullable', 'image', 'max:4096'],
             'meta_title' => ['nullable', 'string', 'max:255'],
             'meta_description' => ['nullable', 'string'],
+            'meta_keywords' => ['nullable', 'string', 'max:255'],
+            'canonical_url' => ['nullable', 'url', 'max:255'],
+            'robots_meta' => ['nullable', 'string', 'max:120'],
+            'featured_image_alt' => ['nullable', 'string', 'max:255'],
+            'featured_image_title' => ['nullable', 'string', 'max:255'],
+            'featured_image_caption' => ['nullable', 'string', 'max:255'],
+            'featured_image_description' => ['nullable', 'string'],
+            'scheduled_at' => ['nullable', 'date'],
+            'status' => ['nullable', 'in:draft,published,scheduled'],
+            'tags' => ['nullable', 'string'],
+            'new_category_name' => ['nullable', 'string', 'max:120'],
+            'new_category_parent_id' => ['nullable', 'exists:categories,id'],
         ]);
+    }
+
+    private function storeImages(Request $request, array &$data, ?Blog $blog = null): void
+    {
+        if ($request->hasFile('image')) {
+            $data['image'] = $request->file('image')->store('uploads', 'public');
+        }
+
+        if ($request->hasFile('featured_image')) {
+            $data['featured_image'] = $request->file('featured_image')->store('uploads', 'public');
+        }
+
+        if ($request->hasFile('gallery_images')) {
+            $existing = $blog?->gallery_images ?? [];
+            $newImages = collect($request->file('gallery_images'))
+                ->map(fn ($file) => $file->store('uploads/gallery', 'public'))
+                ->all();
+            $data['gallery_images'] = array_values(array_filter(array_merge($existing, $newImages)));
+        }
+    }
+
+    private function readingTime(string $content): int
+    {
+        return max(1, (int) ceil(str_word_count(strip_tags($content)) / 220));
+    }
+
+    private function resolveCategory(Request $request, ?int $categoryId): ?int
+    {
+        $name = trim((string) $request->input('new_category_name'));
+        if ($name === '') {
+            return $categoryId;
+        }
+
+        return Category::firstOrCreate(
+            ['slug' => Str::slug($name)],
+            ['name' => $name, 'parent_id' => $request->input('new_category_parent_id'), 'is_active' => true]
+        )->id;
+    }
+
+    private function syncTags(Blog $blog, ?string $tags): void
+    {
+        $names = collect(explode(',', (string) $tags))->map(fn ($tag) => trim($tag))->filter()->unique();
+        $ids = $names->map(fn ($name) => Tag::firstOrCreate(['slug' => Str::slug($name)], ['name' => $name])->id)->all();
+
+        $blog->tags()->sync($ids);
+        $blog->updateQuietly(['tags_cache' => $names->implode(', ')]);
     }
 }

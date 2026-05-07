@@ -2,7 +2,7 @@
     $footerColumns = [
         'Categories' => ['News', 'Markets', 'Technology', 'Companies', 'Politics', 'Opinion', 'Sports', 'Lifestyle'],
         'Trending Topics' => ['Stock Market', 'Income Tax', 'Mutual Funds', 'IPO Watch', 'Gold Rates', 'AI News', 'Startup Funding'],
-        'About Us' => ['About MintWire', 'Advertise With Us', 'Careers', 'Press Releases', 'Investor Relations'],
+        'About Us' => ['About MILLENIUMNEWSROOM', 'Advertise With Us', 'Careers', 'Press Releases', 'Investor Relations'],
         'Editorial Team' => ['Editor-in-Chief', 'Business Desk', 'Markets Desk', 'Opinion Editors', 'Corrections Policy'],
         'Contact' => ['Contact Us', 'Customer Support', 'News Tips', 'Partnerships', 'RSS Feeds'],
     ];
@@ -15,7 +15,7 @@
         <div class="footer-newsletter__copy">
             <span class="section-kicker">Premium Briefing</span>
             <h2 id="footer-heading">Business news with context, delivered every morning.</h2>
-            <p>Join readers who rely on MintWire for markets, policy, companies, technology and personal finance coverage.</p>
+            <p>Join readers who rely on MILLENIUMNEWSROOM for markets, policy, companies, technology and personal finance coverage.</p>
         </div>
 
         <div class="footer-newsletter__panel">
@@ -26,19 +26,19 @@
             </form>
 
             <div class="social-links" aria-label="Social links">
-                <a href="#" aria-label="Follow MintWire on X">
+                <a href="#" aria-label="Follow MILLENIUMNEWSROOM on X">
                     <span>X</span>
                 </a>
-                <a href="#" aria-label="Follow MintWire on Facebook">
+                <a href="#" aria-label="Follow MILLENIUMNEWSROOM on Facebook">
                     <span>f</span>
                 </a>
-                <a href="#" aria-label="Follow MintWire on LinkedIn">
+                <a href="#" aria-label="Follow MILLENIUMNEWSROOM on LinkedIn">
                     <span>in</span>
                 </a>
-                <a href="#" aria-label="Watch MintWire on YouTube">
+                <a href="#" aria-label="Watch MILLENIUMNEWSROOM on YouTube">
                     <span>yt</span>
                 </a>
-                <a href="#" aria-label="Follow MintWire on Instagram">
+                <a href="#" aria-label="Follow MILLENIUMNEWSROOM on Instagram">
                     <span>ig</span>
                 </a>
             </div>
@@ -50,10 +50,10 @@
             <a class="brand-logo brand-logo--footer" href="{{ url('/') }}">Mint<span>Wire</span></a>
             <p>Independent business journalism for markets, companies, policy, money and modern India.</p>
             <address>
-                MintWire News Network<br>
+                MILLENIUMNEWSROOM News Network<br>
                 14 Editorial House, Business District<br>
                 New Delhi, India<br>
-                <a href="mailto:newsroom@mintwire.test">newsroom@mintwire.test</a>
+                <a href="mailto:newsroom@MILLENIUMNEWSROOM.test">newsroom@MILLENIUMNEWSROOM.test</a>
             </address>
         </div>
 
@@ -83,7 +83,7 @@
     </div>
 
     <div class="container footer-bottom">
-        <span>&copy; {{ now()->year }} MintWire News Network. All rights reserved.</span>
+        <span>&copy; {{ now()->year }} MILLENIUMNEWSROOM News Network. All rights reserved.</span>
         <nav class="footer-policy" aria-label="Legal links">
             @foreach ($policyLinks as $link)
                 <a href="#">{{ $link }}</a>

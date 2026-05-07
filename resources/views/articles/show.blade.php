@@ -28,7 +28,7 @@
             ],
             'publisher' => [
                 '@type' => 'Organization',
-                'name' => 'MintWire',
+                'name' => 'MILLENIUMNEWSROOM',
             ],
             'mainEntityOfPage' => $article['canonical'],
         ], JSON_UNESCAPED_SLASHES) !!}
@@ -180,7 +180,7 @@
             <section class="sidebar-widget sidebar-widget--premium">
                 <span class="section-kicker">Premium</span>
                 <h2>Unlock market insight</h2>
-                <p>Get deeper sector analysis, earnings explainers and portfolio ideas from the MintWire newsroom.</p>
+                <p>Get deeper sector analysis, earnings explainers and portfolio ideas from the MILLENIUMNEWSROOM newsroom.</p>
                 <a class="button-gold" href="#">Subscribe now</a>
             </section>
 

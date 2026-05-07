@@ -2,9 +2,9 @@
 
 @section('content')
 <section class="page-hero">
-    <p class="eyebrow">Energy Savings Calculator</p>
-    <h1>Estimate your clean energy savings</h1>
-    <p>Solar is one of the renewable energy solutions. Change the numbers and see an instant formula-based estimate.</p>
+    <p class="eyebrow">Business Tool</p>
+    <h1>Estimate long-term savings</h1>
+    <p>Change the numbers and see an instant formula-based estimate for planning and comparison.</p>
 </section>
 <section class="calculator"
     data-rate="{{ $setting->electricity_rate }}"

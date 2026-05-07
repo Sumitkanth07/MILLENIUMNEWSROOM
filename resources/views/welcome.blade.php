@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'MintWire - Premium Business News, Markets and Analysis')
+@section('title', 'MILLENIUMNEWSROOM - Premium Business News, Markets and Analysis')
 @section('meta_description', 'A professional Laravel Blade news portal with markets, top headlines, technology, startups, opinion, videos and photo stories.')
 
 @section('content')

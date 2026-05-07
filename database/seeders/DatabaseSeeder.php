@@ -2,15 +2,15 @@
 
 namespace Database\Seeders;
 
+use App\Models\Author;
+use App\Models\AdPlacement;
 use App\Models\Blog;
-use App\Models\CalculatorSetting;
-use App\Models\City;
+use App\Models\Category;
 use App\Models\FooterSetting;
-use App\Models\HomepageSection;
 use App\Models\NavigationItem;
-use App\Models\Project;
-use App\Models\Service;
+use App\Models\Page;
 use App\Models\Setting;
+use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -20,95 +20,150 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $admin = User::updateOrCreate(
-            ['email' => 'admin@navurja.test'],
-            ['name' => 'Navurja Admin', 'password' => Hash::make('password'), 'is_admin' => true]
+            ['email' => 'admin@milleniumnewsroom.test'],
+            ['name' => 'MILLENIUMNEWSROOM Admin', 'password' => Hash::make('password'), 'is_admin' => true]
         );
-
-        FooterSetting::updateOrCreate(
-            ['id' => 1],
-            [
-                'company_name' => 'Navurja Renewable Energy Solutions',
-                'email' => 'info@navurja.com',
-                'phone' => '+91 9876543210',
-                'address' => 'New Delhi, India',
-                'copyright_text' => '© '.date('Y').' Navurja. All rights reserved.',
-            ]
-        );
-
-        Blog::updateOrCreate(
-            ['slug' => 'benefits-of-solar-panels'],
-            [
-                'user_id' => $admin->id,
-                'title' => 'Renewable Energy, Clean Energy and solar solutions for Homes',
-                'excerpt' => 'Learn how renewable energy, clean energy and solar solutions help homeowners reduce bills and support a sustainable future.',
-                'content' => '<p>Renewable energy solutions are becoming an increasingly popular choice for homeowners looking to reduce electricity bills and environmental impact. Solar panels, wind power and efficient clean energy systems can provide dependable power while lowering monthly energy costs.</p><p>One of the major advantages of renewable energy is sustainability. Unlike fossil fuels, clean energy technologies reduce harmful emissions and support a healthier future. Solar solutions remain one of the most practical options for homes, while broader renewable technologies help communities build resilient power systems.</p><p>With advancements in technology, renewable systems have become more efficient and affordable. Many governments also offer incentives and subsidies, making it easier for homeowners to adopt sustainable energy. Overall, investing in renewable energy is a smart decision for both your wallet and the planet.</p>',
-                'image' => 'uploads/solar-panels-placeholder.svg',
-                'meta_title' => 'Renewable Energy, Clean Energy and solar solutions for Homes | Navurja',
-                'meta_description' => 'Discover renewable energy solutions, clean energy benefits, solar solutions, sustainability and long-term savings for homes.',
-                'is_published' => true,
-                'published_at' => now(),
-            ]
-        );
-
-        Service::whereIn('sort_order', [1, 2, 3, 4])->delete();
 
         foreach ([
-            'site_name' => 'Navurja Renewable Energy Solutions',
-            'site_title' => 'Navurja | Renewable Energy Solutions',
-            'tagline' => 'Clean Energy for a Better Future',
-            'primary_color' => '#1f8f45',
-            'secondary_color' => '#f4b23b',
+            'site_name' => 'MILLENIUMNEWSROOM',
+            'site_title' => 'MILLENIUMNEWSROOM | Professional News Portal',
+            'tagline' => 'Business, markets and technology journalism',
+            'primary_color' => '#1f1a12',
+            'secondary_color' => '#c79a2b',
             'logo' => '',
-            'meta_description' => 'Navurja delivers renewable energy solutions, clean energy systems, solar solutions, sustainable energy consulting and efficient power systems.',
+            'meta_description' => 'MILLENIUMNEWSROOM delivers fast, professional coverage of news, markets, companies, politics, technology, sports, lifestyle and opinion.',
+            'robots_txt' => "User-agent: *\nAllow: /",
         ] as $key => $value) {
             Setting::setValue($key, $value);
         }
 
-        Project::where('location', 'Nashik')->where('capacity', '30 kW')->delete();
+        foreach ([
+            ['name' => 'Header Ad', 'key' => 'header_ad'],
+            ['name' => 'Sidebar Ad', 'key' => 'sidebar_ad'],
+            ['name' => 'In Content Ad', 'key' => 'in_content_ad'],
+            ['name' => 'Footer Ad', 'key' => 'footer_ad'],
+        ] as $ad) {
+            AdPlacement::updateOrCreate(['key' => $ad['key']], [
+                'name' => $ad['name'],
+                'code' => null,
+                'is_active' => true,
+            ]);
+        }
+
+        FooterSetting::updateOrCreate(['id' => 1], [
+            'company_name' => 'MILLENIUMNEWSROOM',
+            'email' => 'newsroom@milleniumnewsroom.test',
+            'phone' => '+91 9876543210',
+            'address' => 'New Delhi, India',
+            'copyright_text' => '(c) '.date('Y').' MILLENIUMNEWSROOM. All rights reserved.',
+        ]);
+
+        $categories = collect(['News', 'Markets', 'Technology', 'Companies', 'Politics', 'Opinion', 'Sports', 'Lifestyle'])
+            ->mapWithKeys(fn ($name, $index) => [$name => Category::updateOrCreate(
+                ['slug' => str($name)->slug()->toString()],
+                ['name' => $name, 'sort_order' => $index + 1, 'is_active' => true, 'meta_title' => $name.' News | MILLENIUMNEWSROOM', 'meta_description' => 'Latest '.$name.' coverage from MILLENIUMNEWSROOM.']
+            )]);
+
+        $author = Author::updateOrCreate(
+            ['slug' => 'editorial-desk'],
+            ['name' => 'Editorial Desk', 'email' => 'newsroom@milleniumnewsroom.test', 'bio' => 'The MILLENIUMNEWSROOM editorial desk covers business, policy, technology and culture with context and speed.', 'is_active' => true]
+        );
+
+        $post = Blog::updateOrCreate(
+            ['slug' => 'ai-is-transforming-the-future-of-digital-journalism'],
+            [
+                'user_id' => $admin->id,
+                'category_id' => $categories['Technology']->id,
+                'author_id' => $author->id,
+                'title' => 'AI Is Transforming The Future Of Digital Journalism',
+                'excerpt' => 'Artificial intelligence is reshaping reporting workflows, newsroom research, audience products and the economics of digital media.',
+                'content' => '<h2>Newsrooms are changing fast</h2><p>Artificial intelligence is moving from experiment to daily workflow inside modern newsrooms. Editors are using AI tools to speed up research, summarize documents, monitor live events and package stories for different audience formats.</p><p>The strongest use cases keep human editorial judgment at the center. Reporters still verify facts, add context and make final publishing decisions, while AI helps reduce repetitive production work.</p><h2>What it means for readers</h2><p>Readers can expect faster updates, richer explainers and more personalized news experiences. The challenge for publishers is transparency, accuracy and clear accountability whenever automation is involved.</p>',
+                'meta_title' => 'AI Is Transforming The Future Of Digital Journalism | MILLENIUMNEWSROOM',
+                'meta_description' => 'A professional analysis of how AI is changing digital journalism, newsroom workflows and reader experiences.',
+                'meta_keywords' => 'AI journalism, digital media, newsroom technology',
+                'is_published' => true,
+                'is_featured' => true,
+                'is_breaking' => true,
+                'is_trending' => true,
+                'status' => 'published',
+                'published_at' => now(),
+                'views_count' => 1250,
+                'reading_time' => 2,
+                'featured_image_alt' => 'Digital newsroom using artificial intelligence tools',
+                'robots_meta' => 'index,follow',
+            ]
+        );
+
+        foreach (['AI', 'Digital Journalism', 'Media'] as $tag) {
+            $post->tags()->syncWithoutDetaching(Tag::firstOrCreate(['slug' => str($tag)->slug()->toString()], ['name' => $tag])->id);
+        }
+        $post->updateQuietly(['tags_cache' => 'AI, Digital Journalism, Media']);
 
         foreach ([
-            ['key' => 'hero', 'title' => 'Renewable Energy for a Better Future', 'subtitle' => 'Navurja Renewable Energy Solutions', 'content' => 'Power your home, business, or institution with solar, wind and clean energy systems designed for long-term savings.', 'button_text' => 'Calculate Energy Savings', 'button_url' => '/savings-calculator', 'sort_order' => 1],
-            ['key' => 'about', 'title' => 'About Navurja', 'subtitle' => 'Reliable renewable energy partner', 'content' => 'We help customers adopt solar energy, renewable technologies and efficient power systems for a sustainable future.', 'sort_order' => 2],
-            ['key' => 'services', 'title' => 'Renewable Energy Services', 'subtitle' => 'Everything needed for clean power', 'content' => 'From consulting to installation, Navurja manages practical renewable energy details so your clean energy journey is simple.', 'sort_order' => 3],
-            ['key' => 'projects', 'title' => 'Recent Projects', 'subtitle' => 'Clean energy systems delivered with care', 'content' => 'A few examples of renewable energy systems delivered for homes, schools and commercial roofs.', 'sort_order' => 4],
-            ['key' => 'contact', 'title' => 'Start Your Renewable Energy Journey', 'subtitle' => 'Talk to Navurja', 'content' => 'Share your energy goals, roof details and bill amount. Our team will help estimate the right clean energy solution.', 'button_text' => 'Email Us', 'button_url' => 'mailto:hello@navurja.test', 'sort_order' => 5],
+            ['slug' => 'markets-open-higher-as-investors-track-earnings', 'category' => 'Markets', 'title' => 'Markets Open Higher As Investors Track Earnings Momentum', 'excerpt' => 'Benchmark indices advanced in early trade as investors watched quarterly earnings, global cues and sector rotation.', 'views' => 860],
+            ['slug' => 'startup-founders-focus-on-profitability-in-2026', 'category' => 'Companies', 'title' => 'Startup Founders Focus On Profitability In 2026', 'excerpt' => 'Founders are prioritizing cash discipline, sharper products and sustainable expansion after a reset in private funding.', 'views' => 720],
+            ['slug' => 'new-data-rules-could-change-digital-advertising', 'category' => 'Technology', 'title' => 'New Data Rules Could Change Digital Advertising', 'excerpt' => 'Privacy regulation and consent frameworks are pushing digital businesses to rethink measurement and customer trust.', 'views' => 640],
+            ['slug' => 'policy-watch-what-businesses-need-to-know-this-week', 'category' => 'Politics', 'title' => 'Policy Watch: What Businesses Need To Know This Week', 'excerpt' => 'A concise briefing on policy moves, parliamentary signals and regulatory updates affecting companies and investors.', 'views' => 510],
+            ['slug' => 'opinion-why-trust-is-the-next-media-metric', 'category' => 'Opinion', 'title' => 'Opinion: Why Trust Is The Next Media Metric', 'excerpt' => 'Audience loyalty will depend less on speed alone and more on credibility, transparency and useful context.', 'views' => 940],
+            ['slug' => 'lifestyle-brands-use-community-to-drive-growth', 'category' => 'Lifestyle', 'title' => 'Lifestyle Brands Use Community To Drive Growth', 'excerpt' => 'Modern consumer brands are building repeat engagement through memberships, creator partnerships and events.', 'views' => 430],
+        ] as $sample) {
+            Blog::updateOrCreate(['slug' => $sample['slug']], [
+                'user_id' => $admin->id,
+                'category_id' => $categories[$sample['category']]->id,
+                'author_id' => $author->id,
+                'title' => $sample['title'],
+                'excerpt' => $sample['excerpt'],
+                'content' => '<p>'.$sample['excerpt'].'</p><p>MILLENIUMNEWSROOM explains the key context, stakeholder impact and next signals readers should watch. This sample story can be edited from the admin panel with images, SEO metadata, tags and scheduling.</p>',
+                'meta_title' => $sample['title'].' | MILLENIUMNEWSROOM',
+                'meta_description' => $sample['excerpt'],
+                'meta_keywords' => strtolower($sample['category']).', news, MILLENIUMNEWSROOM',
+                'robots_meta' => 'index,follow',
+                'is_published' => true,
+                'is_featured' => in_array($sample['category'], ['Markets', 'Opinion']),
+                'is_breaking' => $sample['category'] === 'Markets',
+                'is_trending' => $sample['views'] > 800,
+                'status' => 'published',
+                'published_at' => now()->subHours(rand(2, 48)),
+                'views_count' => $sample['views'],
+                'reading_time' => 2,
+                'featured_image_alt' => $sample['title'],
+            ]);
+        }
+
+        foreach ([
+            ['title' => 'About Us', 'slug' => 'about-us'],
+            ['title' => 'Privacy Policy', 'slug' => 'privacy-policy'],
+            ['title' => 'Terms', 'slug' => 'terms'],
+        ] as $page) {
+            Page::updateOrCreate(['slug' => $page['slug']], [
+                'title' => $page['title'],
+                'content' => '<p>MILLENIUMNEWSROOM is a professional digital news portal focused on clear, timely and useful journalism.</p>',
+                'is_published' => true,
+                'meta_title' => $page['title'].' | MILLENIUMNEWSROOM',
+                'meta_description' => $page['title'].' for MILLENIUMNEWSROOM.',
+            ]);
+        }
+
+        foreach ([
+            ['key' => 'hero', 'title' => 'Lead Story', 'subtitle' => 'Top of homepage', 'content' => 'Controls the premium lead story area.', 'sort_order' => 1],
+            ['key' => 'breaking_news', 'title' => 'Breaking News Ticker', 'subtitle' => 'Live updates', 'content' => 'Highlights stories marked as breaking.', 'sort_order' => 2],
+            ['key' => 'trending_posts', 'title' => 'Trending Posts', 'subtitle' => 'Most read', 'content' => 'Uses views and forced trending flag.', 'sort_order' => 3],
+            ['key' => 'featured_categories', 'title' => 'Featured Categories', 'subtitle' => 'Section blocks', 'content' => 'Homepage category sections are created dynamically.', 'sort_order' => 4],
+            ['key' => 'latest_news', 'title' => 'Latest News', 'subtitle' => 'Fresh updates', 'content' => 'Latest published posts feed.', 'sort_order' => 5],
+            ['key' => 'sidebar_widgets', 'title' => 'Sidebar Widgets', 'subtitle' => 'Newsletter and popular news', 'content' => 'Controls secondary modules.', 'sort_order' => 6],
+            ['key' => 'advertisements', 'title' => 'Advertisement Blocks', 'subtitle' => 'Ad placements', 'content' => 'Reserved blocks for ad tags or static placements.', 'sort_order' => 7],
         ] as $section) {
-            HomepageSection::updateOrCreate(['key' => $section['key']], $section);
+            \App\Models\HomepageSection::updateOrCreate(['key' => $section['key']], $section + ['is_active' => true]);
         }
 
-        foreach ([
-            ['title' => 'Solar Panel Installation', 'description' => 'Custom rooftop solar solutions for lower bills and dependable clean power.', 'icon' => 'home', 'sort_order' => 1],
-            ['title' => 'Renewable Energy Consulting', 'description' => 'Practical guidance for solar, wind, storage and clean energy planning.', 'icon' => 'factory', 'sort_order' => 2],
-            ['title' => 'Energy Efficiency Solutions', 'description' => 'Audits and improvements that reduce waste and improve power performance.', 'icon' => 'shield', 'sort_order' => 3],
-            ['title' => 'Sustainable Power Systems', 'description' => 'Integrated renewable power systems for homes, institutions and businesses.', 'icon' => 'power', 'sort_order' => 4],
-        ] as $service) {
-            Service::updateOrCreate(['title' => $service['title']], $service);
-        }
-
-        foreach ([
-            ['title' => 'Home Rooftop System', 'location' => 'Pune', 'capacity' => '5 kW', 'description' => 'A compact grid-tied system for a family home.', 'sort_order' => 1],
-            ['title' => 'School Renewable Power System', 'location' => 'Nashik', 'capacity' => '30 kW', 'description' => 'Clean energy generation for classrooms and administration blocks.', 'sort_order' => 2],
-            ['title' => 'Commercial Rooftop', 'location' => 'Mumbai', 'capacity' => '75 kW', 'description' => 'Energy savings for daily business operations.', 'sort_order' => 3],
-        ] as $project) {
-            Project::updateOrCreate(['title' => $project['title']], $project);
-        }
-
-        foreach ([
-            ['label' => 'Home', 'url' => '/#home', 'sort_order' => 1],
-            ['label' => 'About', 'url' => '/#about', 'sort_order' => 2],
-            ['label' => 'Services', 'url' => '/#services', 'sort_order' => 3],
-            ['label' => 'Projects', 'url' => '/#projects', 'sort_order' => 4],
-            ['label' => 'Blog', 'url' => '/blog', 'sort_order' => 5],
-            ['label' => 'Calculator', 'url' => '/savings-calculator', 'sort_order' => 6],
-            ['label' => 'Contact', 'url' => '/#contact', 'sort_order' => 7],
-        ] as $item) {
-            NavigationItem::updateOrCreate(['label' => $item['label']], $item);
-        }
-
-        CalculatorSetting::firstOrCreate([], ['electricity_rate' => 8, 'sun_hours' => 4.5, 'co2_factor' => 1.35]);
-
-        foreach ([['Mumbai', 1.05], ['Pune', 1.02], ['Nashik', 1], ['Nagpur', 1.12], ['Delhi', 1.06], ['Bengaluru', .95]] as [$name, $multiplier]) {
-            City::updateOrCreate(['name' => $name], ['multiplier' => $multiplier, 'is_active' => true]);
+        NavigationItem::query()->delete();
+        foreach ($categories as $category) {
+            NavigationItem::create([
+                'label' => $category->name,
+                'url' => '/category/'.$category->slug,
+                'sort_order' => $category->sort_order,
+                'is_active' => true,
+            ]);
         }
     }
 }

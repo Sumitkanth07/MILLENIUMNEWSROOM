@@ -3,6 +3,8 @@
 .env
 .env.backup
 .env.production
+.env.*
+!.env.example
 .phpactor.json
 .phpunit.result.cache
 /.fleet
@@ -16,6 +18,8 @@
 /public/build
 /public/hot
 /public/storage
+/database/*.sqlite
+/database/*.sqlite-*
 /bootstrap/cache/*.php
 /storage/app/*
 !/storage/app/.gitignore
@@ -35,6 +39,8 @@
 /storage/*.key
 /storage/pail
 /vendor
+/_laravel_scaffold_tmp
+/test_write_check
 Homestead.json
 Homestead.yaml
 Thumbs.db

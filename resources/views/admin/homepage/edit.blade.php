@@ -1,7 +1,7 @@
 @extends('admin.layout')
 
 @section('content')
-<h2>Edit {{ ucfirst($section->key) }}</h2>
+<div class="admin-title"><div><span class="kicker">Homepage Builder</span><h2>Edit {{ ucfirst(str_replace('_', ' ', $section->key)) }}</h2></div></div>
 <form class="panel form" method="POST" action="{{ route('admin.homepage.update', $section) }}" enctype="multipart/form-data">
     @csrf @method('PUT')
     <label>Title <input name="title" value="{{ old('title', $section->title) }}"></label>
