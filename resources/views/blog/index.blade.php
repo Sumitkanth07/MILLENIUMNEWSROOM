@@ -5,7 +5,7 @@
     <p class="eyebrow">MILLENIUMNEWSROOM</p>
     <h1>Latest News</h1>
     <p>Business, markets, politics, technology, lifestyle and opinion coverage in one newsroom.</p>
-</section>
+</section>  
 <section class="news-shell">
     <div class="card-grid">
         @foreach($blogs as $blog)
