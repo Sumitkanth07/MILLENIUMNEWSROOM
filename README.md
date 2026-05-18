@@ -66,14 +66,14 @@ Open:
 
 ## Demo Admin Login
 
-Seeded demo credentials:
+Seeded admin account:
 
 ```text
-Email: admin@milleniumnewsroom.test
-Password: password
+Email: Sumitkant7@gmail.com
+Password: configured in the database seeder for the project owner
 ```
 
-Change this password before production use.
+For production, rotate the password after first login and do not publish live credentials in public documentation.
 
 ## Environment Setup
 

@@ -13,7 +13,7 @@
 <div class="media-grid">
 @foreach($items as $item)
     <article class="media-item">
-        <img src="{{ asset('storage/'.$item->path) }}" alt="{{ $item->alt_text ?: $item->name }}" loading="lazy">
+        <img src="{{ asset('storage/'.$item->path) }}" alt="{{ $item->alt_text ?: $item->name }}" loading="lazy" decoding="async">
         <strong>{{ $item->name }}</strong>
         <small>{{ $item->folder }}</small>
         <form method="POST" action="{{ route('admin.media.destroy', $item) }}">@csrf @method('DELETE')<button class="btn small danger">Delete</button></form>

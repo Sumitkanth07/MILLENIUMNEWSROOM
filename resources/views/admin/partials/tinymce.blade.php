@@ -1,6 +1,7 @@
 @push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/tinymce@6/tinymce.min.js"></script>
 <script>
-tinymce.init({
+window.addEventListener('load', () => tinymce.init({
     selector: '#content',
     height: 500,
     plugins: 'image media link lists table code codesample preview wordcount',
@@ -29,6 +30,6 @@ tinymce.init({
         xhr.send(formData);
     }),
     license_key: 'gpl'
-});
+}));
 </script>
 @endpush

@@ -8,6 +8,7 @@ use App\Models\Blog;
 use App\Models\Category;
 use App\Models\Tag;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 
 class BlogController extends Controller
@@ -43,6 +44,7 @@ class BlogController extends Controller
 
         $blog = Blog::create($data);
         $this->syncTags($blog, $request->input('tags'));
+        $this->clearPublishingCaches();
 
         return redirect()->route('admin.blogs.index')->with('status', 'Post created.');
     }
@@ -69,6 +71,7 @@ class BlogController extends Controller
         $this->storeImages($request, $data, $blog);
         $blog->update($data);
         $this->syncTags($blog, $request->input('tags'));
+        $this->clearPublishingCaches();
 
         return redirect()->route('admin.blogs.index')->with('status', 'Post updated.');
     }
@@ -76,6 +79,7 @@ class BlogController extends Controller
     public function destroy(Blog $blog)
     {
         $blog->delete();
+        $this->clearPublishingCaches();
 
         return back()->with('status', 'Post deleted.');
     }
@@ -163,5 +167,11 @@ class BlogController extends Controller
 
         $blog->tags()->sync($ids);
         $blog->updateQuietly(['tags_cache' => $names->implode(', ')]);
+    }
+
+    private function clearPublishingCaches(): void
+    {
+        Cache::forget('admin.dashboard.payload');
+        Cache::forget('frontend.home.payload');
     }
 }

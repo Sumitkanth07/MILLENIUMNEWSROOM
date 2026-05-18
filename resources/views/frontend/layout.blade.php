@@ -6,11 +6,17 @@
     <title>{{ $metaTitle ?? $siteTitle }}</title>
     <meta name="description" content="{{ $metaDescription ?? $tagline }}">
     <meta name="robots" content="{{ $robotsMeta ?? 'index,follow' }}">
-    <link rel="canonical" href="{{ url()->current() }}">
+    <link rel="canonical" href="{{ $canonicalUrl ?? url()->current() }}">
     <meta property="og:title" content="{{ $metaTitle ?? $siteTitle }}">
     <meta property="og:description" content="{{ $metaDescription ?? $tagline }}">
+    <meta property="og:url" content="{{ $canonicalUrl ?? url()->current() }}">
+    <meta property="og:type" content="{{ $ogType ?? 'website' }}">
+    <meta name="twitter:title" content="{{ $metaTitle ?? $siteTitle }}">
+    <meta name="twitter:description" content="{{ $metaDescription ?? $tagline }}">
     <meta name="twitter:card" content="summary_large_image">
     @isset($ogImage)<meta property="og:image" content="{{ $ogImage }}">@endisset
+    @isset($ogImage)<meta name="twitter:image" content="{{ $ogImage }}">@endisset
+    <link rel="preload" href="{{ asset('css/news.css') }}" as="style">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <link rel="stylesheet" href="{{ asset('css/news.css') }}">
     <link rel="stylesheet" href="{{ asset('css/footer.css') }}">
@@ -23,7 +29,7 @@
     </div>
     <header class="site-header news-header">
         <a class="brand" href="{{ route('home') }}">
-            @if($logo)<img src="{{ asset('storage/'.$logo) }}" alt="{{ $siteName }} logo">@else<span class="leaf-logo">M</span>@endif
+            @if($logo)<img src="{{ asset('storage/'.$logo) }}" alt="{{ $siteName }} logo" width="42" height="42">@else<span class="leaf-logo">M</span>@endif
             <span>{{ $siteName }}</span>
         </a>
         <button class="nav-toggle" type="button" aria-label="Open menu">Menu</button>
@@ -39,7 +45,9 @@
     </header>
 
     @isset($breakingPosts)
-        <div class="ticker"><strong>Breaking</strong><marquee>@foreach($breakingPosts as $post) {{ $post->title }} @if(!$loop->last) • @endif @endforeach</marquee></div>
+        @if($breakingPosts->isNotEmpty())
+            <div class="ticker"><strong>Breaking</strong><div class="ticker-track">@foreach($breakingPosts as $post)<a href="{{ route('blog.show', $post) }}">{{ $post->title }}</a>@if(!$loop->last)<span>•</span>@endif @endforeach</div></div>
+        @endif
     @endisset
 
     <main>@yield('content')</main>
@@ -60,11 +68,18 @@
             const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
             localStorage.setItem(key, next); apply(next); btn.textContent = next === 'dark' ? 'Light' : 'Dark';
         }));
+        let ticking = false;
         window.addEventListener('scroll', () => {
-            const bar = document.getElementById('readingProgress');
-            if (!bar) return;
-            const max = document.documentElement.scrollHeight - innerHeight;
-            bar.style.width = max > 0 ? (scrollY / max * 100) + '%' : '0%';
+            if (ticking) return;
+            ticking = true;
+            requestAnimationFrame(() => {
+                const bar = document.getElementById('readingProgress');
+                if (bar) {
+                    const max = document.documentElement.scrollHeight - innerHeight;
+                    bar.style.width = max > 0 ? (scrollY / max * 100) + '%' : '0%';
+                }
+                ticking = false;
+            });
         }, {passive:true});
     })();
     </script>

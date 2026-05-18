@@ -31,8 +31,7 @@
         @if($errors->any())<div class="notice danger">{{ $errors->first() }}</div>@endif
         @yield('content')
     </main>
-    <script src="{{ asset('js/app.js') }}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/tinymce@6/tinymce.min.js"></script>
+    <script src="{{ asset('js/app.js') }}" defer></script>
     <script>
     (() => {
         const key = 'millenium-admin-theme';

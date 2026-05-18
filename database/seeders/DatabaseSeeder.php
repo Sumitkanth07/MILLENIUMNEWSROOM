@@ -19,9 +19,11 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
+        User::where('email', 'admin@milleniumnewsroom.test')->delete();
+
         $admin = User::updateOrCreate(
-            ['email' => 'admin@milleniumnewsroom.test'],
-            ['name' => 'MILLENIUMNEWSROOM Admin', 'password' => Hash::make('password'), 'is_admin' => true]
+            ['email' => 'Sumitkant7@gmail.com'],
+            ['name' => 'MILLENIUMNEWSROOM Admin', 'password' => Hash::make('Milleniums@2026#'), 'is_admin' => true]
         );
 
         foreach ([

@@ -22,11 +22,13 @@ class BlogController extends Controller
 
         return view('blog.show', [
             'blog' => $blog->load(['category', 'author', 'tags']),
-            'relatedPosts' => Blog::where('is_published', true)->whereKeyNot($blog->id)->latest('published_at')->take(4)->get(),
-            'trendingPosts' => Blog::where('is_published', true)->orderByDesc('views_count')->take(5)->get(),
+            'relatedPosts' => Blog::with(['category', 'author'])->where('is_published', true)->whereKeyNot($blog->id)->latest('published_at')->take(4)->get(),
+            'trendingPosts' => Blog::with('category')->where('is_published', true)->orderByDesc('views_count')->take(5)->get(),
             'metaTitle' => $blog->meta_title ?: $blog->title.' | MILLENIUMNEWSROOM',
             'metaDescription' => $blog->meta_description ?: $blog->excerpt,
             'robotsMeta' => $blog->robots_meta ?: 'index,follow',
+            'canonicalUrl' => $blog->canonical_url ?: route('blog.show', $blog),
+            'ogType' => 'article',
             'ogImage' => ($blog->featured_image || $blog->image) ? asset('storage/'.($blog->featured_image ?: $blog->image)) : null,
         ]);
     }
