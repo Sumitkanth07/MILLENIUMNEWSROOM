@@ -57,6 +57,16 @@ class Blog extends Model
         return $this->hasMany(Comment::class);
     }
 
+    public function galleries(): HasMany
+    {
+        return $this->hasMany(Gallery::class);
+    }
+
+    public function viewsLog(): HasMany
+    {
+        return $this->hasMany(PostView::class);
+    }
+
     public static function uniqueSlug(string $title, ?int $ignoreId = null): string
     {
         $slug = Str::slug($title);

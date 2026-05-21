@@ -20,7 +20,7 @@ MILLENIUMNEWSROOM is a Laravel-based premium news portal and CMS. It includes a 
 - PHP 8.2+
 - Blade templates
 - Eloquent ORM
-- SQLite for local development by default
+- MySQL database, phpMyAdmin compatible
 - TinyMCE editor
 - Plain CSS, no Tailwind dependency
 
@@ -41,22 +41,13 @@ cp .env.example .env
 php artisan key:generate
 ```
 
-For local SQLite:
+Create the MySQL database in phpMyAdmin or the MySQL CLI:
 
 ```bash
-type nul > database/milleniumnewsroom.sqlite
+mysql -u root -p -e "CREATE DATABASE milleniumnewsroom CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
 php artisan migrate --seed
 php artisan storage:link
 php artisan serve --host=127.0.0.1 --port=8000
-```
-
-For Linux/macOS SQLite:
-
-```bash
-touch database/milleniumnewsroom.sqlite
-php artisan migrate --seed
-php artisan storage:link
-php artisan serve
 ```
 
 Open:

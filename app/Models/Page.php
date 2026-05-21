@@ -14,6 +14,11 @@ class Page extends Model
         return ['is_published' => 'boolean'];
     }
 
+    public function seoSetting()
+    {
+        return $this->morphOne(SeoSetting::class, 'seoable');
+    }
+
     public static function slugFrom(string $title): string
     {
         return Str::slug($title) ?: 'page';

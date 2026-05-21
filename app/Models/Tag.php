@@ -15,6 +15,11 @@ class Tag extends Model
         return $this->belongsToMany(Blog::class);
     }
 
+    public function posts(): BelongsToMany
+    {
+        return $this->belongsToMany(Post::class);
+    }
+
     public static function findOrCreateByName(string $name): self
     {
         $name = trim($name);

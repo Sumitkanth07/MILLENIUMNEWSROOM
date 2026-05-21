@@ -8,7 +8,7 @@ use Illuminate\Support\Str;
 
 class Category extends Model
 {
-    protected $fillable = ['parent_id', 'name', 'slug', 'image', 'description', 'meta_title', 'meta_description', 'sort_order', 'is_active'];
+    protected $fillable = ['parent_id', 'name', 'slug', 'image', 'description', 'meta_title', 'meta_description', 'sort_order', 'order', 'is_active'];
 
     protected function casts(): array
     {
@@ -18,6 +18,16 @@ class Category extends Model
     public function blogs(): HasMany
     {
         return $this->hasMany(Blog::class);
+    }
+
+    public function posts(): HasMany
+    {
+        return $this->hasMany(Post::class);
+    }
+
+    public function subcategories(): HasMany
+    {
+        return $this->hasMany(Subcategory::class);
     }
 
     public function parent()

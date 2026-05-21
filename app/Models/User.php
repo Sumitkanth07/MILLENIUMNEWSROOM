@@ -48,4 +48,19 @@ class User extends Authenticatable
             'is_admin' => 'boolean',
         ];
     }
+
+    public function admin()
+    {
+        return $this->hasOne(Admin::class);
+    }
+
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class);
+    }
+
+    public function media()
+    {
+        return $this->hasMany(Media::class, 'uploaded_by');
+    }
 }

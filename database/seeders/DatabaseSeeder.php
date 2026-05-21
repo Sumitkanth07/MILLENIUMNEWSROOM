@@ -4,12 +4,24 @@ namespace Database\Seeders;
 
 use App\Models\Author;
 use App\Models\AdPlacement;
+use App\Models\Admin;
+use App\Models\Advertisement;
 use App\Models\Blog;
 use App\Models\Category;
+use App\Models\ContactMessage;
 use App\Models\FooterSetting;
+use App\Models\Menu;
+use App\Models\MenuItem;
 use App\Models\NavigationItem;
+use App\Models\Newsletter;
 use App\Models\Page;
+use App\Models\Permission;
+use App\Models\Post;
+use App\Models\Role;
+use App\Models\SeoSetting;
 use App\Models\Setting;
+use App\Models\SocialAccount;
+use App\Models\Subcategory;
 use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -25,6 +37,14 @@ class DatabaseSeeder extends Seeder
             ['email' => 'Sumitkant7@gmail.com'],
             ['name' => 'MILLENIUMNEWSROOM Admin', 'password' => Hash::make('Milleniums@2026#'), 'is_admin' => true]
         );
+        Admin::updateOrCreate(['user_id' => $admin->id], ['designation' => 'Super Administrator', 'is_active' => true]);
+
+        $adminRole = Role::updateOrCreate(['name' => 'super-admin'], ['label' => 'Super Admin']);
+        foreach (['manage-posts', 'manage-media', 'manage-seo', 'manage-ads', 'manage-users'] as $permissionName) {
+            $permission = Permission::updateOrCreate(['name' => $permissionName], ['label' => str($permissionName)->headline()]);
+            $adminRole->permissions()->syncWithoutDetaching($permission->id);
+        }
+        $admin->roles()->syncWithoutDetaching($adminRole->id);
 
         foreach ([
             'site_name' => 'MILLENIUMNEWSROOM',
@@ -63,12 +83,17 @@ class DatabaseSeeder extends Seeder
         $categories = collect(['News', 'Markets', 'Technology', 'Companies', 'Politics', 'Opinion', 'Sports', 'Lifestyle'])
             ->mapWithKeys(fn ($name, $index) => [$name => Category::updateOrCreate(
                 ['slug' => str($name)->slug()->toString()],
-                ['name' => $name, 'sort_order' => $index + 1, 'is_active' => true, 'meta_title' => $name.' News | MILLENIUMNEWSROOM', 'meta_description' => 'Latest '.$name.' coverage from MILLENIUMNEWSROOM.']
+                ['name' => $name, 'sort_order' => $index + 1, 'order' => $index + 1, 'is_active' => true, 'meta_title' => $name.' News | MILLENIUMNEWSROOM', 'meta_description' => 'Latest '.$name.' coverage from MILLENIUMNEWSROOM.']
             )]);
 
         $author = Author::updateOrCreate(
             ['slug' => 'editorial-desk'],
-            ['name' => 'Editorial Desk', 'email' => 'newsroom@milleniumnewsroom.test', 'bio' => 'The MILLENIUMNEWSROOM editorial desk covers business, policy, technology and culture with context and speed.', 'is_active' => true]
+            ['name' => 'Editorial Desk', 'email' => 'newsroom@milleniumnewsroom.test', 'designation' => 'News Desk', 'social_links' => ['x' => 'https://x.com/', 'linkedin' => 'https://linkedin.com/'], 'bio' => 'The MILLENIUMNEWSROOM editorial desk covers business, policy, technology and culture with context and speed.', 'is_active' => true]
+        );
+
+        $aiSubcategory = Subcategory::updateOrCreate(
+            ['slug' => 'artificial-intelligence'],
+            ['category_id' => $categories['Technology']->id, 'name' => 'Artificial Intelligence', 'order' => 1, 'is_active' => true]
         );
 
         $post = Blog::updateOrCreate(
@@ -101,6 +126,36 @@ class DatabaseSeeder extends Seeder
         }
         $post->updateQuietly(['tags_cache' => 'AI, Digital Journalism, Media']);
 
+        $mainPost = Post::updateOrCreate(
+            ['slug' => 'ai-is-transforming-the-future-of-digital-journalism'],
+            [
+                'title' => 'AI Is Transforming The Future Of Digital Journalism',
+                'short_description' => 'Artificial intelligence is reshaping reporting workflows, newsroom research, audience products and digital media economics.',
+                'content' => $post->content,
+                'featured_image' => $post->featured_image ?: $post->image,
+                'image_alt' => 'Digital newsroom using artificial intelligence tools',
+                'gallery_images' => [],
+                'category_id' => $categories['Technology']->id,
+                'subcategory_id' => $aiSubcategory->id,
+                'author_id' => $author->id,
+                'meta_title' => 'AI Is Transforming The Future Of Digital Journalism | MILLENIUMNEWSROOM',
+                'meta_description' => 'A professional analysis of how AI is changing digital journalism, newsroom workflows and reader experiences.',
+                'meta_keywords' => 'AI journalism, digital media, newsroom technology',
+                'canonical_url' => url('/blog/ai-is-transforming-the-future-of-digital-journalism'),
+                'schema_type' => 'NewsArticle',
+                'views' => 1250,
+                'reading_time' => 2,
+                'featured' => true,
+                'breaking_news' => true,
+                'trending' => true,
+                'status' => 'published',
+                'published_at' => now(),
+            ]
+        );
+        foreach (['AI', 'Digital Journalism', 'Media'] as $tag) {
+            $mainPost->tags()->syncWithoutDetaching(Tag::firstOrCreate(['slug' => str($tag)->slug()->toString()], ['name' => $tag])->id);
+        }
+
         foreach ([
             ['slug' => 'markets-open-higher-as-investors-track-earnings', 'category' => 'Markets', 'title' => 'Markets Open Higher As Investors Track Earnings Momentum', 'excerpt' => 'Benchmark indices advanced in early trade as investors watched quarterly earnings, global cues and sector rotation.', 'views' => 860],
             ['slug' => 'startup-founders-focus-on-profitability-in-2026', 'category' => 'Companies', 'title' => 'Startup Founders Focus On Profitability In 2026', 'excerpt' => 'Founders are prioritizing cash discipline, sharper products and sustainable expansion after a reset in private funding.', 'views' => 720],
@@ -109,7 +164,7 @@ class DatabaseSeeder extends Seeder
             ['slug' => 'opinion-why-trust-is-the-next-media-metric', 'category' => 'Opinion', 'title' => 'Opinion: Why Trust Is The Next Media Metric', 'excerpt' => 'Audience loyalty will depend less on speed alone and more on credibility, transparency and useful context.', 'views' => 940],
             ['slug' => 'lifestyle-brands-use-community-to-drive-growth', 'category' => 'Lifestyle', 'title' => 'Lifestyle Brands Use Community To Drive Growth', 'excerpt' => 'Modern consumer brands are building repeat engagement through memberships, creator partnerships and events.', 'views' => 430],
         ] as $sample) {
-            Blog::updateOrCreate(['slug' => $sample['slug']], [
+            $sampleBlog = Blog::updateOrCreate(['slug' => $sample['slug']], [
                 'user_id' => $admin->id,
                 'category_id' => $categories[$sample['category']]->id,
                 'author_id' => $author->id,
@@ -130,6 +185,25 @@ class DatabaseSeeder extends Seeder
                 'reading_time' => 2,
                 'featured_image_alt' => $sample['title'],
             ]);
+
+            Post::updateOrCreate(['slug' => $sample['slug']], [
+                'title' => $sample['title'],
+                'short_description' => $sample['excerpt'],
+                'content' => $sampleBlog->content,
+                'category_id' => $categories[$sample['category']]->id,
+                'author_id' => $author->id,
+                'meta_title' => $sample['title'].' | MILLENIUMNEWSROOM',
+                'meta_description' => $sample['excerpt'],
+                'meta_keywords' => strtolower($sample['category']).', news, MILLENIUMNEWSROOM',
+                'schema_type' => 'NewsArticle',
+                'views' => $sample['views'],
+                'reading_time' => 2,
+                'featured' => in_array($sample['category'], ['Markets', 'Opinion']),
+                'breaking_news' => $sample['category'] === 'Markets',
+                'trending' => $sample['views'] > 800,
+                'status' => 'published',
+                'published_at' => $sampleBlog->published_at,
+            ]);
         }
 
         foreach ([
@@ -145,6 +219,11 @@ class DatabaseSeeder extends Seeder
                 'meta_description' => $page['title'].' for MILLENIUMNEWSROOM.',
             ]);
         }
+
+        SeoSetting::updateOrCreate(
+            ['seoable_type' => Page::class, 'seoable_id' => Page::where('slug', 'about-us')->value('id')],
+            ['meta_title' => 'About Us | MILLENIUMNEWSROOM', 'meta_description' => 'About MILLENIUMNEWSROOM digital newsroom.', 'robots_meta' => 'index,follow', 'schema_type' => 'WebPage']
+        );
 
         foreach ([
             ['key' => 'hero', 'title' => 'Lead Story', 'subtitle' => 'Top of homepage', 'content' => 'Controls the premium lead story area.', 'sort_order' => 1],
@@ -167,5 +246,26 @@ class DatabaseSeeder extends Seeder
                 'is_active' => true,
             ]);
         }
+
+        $mainMenu = Menu::updateOrCreate(['location' => 'main'], ['name' => 'Main Navigation', 'is_active' => true]);
+        foreach ($categories as $category) {
+            MenuItem::updateOrCreate(
+                ['menu_id' => $mainMenu->id, 'label' => $category->name],
+                ['url' => '/category/'.$category->slug, 'sort_order' => $category->sort_order, 'is_active' => true]
+            );
+        }
+
+        foreach ([
+            ['name' => 'Header Advertisement', 'placement' => 'header_ad'],
+            ['name' => 'Sidebar Advertisement', 'placement' => 'sidebar_ad'],
+            ['name' => 'In Content Advertisement', 'placement' => 'in_content_ad'],
+            ['name' => 'Footer Advertisement', 'placement' => 'footer_ad'],
+        ] as $ad) {
+            Advertisement::updateOrCreate(['placement' => $ad['placement']], $ad + ['code' => null, 'is_responsive' => true, 'is_active' => true]);
+        }
+
+        Newsletter::updateOrCreate(['email' => 'reader@example.com'], ['name' => 'Demo Reader', 'is_active' => true, 'subscribed_at' => now()]);
+        SocialAccount::updateOrCreate(['platform' => 'x', 'account_name' => 'MILLENIUMNEWSROOM'], ['platform_settings' => ['auto_hashtags' => true], 'auto_post' => false, 'is_active' => true]);
+        ContactMessage::firstOrCreate(['email' => 'reader@example.com', 'subject' => 'Demo enquiry'], ['name' => 'Demo Reader', 'message' => 'This is a sample contact message.', 'status' => 'new']);
     }
 }
