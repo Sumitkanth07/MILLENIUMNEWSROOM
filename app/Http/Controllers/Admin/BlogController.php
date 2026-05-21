@@ -123,24 +123,51 @@ class BlogController extends Controller
         ]);
     }
 
-    private function storeImages(Request $request, array &$data, ?Blog $blog = null): void
-    {
-        if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('uploads', 'public');
-        }
+   private function storeImages(Request $request, array &$data, ?Blog $blog = null): void
+{
+    if ($request->hasFile('image')) {
 
-        if ($request->hasFile('featured_image')) {
-            $data['featured_image'] = $request->file('featured_image')->store('uploads', 'public');
-        }
+        $file = $request->file('image');
 
-        if ($request->hasFile('gallery_images')) {
-            $existing = $blog?->gallery_images ?? [];
-            $newImages = collect($request->file('gallery_images'))
-                ->map(fn ($file) => $file->store('uploads/gallery', 'public'))
-                ->all();
-            $data['gallery_images'] = array_values(array_filter(array_merge($existing, $newImages)));
-        }
+        $filename = time().'_'.$file->getClientOriginalName();
+
+        $file->move(public_path('storage/uploads'), $filename);
+
+        $data['image'] = 'uploads/'.$filename;
     }
+
+    if ($request->hasFile('featured_image')) {
+
+        $file = $request->file('featured_image');
+
+        $filename = time().'_'.$file->getClientOriginalName();
+
+        $file->move(public_path('storage/uploads'), $filename);
+
+        $data['featured_image'] = 'uploads/'.$filename;
+    }
+
+    if ($request->hasFile('gallery_images')) {
+
+        $existing = $blog?->gallery_images ?? [];
+
+        $newImages = collect($request->file('gallery_images'))
+            ->map(function ($file) {
+
+                $filename = time().'_'.$file->getClientOriginalName();
+
+                $file->move(public_path('storage/uploads/gallery'), $filename);
+
+                return 'uploads/gallery/'.$filename;
+
+            })
+            ->all();
+
+        $data['gallery_images'] = array_values(
+            array_filter(array_merge($existing, $newImages))
+        );
+    }
+}
 
     private function readingTime(string $content): int
     {
