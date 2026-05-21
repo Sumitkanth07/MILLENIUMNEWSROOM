@@ -28,7 +28,14 @@ class BrandingController extends Controller
         $uploadedLogo = $request->hasFile('logo');
 
         if ($uploadedLogo) {
-            $data['logo'] = $request->file('logo')->store('uploads', 'public');
+
+            $file = $request->file('logo');
+
+            $filename = time().'_'.$file->getClientOriginalName();
+
+            $file->move(public_path('storage/uploads'), $filename);
+
+            $data['logo'] = 'uploads/'.$filename;
         }
 
         foreach ($data as $key => $value) {
