@@ -10,9 +10,17 @@ class ImageUploadController extends Controller
 {
     public function store(Request $request)
     {
-        $request->validate(['file' => ['required', 'image', 'max:4096']]);
+        $request->validate([
+            'file' => ['required', 'image', 'max:4096']
+        ]);
+
         $file = $request->file('file');
-        $path = $file->store('uploads/editor', 'public');
+
+        $filename = time() . '_' . $file->getClientOriginalName();
+
+        $file->move(public_path('storage/uploads/editor'), $filename);
+
+        $path = 'uploads/editor/' . $filename;
 
         MediaItem::create([
             'name' => pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME),
@@ -25,7 +33,7 @@ class ImageUploadController extends Controller
         ]);
 
         return response()->json([
-            'location' => asset('storage/'.$path),
+            'location' => asset('storage/uploads/editor/' . $filename),
             'path' => $path,
             'message' => 'Image uploaded successfully.',
         ]);
