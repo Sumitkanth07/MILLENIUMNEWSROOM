@@ -29,14 +29,14 @@ class BrandingController extends Controller
 
         if ($uploadedLogo) {
 
-            $file = $request->file('logo');
+    $file = $request->file('logo');
 
-            $filename = time().'_'.$file->getClientOriginalName();
+    $filename = time().'.'.$file->getClientOriginalExtension();
 
-            $file->move(public_path('storage/uploads'), $filename);
+    $file->move(public_path('storage/uploads'), $filename);
 
-            $data['logo'] = 'uploads/'.$filename;
-        }
+    $data['logo'] = 'uploads/'.$filename;
+}
 
         foreach ($data as $key => $value) {
             Setting::setValue($key, $value);
