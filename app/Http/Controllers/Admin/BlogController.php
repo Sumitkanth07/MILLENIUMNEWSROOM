@@ -132,7 +132,7 @@ class BlogController extends Controller
 
         $filename = time().'_'.str_replace(' ', '_', $file->getClientOriginalName());
 
-        $file->move(public_path('storage/uploads'), $filename);
+        $file->move($_SERVER['DOCUMENT_ROOT'].'/storage/uploads', $filename);
 
         $data['image'] = 'uploads/'.$filename;
     }
@@ -144,7 +144,7 @@ class BlogController extends Controller
 
         $filename = time().'_'.str_replace(' ', '_', $file->getClientOriginalName());
 
-        $file->move(public_path('storage/uploads'), $filename);
+        $file->move($_SERVER['DOCUMENT_ROOT'].'/storage/uploads', $filename);
 
         $data['featured_image'] = 'uploads/'.$filename;
     }
@@ -159,7 +159,7 @@ class BlogController extends Controller
 
                 $filename = time().'_'.str_replace(' ', '_', $file->getClientOriginalName());
 
-                $file->move(public_path('storage/uploads/gallery'), $filename);
+                $file->move($_SERVER['DOCUMENT_ROOT'].'/storage/uploads/gallery', $filename);
 
                 return 'uploads/gallery/'.$filename;
 
