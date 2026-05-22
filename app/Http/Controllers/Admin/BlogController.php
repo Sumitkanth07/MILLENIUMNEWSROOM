@@ -125,6 +125,7 @@ class BlogController extends Controller
 
    private function storeImages(Request $request, array &$data, ?Blog $blog = null): void
 {
+    // Normal Image Upload
     if ($request->hasFile('image')) {
 
         $file = $request->file('image');
@@ -136,17 +137,19 @@ class BlogController extends Controller
         $data['image'] = 'uploads/'.$filename;
     }
 
+    // Featured Image Upload
     if ($request->hasFile('featured_image')) {
 
         $file = $request->file('featured_image');
 
-        $filename = time().'_'.$file->getClientOriginalName();
+        $filename = time().'_'.str_replace(' ', '_', $file->getClientOriginalName());
 
         $file->move(public_path('storage/uploads'), $filename);
 
         $data['featured_image'] = 'uploads/'.$filename;
     }
 
+    // Gallery Images Upload
     if ($request->hasFile('gallery_images')) {
 
         $existing = $blog?->gallery_images ?? [];
@@ -154,7 +157,7 @@ class BlogController extends Controller
         $newImages = collect($request->file('gallery_images'))
             ->map(function ($file) {
 
-                $filename = time().'_'.$file->getClientOriginalName();
+                $filename = time().'_'.str_replace(' ', '_', $file->getClientOriginalName());
 
                 $file->move(public_path('storage/uploads/gallery'), $filename);
 
