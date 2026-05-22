@@ -155,3 +155,97 @@ html[data-theme=dark] body.news-body{background:#0f0d0a;color:#f6ecd6}html[data-
         font-size:38px;
     }
 }
+
+/* ===== FINAL OVERRIDE FIX ===== */
+
+.article-layout{
+    display:grid !important;
+    grid-template-columns:80px minmax(0,1fr) 320px !important;
+    gap:34px !important;
+    max-width:1400px !important;
+    width:min(1400px,94vw) !important;
+    margin:auto !important;
+    align-items:start !important;
+}
+
+.article-layout > div{
+    min-width:0 !important;
+}
+
+.article .content{
+    width:100% !important;
+    max-width:100% !important;
+    overflow:hidden !important;
+    word-break:break-word !important;
+    line-height:1.9 !important;
+    font-size:20px !important;
+}
+
+.article .content img{
+    width:100% !important;
+    height:auto !important;
+    border-radius:14px !important;
+}
+
+.article-image{
+    width:100% !important;
+    max-height:600px !important;
+    object-fit:cover !important;
+    border-radius:16px !important;
+    display:block !important;
+}
+
+.site-header{
+    display:flex !important;
+    align-items:center !important;
+    justify-content:space-between !important;
+    gap:20px !important;
+    flex-wrap:wrap !important;
+}
+
+.brand{
+    display:flex !important;
+    align-items:center !important;
+    gap:12px !important;
+}
+
+.brand img{
+    width:48px !important;
+    height:48px !important;
+    object-fit:contain !important;
+}
+
+.site-nav{
+    display:flex !important;
+    align-items:center !important;
+    gap:18px !important;
+    flex-wrap:wrap !important;
+}
+
+.gallery-grid{
+    display:grid !important;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr)) !important;
+    gap:20px !important;
+}
+
+.gallery-grid img{
+    width:100% !important;
+    height:220px !important;
+    object-fit:cover !important;
+}
+
+@media(max-width:1000px){
+
+    .article-layout{
+        grid-template-columns:1fr !important;
+    }
+
+    .sticky-share{
+        display:none !important;
+    }
+
+    .sidebar{
+        position:relative !important;
+        top:auto !important;
+    }
+}
