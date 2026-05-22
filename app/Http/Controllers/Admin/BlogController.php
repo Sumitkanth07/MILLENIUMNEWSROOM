@@ -125,14 +125,37 @@ class BlogController extends Controller
 
    private function storeImages(Request $request, array &$data, ?Blog $blog = null): void
 {
+    /*
+    |--------------------------------------------------------------------------
+    | Simple Direct Upload System
+    |--------------------------------------------------------------------------
+    | Shared hosting friendly
+    | No Laravel storage/symlink dependency
+    | Uploads directly into:
+    | public_html/uploads
+    | public_html/uploads/gallery
+    |--------------------------------------------------------------------------
+    */
+
+    // Create folders if missing
+    if (!file_exists($_SERVER['DOCUMENT_ROOT'].'/uploads')) {
+        mkdir($_SERVER['DOCUMENT_ROOT'].'/uploads', 0775, true);
+    }
+
+    if (!file_exists($_SERVER['DOCUMENT_ROOT'].'/uploads/gallery')) {
+        mkdir($_SERVER['DOCUMENT_ROOT'].'/uploads/gallery', 0775, true);
+    }
+
     // Normal Image Upload
     if ($request->hasFile('image')) {
 
         $file = $request->file('image');
 
-        $filename = time().'_'.str_replace(' ', '_', $file->getClientOriginalName());
+        $filename = time().'_'.preg_replace('/[^A-Za-z0-9\.\-_]/', '_', $file->getClientOriginalName());
 
-        $file->move($_SERVER['DOCUMENT_ROOT'].'/storage/uploads', $filename);
+        $destination = $_SERVER['DOCUMENT_ROOT'].'/uploads';
+
+        $file->move($destination, $filename);
 
         $data['image'] = 'uploads/'.$filename;
     }
@@ -142,9 +165,11 @@ class BlogController extends Controller
 
         $file = $request->file('featured_image');
 
-        $filename = time().'_'.str_replace(' ', '_', $file->getClientOriginalName());
+        $filename = time().'_'.preg_replace('/[^A-Za-z0-9\.\-_]/', '_', $file->getClientOriginalName());
 
-        $file->move($_SERVER['DOCUMENT_ROOT'].'/storage/uploads', $filename);
+        $destination = $_SERVER['DOCUMENT_ROOT'].'/uploads';
+
+        $file->move($destination, $filename);
 
         $data['featured_image'] = 'uploads/'.$filename;
     }
@@ -157,9 +182,11 @@ class BlogController extends Controller
         $newImages = collect($request->file('gallery_images'))
             ->map(function ($file) {
 
-                $filename = time().'_'.str_replace(' ', '_', $file->getClientOriginalName());
+                $filename = time().'_'.preg_replace('/[^A-Za-z0-9\.\-_]/', '_', $file->getClientOriginalName());
 
-                $file->move($_SERVER['DOCUMENT_ROOT'].'/storage/uploads/gallery', $filename);
+                $destination = $_SERVER['DOCUMENT_ROOT'].'/uploads/gallery';
+
+                $file->move($destination, $filename);
 
                 return 'uploads/gallery/'.$filename;
 
