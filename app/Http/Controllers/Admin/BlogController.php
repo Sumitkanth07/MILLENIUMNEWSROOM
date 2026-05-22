@@ -129,7 +129,7 @@ class BlogController extends Controller
 
         $file = $request->file('image');
 
-        $filename = time().'_'.$file->getClientOriginalName();
+        $filename = time().'_'.str_replace(' ', '_', $file->getClientOriginalName());
 
         $file->move(public_path('storage/uploads'), $filename);
 
