@@ -1,22 +1,53 @@
 @extends('frontend.layout')
 
 @section('content')
+
 <section class="page-hero">
     <p class="eyebrow">MILLENIUMNEWSROOM</p>
+
     <h1>Latest News</h1>
-    <p>Business, markets, politics, technology, lifestyle and opinion coverage in one newsroom.</p>
-</section>  
-<section class="news-shell">
-    <div class="card-grid">
-        @foreach($blogs as $blog)
-            <article class="card">
-                @if($blog->featured_image || $blog->image)<img class="thumb" src="{{ asset('storage/'.($blog->featured_image ?: $blog->image)) }}" alt="{{ $blog->title }}" loading="lazy">@endif
-                <span>{{ $blog->category?->name }}</span>
-                <h2><a href="{{ route('blog.show', $blog) }}">{{ $blog->title }}</a></h2>
-                <p>{{ $blog->excerpt }}</p>
-            </article>
-        @endforeach
-    </div>
-    {{ $blogs->links() }}
+
+    <p>
+        Business, markets, politics, technology, lifestyle and opinion coverage in one newsroom.
+    </p>
 </section>
+
+<section class="news-shell">
+
+    <div class="card-grid">
+
+        @foreach($blogs as $blog)
+
+            <article class="card">
+
+                @if($blog->featured_image || $blog->image)
+
+                    <img 
+                        class="thumb"
+                        src="{{ url($blog->featured_image ?: $blog->image) }}"
+                        alt="{{ $blog->title }}"
+                        loading="lazy">
+
+                @endif
+
+                <span>{{ $blog->category?->name }}</span>
+
+                <h2>
+                    <a href="{{ route('blog.show', $blog) }}">
+                        {{ $blog->title }}
+                    </a>
+                </h2>
+
+                <p>{{ $blog->excerpt }}</p>
+
+            </article>
+
+        @endforeach
+
+    </div>
+
+    {{ $blogs->links() }}
+
+</section>
+
 @endsection

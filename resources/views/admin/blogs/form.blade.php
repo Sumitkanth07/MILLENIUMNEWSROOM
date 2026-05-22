@@ -58,29 +58,82 @@
         </label>
     </aside>
 
-    <section class="panel form">
-        <h3>Featured Image SEO</h3>
-        @if($blog->featured_image || $blog->image)
-            <div class="preview-box"><span>Current image</span><img src="{{ asset('storage/'.($blog->featured_image ?: $blog->image)) }}" alt="{{ $blog->featured_image_alt ?: $blog->title }}"><small>{{ basename($blog->featured_image ?: $blog->image) }}</small></div>
-        @endif
-        <label>Featured image <input id="featuredImageInput" name="featured_image" type="file" accept="image/*"></label>
-        <div id="featuredImagePreview" class="preview-box" hidden><span>New image preview</span><img alt=""><small></small></div>
-        <label>Gallery images <input name="gallery_images[]" type="file" accept="image/*" multiple></label>
-        @if($blog->gallery_images)
-            <div class="gallery-admin-grid">
-                @foreach($blog->gallery_images as $image)
-                    <figure>
-                        <img src="{{ asset('storage/'.$image) }}" alt="{{ basename($image) }}">
-                        <figcaption>{{ basename($image) }}<small>{{ $image }}</small></figcaption>
-                    </figure>
-                @endforeach
-            </div>
-        @endif
-        <label>Alt text <input name="featured_image_alt" value="{{ old('featured_image_alt', $blog->featured_image_alt) }}"></label>
-        <label>Title text <input name="featured_image_title" value="{{ old('featured_image_title', $blog->featured_image_title) }}"></label>
-        <label>Caption <input name="featured_image_caption" value="{{ old('featured_image_caption', $blog->featured_image_caption) }}"></label>
-        <label>Description <textarea name="featured_image_description" rows="3">{{ old('featured_image_description', $blog->featured_image_description) }}</textarea></label>
-    </section>
+   <section class="panel form">
+    <h3>Featured Image SEO</h3>
+
+    @if($blog->featured_image || $blog->image)
+        <div class="preview-box">
+            <span>Current image</span>
+
+            <img 
+                src="{{ url($blog->featured_image ?: $blog->image) }}" 
+                alt="{{ $blog->featured_image_alt ?: $blog->title }}">
+
+            <small>
+                {{ basename($blog->featured_image ?: $blog->image) }}
+            </small>
+        </div>
+    @endif
+
+    <label>
+        Featured image
+        <input id="featuredImageInput" name="featured_image" type="file" accept="image/*">
+    </label>
+
+    <div id="featuredImagePreview" class="preview-box" hidden>
+        <span>New image preview</span>
+        <img alt="">
+        <small></small>
+    </div>
+
+    <label>
+        Gallery images
+        <input name="gallery_images[]" type="file" accept="image/*" multiple>
+    </label>
+
+    @if($blog->gallery_images)
+        <div class="gallery-admin-grid">
+
+            @foreach($blog->gallery_images as $image)
+
+                <figure>
+
+                    <img 
+                        src="{{ url($image) }}" 
+                        alt="{{ basename($image) }}">
+
+                    <figcaption>
+                        {{ basename($image) }}
+                        <small>{{ $image }}</small>
+                    </figcaption>
+
+                </figure>
+
+            @endforeach
+
+        </div>
+    @endif
+
+    <label>
+        Alt text
+        <input name="featured_image_alt" value="{{ old('featured_image_alt', $blog->featured_image_alt) }}">
+    </label>
+
+    <label>
+        Title text
+        <input name="featured_image_title" value="{{ old('featured_image_title', $blog->featured_image_title) }}">
+    </label>
+
+    <label>
+        Caption
+        <input name="featured_image_caption" value="{{ old('featured_image_caption', $blog->featured_image_caption) }}">
+    </label>
+
+    <label>
+        Description
+        <textarea name="featured_image_description" rows="3">{{ old('featured_image_description', $blog->featured_image_description) }}</textarea>
+    </label>
+</section>
 
     <section class="panel form">
         <h3>SEO Preview</h3>
