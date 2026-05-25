@@ -59,7 +59,7 @@
         >
 
             <img
-                src="{{ url('/'.ltrim($image, '/')) }}"
+                src="{{ asset(ltrim($image, '/')) }}"
                 alt="{{ $title }}"
                 loading="lazy"
             >

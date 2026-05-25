@@ -6,7 +6,7 @@
     <meta name="description" content="@yield('meta_description', 'Premium business news, markets, money and opinion coverage.')">
     <title>@yield('title', 'MILLENIUMNEWSROOM - Business News, Markets and Money')</title>
     @stack('head')
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}?v={{ $assetVersion ?? time() }}">
     @stack('styles')
 </head>
 <body class="@yield('body_class', 'news-portal')">

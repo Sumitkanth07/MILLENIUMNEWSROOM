@@ -6,7 +6,7 @@
     <meta charset="utf-8">
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="icon" type="image/png" href="/{{ $logo }}">
+    <link rel="icon" type="image/png" href="{{ $logo ? asset($logo) : asset('favicon.ico') }}">
 
     <title>{{ $metaTitle ?? $siteTitle }}</title>
 
@@ -38,13 +38,13 @@
         <meta name="twitter:image" content="{{ $ogImage }}">
     @endisset
 
-    <link rel="preload" href="{{ asset('css/news.css') }}?v={{ time() }}" as="style">
+    <link rel="preload" href="{{ asset('css/news.css') }}?v={{ $assetVersion }}" as="style">
 
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}?v={{ time() }}">
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}?v={{ $assetVersion }}">
 
-    <link rel="stylesheet" href="{{ asset('css/news.css') }}?v={{ time() }}">
+    <link rel="stylesheet" href="{{ asset('css/news.css') }}?v={{ $assetVersion }}">
 
-    <link rel="stylesheet" href="{{ asset('css/footer.css') }}?v={{ time() }}">
+    <link rel="stylesheet" href="{{ asset('css/footer.css') }}?v={{ $assetVersion }}">
 
     <style>
         :root{
@@ -82,7 +82,7 @@
             @if($logo)
 
                 <img 
-                    src="/{{ $logo }}"
+                    src="{{ asset($logo) }}"
                     alt="{{ $siteName }} logo"
                     width="42"
                     height="42">
@@ -105,7 +105,7 @@
 
             @forelse($navigationItems as $item)
 
-                <a href="{{ $item->url }}" class="nav-link">
+                <a href="{{ url($item->url) }}" class="nav-link">
                     {{ $item->label }}
                 </a>
 
@@ -113,7 +113,7 @@
 
                 @foreach(['News','Markets','Technology','Companies','Politics','Opinion','Sports','Lifestyle'] as $menu)
 
-                    <a href="{{ route('search', ['q' => $menu]) }}" class="nav-link">
+                    <a href="{{ url('/category/'.str($menu)->slug()) }}" class="nav-link">
                         {{ $menu }}
                     </a>
 
@@ -258,7 +258,7 @@
 
     </footer>
 
-    <script src="{{ asset('js/app.js') }}?v={{ time() }}" defer></script>
+    <script src="{{ asset('js/app.js') }}?v={{ $assetVersion }}" defer></script>
 
     <script>
     (() => {

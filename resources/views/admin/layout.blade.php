@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Admin | {{ $siteName ?? 'MILLENIUMNEWSROOM' }}</title>
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/news.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}?v={{ $assetVersion }}">
+    <link rel="stylesheet" href="{{ asset('css/news.css') }}?v={{ $assetVersion }}">
 </head>
 <body class="admin-body">
     <aside class="admin-sidebar">
@@ -31,7 +31,7 @@
         @if($errors->any())<div class="notice danger">{{ $errors->first() }}</div>@endif
         @yield('content')
     </main>
-    <script src="{{ asset('js/app.js') }}" defer></script>
+    <script src="{{ asset('js/app.js') }}?v={{ $assetVersion }}" defer></script>
     <script>
     (() => {
         const key = 'millenium-admin-theme';

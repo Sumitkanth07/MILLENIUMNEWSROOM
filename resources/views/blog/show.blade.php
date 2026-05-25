@@ -44,7 +44,7 @@
 
                 @if($blog->author->image)
                     <img 
-                        src="{{ url($blog->author->image) }}"
+                        src="{{ asset($blog->author->image) }}"
                         alt="{{ $blog->author->name }}"
                         loading="lazy">
                 @endif
@@ -63,7 +63,7 @@
 
                 <img 
                     class="article-image"
-                    src="{{ url($blog->featured_image ?: $blog->image) }}"
+                    src="{{ asset($blog->featured_image ?: $blog->image) }}"
                     alt="{{ $blog->featured_image_alt ?: $blog->title }}"
                     title="{{ $blog->featured_image_title ?: $blog->title }}"
                     loading="eager">
@@ -118,7 +118,7 @@
                         <figure>
 
                             <img 
-                                src="{{ url('/'.$image) }}"
+                                src="{{ asset($image) }}"
                                     alt="{{ $blog->title }} gallery image {{ $loop->iteration }}"
                                     loading="lazy"
                             >
@@ -219,7 +219,7 @@
         'name' => 'MILLENIUMNEWSROOM'
     ],
     'image' => ($blog->featured_image || $blog->image)
-        ? [url($blog->featured_image ?: $blog->image)]
+        ? [asset($blog->featured_image ?: $blog->image)]
         : [],
 ], JSON_UNESCAPED_SLASHES) !!}
 </script>

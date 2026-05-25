@@ -24,7 +24,7 @@
 
                     <img 
                         class="thumb"
-                        src="{{ url($blog->featured_image ?: $blog->image) }}"
+                        src="{{ asset($blog->featured_image ?: $blog->image) }}"
                         alt="{{ $blog->title }}"
                         loading="lazy">
 
