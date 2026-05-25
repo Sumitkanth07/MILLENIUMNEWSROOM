@@ -14,7 +14,7 @@
     <h3>Dynamic Footer Links</h3>
     <label>Footer menus <textarea name="footer_menus" rows="4" placeholder="About Us|/page/about-us">{{ old('footer_menus', implode("\n", $footer->footer_menus ?? [])) }}</textarea></label>
     <label>Category links <textarea name="category_links" rows="4" placeholder="Markets|/category/markets">{{ old('category_links', implode("\n", $footer->category_links ?? [])) }}</textarea></label>
-    <label>Social links <textarea name="social_links" rows="4" placeholder="LinkedIn|https://linkedin.com">{{ old('social_links', implode("\n", $footer->social_links ?? [])) }}</textarea></label>
+    <label>Social links <textarea name="social_links" rows="4" placeholder="X|https://x.com/yourprofile&#10;LinkedIn|https://linkedin.com/company/yourcompany&#10;Instagram|https://instagram.com/yourprofile&#10;YouTube|https://youtube.com/@yourchannel">{{ old('social_links', implode("\n", $footer->social_links ?? [])) }}</textarea></label>
     <label>Sitemap links <textarea name="sitemap_links" rows="4" placeholder="XML Sitemap|/sitemap.xml">{{ old('sitemap_links', implode("\n", $footer->sitemap_links ?? [])) }}</textarea></label>
     <button class="btn primary">Save Footer</button>
 </form>

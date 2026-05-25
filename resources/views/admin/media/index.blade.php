@@ -11,14 +11,16 @@
     <button class="btn primary">Upload</button>
 </form>
 <div class="media-grid">
-@foreach($items as $item)
+@forelse($items as $item)
     <article class="media-item">
         <img src="{{ asset('storage/'.$item->path) }}" alt="{{ $item->alt_text ?: $item->name }}" loading="lazy" decoding="async">
         <strong>{{ $item->name }}</strong>
         <small>{{ $item->folder }}</small>
         <form method="POST" action="{{ route('admin.media.destroy', $item) }}">@csrf @method('DELETE')<button class="btn small danger">Delete</button></form>
     </article>
-@endforeach
+@empty
+    <article class="media-item empty-state"><strong>No media uploaded yet.</strong><small>Upload an image to start building the library.</small></article>
+@endforelse
 </div>
 {{ $items->links() }}
 @endsection

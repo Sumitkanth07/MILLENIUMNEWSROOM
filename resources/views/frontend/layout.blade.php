@@ -137,7 +137,7 @@
 
                     @foreach($breakingPosts as $post)
 
-                        <a href="{{ route('blog.show', $post) }}">
+                        <a href="{{ route('blog.show', ['blog' => $post->slug]) }}">
                             {{ $post->title }}
                         </a>
 
@@ -243,9 +243,16 @@
 
             @endif
 
-            <span class="socials">
-                X · LinkedIn · YouTube · Instagram
-            </span>
+            @if(!empty($footerSetting->social_links))
+                <span class="socials">
+                    @foreach($footerSetting->social_links as $social)
+                        @php
+                            [$label, $url] = array_pad(explode('|', $social, 2), 2, '#');
+                        @endphp
+                        <a href="{{ $url }}" target="_blank" rel="noopener">{{ $label }}</a>@if(!$loop->last) &middot; @endif
+                    @endforeach
+                </span>
+            @endif
 
         </div>
 
