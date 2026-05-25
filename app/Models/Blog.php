@@ -11,12 +11,35 @@ use Illuminate\Support\Str;
 class Blog extends Model
 {
     protected $fillable = [
-        'user_id', 'category_id', 'author_id', 'title', 'slug', 'excerpt', 'content', 'image',
-        'featured_image', 'gallery_images', 'tags_cache', 'meta_title', 'meta_description',
-        'meta_keywords', 'canonical_url', 'is_published', 'is_featured', 'is_breaking',
-        'is_trending', 'status', 'scheduled_at', 'published_at', 'views_count',
-        'featured_image_alt', 'featured_image_title', 'featured_image_caption',
-        'featured_image_description', 'robots_meta', 'reading_time',
+        'user_id',
+        'category_id',
+        'author_id',
+        'title',
+        'slug',
+        'excerpt',
+        'content',
+        'image',
+        'featured_image',
+        'gallery_images',
+        'tags_cache',
+        'meta_title',
+        'meta_description',
+        'meta_keywords',
+        'canonical_url',
+        'is_published',
+        'is_featured',
+        'is_breaking',
+        'is_trending',
+        'status',
+        'scheduled_at',
+        'published_at',
+        'views_count',
+        'featured_image_alt',
+        'featured_image_title',
+        'featured_image_caption',
+        'featured_image_description',
+        'robots_meta',
+        'reading_time',
     ];
 
     protected function casts(): array
@@ -31,6 +54,23 @@ class Blog extends Model
             'published_at' => 'datetime',
         ];
     }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Route Model Binding By Slug
+    |--------------------------------------------------------------------------
+    */
+
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Relationships
+    |--------------------------------------------------------------------------
+    */
 
     public function user(): BelongsTo
     {
@@ -67,14 +107,31 @@ class Blog extends Model
         return $this->hasMany(PostView::class);
     }
 
+    /*
+    |--------------------------------------------------------------------------
+    | Generate Unique Slug
+    |--------------------------------------------------------------------------
+    */
+
     public static function uniqueSlug(string $title, ?int $ignoreId = null): string
     {
         $slug = Str::slug($title);
+
         $base = $slug ?: 'post';
+
         $count = 2;
 
-        while (static::where('slug', $slug)->when($ignoreId, fn ($q) => $q->where('id', '!=', $ignoreId))->exists()) {
+        while (
+            static::where('slug', $slug)
+                ->when(
+                    $ignoreId,
+                    fn ($q) => $q->where('id', '!=', $ignoreId)
+                )
+                ->exists()
+        ) {
+
             $slug = "{$base}-{$count}";
+
             $count++;
         }
 

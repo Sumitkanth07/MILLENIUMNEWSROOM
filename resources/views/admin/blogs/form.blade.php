@@ -92,28 +92,52 @@
     </label>
 
     @if($blog->gallery_images)
-        <div class="gallery-admin-grid">
 
-            @foreach($blog->gallery_images as $image)
+    <div class="gallery-admin-grid">
 
-                <figure>
+        @foreach($blog->gallery_images as $image)
 
-                    <img 
-                        src="{{ url($image) }}" 
-                        alt="{{ basename($image) }}">
+            <figure class="gallery-item">
 
-                    <figcaption>
-                        {{ basename($image) }}
-                        <small>{{ $image }}</small>
-                    </figcaption>
+                <img
+                    src="{{ url($image) }}"
+                    alt="{{ basename($image) }}"
+                >
 
-                </figure>
+                <figcaption>
 
-            @endforeach
+                    {{ basename($image) }}
 
-        </div>
-    @endif
+                    <small>{{ $image }}</small>
 
+                </figcaption>
+
+                <label
+                    style="
+                        display:block;
+                        margin-top:10px;
+                        color:#fff;
+                        font-size:14px;
+                    "
+                >
+
+                    <input
+                        type="checkbox"
+                        name="remove_gallery_images[]"
+                        value="{{ $image }}"
+                    >
+
+                    Remove image
+
+                </label>
+
+            </figure>
+
+        @endforeach
+
+    </div>
+
+@endif
     <label>
         Alt text
         <input name="featured_image_alt" value="{{ old('featured_image_alt', $blog->featured_image_alt) }}">

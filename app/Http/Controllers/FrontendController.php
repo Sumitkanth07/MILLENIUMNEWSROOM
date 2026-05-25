@@ -112,7 +112,12 @@ class FrontendController extends Controller
             'pages' => Page::where('is_published', true)->orderBy('title')->get(),
             'latestPosts' => Blog::where('is_published', true)->latest('published_at')->take(20)->get(),
             'popularPosts' => Blog::where('is_published', true)->orderByDesc('views_count')->take(10)->get(),
-            'archives' => Blog::where('is_published', true)->selectRaw("strftime('%Y-%m', published_at) as month")->groupBy('month')->orderByDesc('month')->take(12)->pluck('month'),
+            'archives' => Blog::where('is_published', true)
+                ->selectRaw("DATE_FORMAT(published_at, '%Y-%m') as month")
+                ->groupBy('month')
+                ->orderByDesc('month')
+                ->take(12)
+                ->pluck('month'),
             'metaTitle' => 'Sitemap | MILLENIUMNEWSROOM',
             'metaDescription' => 'Browse categories, pages, posts and archives on MILLENIUMNEWSROOM.',
         ]);

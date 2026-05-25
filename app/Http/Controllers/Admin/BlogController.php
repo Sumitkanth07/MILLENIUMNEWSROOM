@@ -123,82 +123,123 @@ class BlogController extends Controller
         ]);
     }
 
-   private function storeImages(Request $request, array &$data, ?Blog $blog = null): void
+private function storeImages(Request $request, array &$data, ?Blog $blog = null): void
 {
     /*
     |--------------------------------------------------------------------------
-    | Simple Direct Upload System
-    |--------------------------------------------------------------------------
-    | Shared hosting friendly
-    | No Laravel storage/symlink dependency
-    | Uploads directly into:
-    | public_html/uploads
-    | public_html/uploads/gallery
+    | Shared Hosting Friendly Upload System
     |--------------------------------------------------------------------------
     */
 
-    // Create folders if missing
+    // Create upload folders if missing
     if (!file_exists($_SERVER['DOCUMENT_ROOT'].'/uploads')) {
-        mkdir($_SERVER['DOCUMENT_ROOT'].'/uploads', 0775, true);
+
+        mkdir(
+            $_SERVER['DOCUMENT_ROOT'].'/uploads',
+            0775,
+            true
+        );
     }
 
     if (!file_exists($_SERVER['DOCUMENT_ROOT'].'/uploads/gallery')) {
-        mkdir($_SERVER['DOCUMENT_ROOT'].'/uploads/gallery', 0775, true);
+
+        mkdir(
+            $_SERVER['DOCUMENT_ROOT'].'/uploads/gallery',
+            0775,
+            true
+        );
     }
 
-    // Normal Image Upload
+    /*
+    |--------------------------------------------------------------------------
+    | Normal Image Upload
+    |--------------------------------------------------------------------------
+    */
+
     if ($request->hasFile('image')) {
 
         $file = $request->file('image');
 
-        $filename = time().'_'.preg_replace('/[^A-Za-z0-9\.\-_]/', '_', $file->getClientOriginalName());
+        $filename =
+            time().'_'.
+            uniqid().'_'.
+            preg_replace(
+                '/[^A-Za-z0-9\.\-_]/',
+                '_',
+                $file->getClientOriginalName()
+            );
 
-        $destination = $_SERVER['DOCUMENT_ROOT'].'/uploads';
+        $destination =
+            $_SERVER['DOCUMENT_ROOT'].'/uploads';
 
         $file->move($destination, $filename);
 
-        $data['image'] = 'uploads/'.$filename;
+        $data['image'] =
+            'uploads/'.$filename;
     }
 
-    // Featured Image Upload
+    /*
+    |--------------------------------------------------------------------------
+    | Featured Image Upload
+    |--------------------------------------------------------------------------
+    */
+
     if ($request->hasFile('featured_image')) {
 
         $file = $request->file('featured_image');
 
-        $filename = time().'_'.preg_replace('/[^A-Za-z0-9\.\-_]/', '_', $file->getClientOriginalName());
+        $filename =
+            time().'_'.
+            uniqid().'_'.
+            preg_replace(
+                '/[^A-Za-z0-9\.\-_]/',
+                '_',
+                $file->getClientOriginalName()
+            );
 
-        $destination = $_SERVER['DOCUMENT_ROOT'].'/uploads';
+        $destination =
+            $_SERVER['DOCUMENT_ROOT'].'/uploads';
 
         $file->move($destination, $filename);
 
-        $data['featured_image'] = 'uploads/'.$filename;
+        $data['featured_image'] =
+            'uploads/'.$filename;
     }
 
-    // Gallery Images Upload
+    /*
+    |--------------------------------------------------------------------------
+    | Gallery Images Upload
+    |--------------------------------------------------------------------------
+    */
+
     if ($request->hasFile('gallery_images')) {
 
-        $existing = $blog?->gallery_images ?? [];
+        $galleryImages = [];
 
-        $newImages = collect($request->file('gallery_images'))
-            ->map(function ($file) {
+        foreach ($request->file('gallery_images') as $file) {
 
-                $filename = time().'_'.preg_replace('/[^A-Za-z0-9\.\-_]/', '_', $file->getClientOriginalName());
+            $filename =
+                time().'_'.
+                uniqid().'_'.
+                preg_replace(
+                    '/[^A-Za-z0-9\.\-_]/',
+                    '_',
+                    $file->getClientOriginalName()
+                );
 
-                $destination = $_SERVER['DOCUMENT_ROOT'].'/uploads/gallery';
+            $destination =
+                $_SERVER['DOCUMENT_ROOT'].'/uploads/gallery';
 
-                $file->move($destination, $filename);
+            $file->move($destination, $filename);
 
-                return 'uploads/gallery/'.$filename;
+            $galleryImages[] =
+                'uploads/gallery/'.$filename;
+        }
 
-            })
-            ->all();
-
-        $data['gallery_images'] = array_values(
-            array_filter(array_merge($existing, $newImages))
-        );
+        // Replace old gallery fully
+        $data['gallery_images'] = $galleryImages;
     }
 }
-
     private function readingTime(string $content): int
     {
         return max(1, (int) ceil(str_word_count(strip_tags($content)) / 220));

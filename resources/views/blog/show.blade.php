@@ -35,7 +35,7 @@
 
         <p class="muted">
             By {{ $blog->author?->name ?? 'MILLENIUMNEWSROOM Desk' }}
-            ·
+            Â·
             {{ optional($blog->published_at)->format('M d, Y h:i A') }}
         </p>
 
@@ -79,11 +79,8 @@
         @endif
 
         <p class="muted">
-            {{ number_format($blog->views_count) }} views
-            ·
             {{ $blog->reading_time }} min read
         </p>
-
         <div class="share-row">
             <button class="btn small">Share</button>
             <button class="btn small">X</button>
@@ -121,13 +118,10 @@
                         <figure>
 
                             <img 
-                                src="{{ url($image) }}"
-                                alt="{{ $blog->title }} gallery image {{ $loop->iteration }}"
-                                loading="lazy">
-
-                            <figcaption>
-                                {{ basename($image) }}
-                            </figcaption>
+                                src="{{ url('/'.$image) }}"
+                                    alt="{{ $blog->title }} gallery image {{ $loop->iteration }}"
+                                    loading="lazy"
+                            >
 
                         </figure>
 
@@ -158,7 +152,7 @@
                     <article class="card">
 
                         <h3>
-                            <a href="{{ route('blog.show', $post) }}">
+                            <a href="{{ route('blog.show', ['blog' => $post->slug]) }}">
                                 {{ $post->title }}
                             </a>
                         </h3>
@@ -195,7 +189,7 @@
 
         @foreach($trendingPosts as $post)
 
-            <a class="trend" href="{{ route('blog.show', $post) }}">
+            <a class="trend" href="{{ route('blog.show', ['blog' => $post->slug]) }}">
 
                 <strong>{{ $loop->iteration }}</strong>
 

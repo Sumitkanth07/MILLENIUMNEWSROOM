@@ -6,8 +6,8 @@
     <div class="sitemap-grid" data-sitemap-list>
         <section class="sitemap-panel category-card-panel"><h2>Categories</h2>@foreach($categories as $category)<a href="{{ route('category.show', $category) }}">{{ $category->name }} <span>{{ $category->blogs_count }}</span></a>@endforeach</section>
         <section class="sitemap-panel"><h2>Popular Pages</h2>@foreach($pages as $page)<a href="{{ route('page.show', $page) }}">{{ $page->title }}</a>@endforeach</section>
-        <section class="sitemap-panel wide"><h2>Latest Posts</h2>@foreach($latestPosts as $post)<a href="{{ route('blog.show', $post) }}">{{ $post->title }} <span>{{ optional($post->published_at)->format('M d, Y') }}</span></a>@endforeach</section>
-        <section class="sitemap-panel"><h2>Popular Posts</h2>@foreach($popularPosts as $post)<a href="{{ route('blog.show', $post) }}">{{ $post->title }} <span>{{ number_format($post->views_count) }} views</span></a>@endforeach</section>
+        <section class="sitemap-panel wide"><h2>Latest Posts</h2>@foreach($latestPosts as $post)<a href="{{ route('blog.show', ['blog' => $post->slug]) }}">{{ $post->title }} <span>{{ optional($post->published_at)->format('M d, Y') }}</span></a>@endforeach</section>
+        <section class="sitemap-panel"><h2>Popular Posts</h2>@foreach($popularPosts as $post)<a href="{{ route('blog.show', ['blog' => $post->slug]) }}">{{ $post->title }} <span>{{ optional($post->published_at)->format('M d, Y') }}</span></a>@endforeach</section>
         <section class="sitemap-panel"><h2>Archives</h2>@foreach($archives as $archive)<a href="{{ route('search', ['q' => $archive]) }}">{{ $archive }}</a>@endforeach</section>
     </div>
 </section>

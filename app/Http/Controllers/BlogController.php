@@ -9,6 +9,7 @@ class BlogController extends Controller
     public function index()
     {
         return view('blog.index', [
+
             'blogs' => Blog::with(['category', 'author'])
                 ->where('is_published', true)
                 ->latest('published_at')
@@ -17,6 +18,7 @@ class BlogController extends Controller
             'metaTitle' => 'Latest News | MILLENIUMNEWSROOM',
 
             'metaDescription' => 'Latest news, analysis and opinion from MILLENIUMNEWSROOM.',
+
         ]);
     }
 
@@ -27,9 +29,17 @@ class BlogController extends Controller
         $blog->increment('views_count');
 
         return view('blog.show', [
-            'blog' => $blog->load(['category', 'author', 'tags']),
 
-            'relatedPosts' => Blog::with(['category', 'author'])
+            'blog' => $blog->load([
+                'category',
+                'author',
+                'tags'
+            ]),
+
+            'relatedPosts' => Blog::with([
+                    'category',
+                    'author'
+                ])
                 ->where('is_published', true)
                 ->whereKeyNot($blog->id)
                 ->latest('published_at')
@@ -43,7 +53,7 @@ class BlogController extends Controller
                 ->get(),
 
             'metaTitle' => $blog->meta_title
-                ?: $blog->title . ' | MILLENIUMNEWSROOM',
+                ?: $blog->title.' | MILLENIUMNEWSROOM',
 
             'metaDescription' => $blog->meta_description
                 ?: $blog->excerpt,
@@ -57,8 +67,9 @@ class BlogController extends Controller
             'ogType' => 'article',
 
             'ogImage' => ($blog->featured_image || $blog->image)
-                ? asset('storage/uploads/' . basename($blog->featured_image ?: $blog->image))
+                ? url('/'.($blog->featured_image ?: $blog->image))
                 : null,
+
         ]);
     }
 }

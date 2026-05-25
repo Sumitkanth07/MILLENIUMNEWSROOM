@@ -6,51 +6,128 @@
 ])
 
 @php
-    $category = $article['category'] ?? $article['heading'] ?? 'News';
-    $title = $article['title'] ?? 'Untitled story';
-    $summary = $article['summary'] ?? null;
-    $image = $article['image'] ?? null;
-    $readTime = $article['read_time'] ?? null;
-    $time = $article['time'] ?? null;
-    $isPremium = strtolower($category) === 'premium';
+
+    $category =
+        $article->category->name
+        ?? 'News';
+
+    $title =
+        $article->title
+        ?? 'Untitled story';
+
+    $summary =
+        $article->excerpt
+        ?? null;
+
+    $image =
+        $article->featured_image
+        ?: $article->image;
+
+    $slug =
+        $article->slug
+        ?? null;
+
+    $readTime =
+        $article->reading_time
+        ?? null;
+
+    $time =
+        optional($article->published_at)?->diffForHumans();
+
+    $isPremium =
+        strtolower($category) === 'premium';
+
 @endphp
 
-<article {{ $attributes->merge(['class' => 'article-card article-card--'.$variant]) }}>
+<article {{ $attributes->merge([
+    'class' => 'article-card article-card--'.$variant
+]) }}>
+
     @if ($rank)
-        <span class="article-card__rank">{{ $rank }}</span>
+
+        <span class="article-card__rank">
+            {{ $rank }}
+        </span>
+
     @endif
 
     @if ($showImage && $image)
-        <a class="article-card__image" href="#">
-            <img src="{{ $image }}" alt="{{ $title }}">
+
+        <a
+            class="article-card__image"
+            href="{{ url('/blog/'.$slug) }}"
+        >
+
+            <img
+                src="{{ url('/'.ltrim($image, '/')) }}"
+                alt="{{ $title }}"
+                loading="lazy"
+            >
+
         </a>
+
     @endif
 
     <div class="article-card__body">
+
         <div class="article-card__meta-row">
-            <span class="section-kicker">{{ $category }}</span>
+
+            <span class="section-kicker">
+                {{ $category }}
+            </span>
+
             @if ($isPremium)
-                <span class="premium-badge">Premium</span>
+
+                <span class="premium-badge">
+                    Premium
+                </span>
+
             @endif
+
         </div>
-        <h3><a href="#">{{ $title }}</a></h3>
+
+        <h3>
+
+            <a href="{{ url('/blog/'.$slug) }}">
+
+                {{ $title }}
+
+            </a>
+
+        </h3>
 
         @if ($summary && $variant !== 'compact')
+
             <p>{{ $summary }}</p>
+
         @endif
 
         @if ($readTime || $time)
+
             <div class="article-meta">
+
                 @if ($readTime)
-                    <span>{{ $readTime }}</span>
+
+                    <span>{{ $readTime }} min read</span>
+
                 @endif
+
                 @if ($readTime && $time)
+
                     <span aria-hidden="true">|</span>
+
                 @endif
+
                 @if ($time)
+
                     <span>{{ $time }}</span>
+
                 @endif
+
             </div>
+
         @endif
+
     </div>
+
 </article>
