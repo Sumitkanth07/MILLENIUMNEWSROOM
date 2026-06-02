@@ -65,7 +65,7 @@ return [
     |
     */
 
-    'asset_url' => env('ASSET_URL', '/MILLENIUMNEWSROOM/public'),
+    'asset_url' => env('ASSET_URL', PHP_SAPI === 'cli-server' ? null : '/MILLENIUMNEWSROOM/public'),
 
     /*
     |--------------------------------------------------------------------------

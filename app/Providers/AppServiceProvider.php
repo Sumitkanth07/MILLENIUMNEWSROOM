@@ -26,7 +26,19 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         View::composer('*', function ($view) {
+            static $shared = null;
+
+            if ($shared !== null) {
+                $view->with($shared);
+
+                return;
+            }
+
             try {
+                if (app()->environment('testing')) {
+                    throw new \RuntimeException;
+                }
+
                 $hasSettings = Schema::hasTable('settings');
                 $hasNavigation = Schema::hasTable('navigation_items');
                 $hasFooter = Schema::hasTable('footer_settings');
@@ -36,21 +48,25 @@ class AppServiceProvider extends ServiceProvider
                 $hasFooter = false;
             }
 
-            $view->with('siteName', $hasSettings ? Setting::getValue('site_name', 'MILLENIUMNEWSROOM') : 'MILLENIUMNEWSROOM');
-            $view->with('siteTitle', $hasSettings ? Setting::getValue('site_title', 'MILLENIUMNEWSROOM | Professional News Portal') : 'MILLENIUMNEWSROOM | Professional News Portal');
-            $view->with('tagline', $hasSettings ? Setting::getValue('tagline', 'Business, markets and technology journalism') : 'Business, markets and technology journalism');
-            $view->with('primaryColor', $hasSettings ? Setting::getValue('primary_color', '#1f1a12') : '#1f1a12');
-            $view->with('secondaryColor', $hasSettings ? Setting::getValue('secondary_color', '#c79a2b') : '#c79a2b');
-            $view->with('logo', $hasSettings ? Setting::getValue('logo') : null);
-            $view->with('assetVersion', $this->assetVersion());
-            $view->with('navigationItems', $hasNavigation ? $this->navigationItems() : collect());
-            $view->with('footerSetting', $hasFooter ? FooterSetting::current() : new FooterSetting([
-                'company_name' => 'MILLENIUMNEWSROOM',
-                'email' => 'info@MILLENIUMNEWSROOM.com',
+            $shared = [
+                'siteName' => $this->brand($hasSettings ? Setting::getValue('site_name', 'MILLENNIUM NEWSROOM') : 'MILLENNIUM NEWSROOM'),
+                'siteTitle' => $this->brand($hasSettings ? Setting::getValue('site_title', 'MILLENNIUM NEWSROOM | Professional News Portal') : 'MILLENNIUM NEWSROOM | Professional News Portal'),
+                'tagline' => $hasSettings ? Setting::getValue('tagline', 'Business, markets and technology journalism') : 'Business, markets and technology journalism',
+                'primaryColor' => $hasSettings ? Setting::getValue('primary_color', '#1f1a12') : '#1f1a12',
+                'secondaryColor' => $hasSettings ? Setting::getValue('secondary_color', '#c79a2b') : '#c79a2b',
+                'logo' => $hasSettings ? Setting::getValue('logo') : null,
+                'assetVersion' => $this->assetVersion(),
+                'navigationItems' => $hasNavigation ? $this->navigationItems() : collect(),
+                'footerSetting' => $hasFooter ? FooterSetting::current() : new FooterSetting([
+                'company_name' => 'MILLENNIUM NEWSROOM',
+                'email' => 'info@millenniumnewsroom.com',
                 'phone' => '+91 9876543210',
                 'address' => 'New Delhi, India',
-                'copyright_text' => '(c) '.date('Y').' MILLENIUMNEWSROOM. All rights reserved.',
-            ]));
+                'copyright_text' => '(c) '.date('Y').' MILLENNIUM NEWSROOM. All rights reserved.',
+                ]),
+            ];
+
+            $view->with($shared);
         });
     }
 
@@ -65,6 +81,11 @@ class AppServiceProvider extends ServiceProvider
             ->max();
 
         return (string) ($latest ?: time());
+    }
+
+    private function brand(?string $value): string
+    {
+        return str_ireplace('MILLENNIUM NEWSROOM', 'MILLENNIUM NEWSROOM', (string) $value);
     }
 
     private function navigationItems()

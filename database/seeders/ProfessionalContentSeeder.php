@@ -30,10 +30,10 @@ class ProfessionalContentSeeder extends Seeder
         $admin = User::where('email', 'Sumitkant7@gmail.com')->first() ?: User::first();
 
         foreach ([
-            'site_name' => 'MILLENIUMNEWSROOM',
-            'site_title' => 'MILLENIUMNEWSROOM | Business, Markets, Technology & Policy News',
+            'site_name' => 'MILLENNIUM NEWSROOM',
+            'site_title' => 'MILLENNIUM NEWSROOM | Business, Markets, Technology & Policy News',
             'tagline' => 'Premium digital newsroom for business, markets, technology and public affairs',
-            'meta_description' => 'MILLENIUMNEWSROOM publishes premium business news, market updates, technology analysis, policy coverage, startup stories and opinion for modern readers.',
+            'meta_description' => 'MILLENNIUM NEWSROOM publishes premium business news, market updates, technology analysis, policy coverage, startup stories and opinion for modern readers.',
             'robots_txt' => "User-agent: *\nAllow: /\nDisallow: /admin\nDisallow: /login",
             'analytics_code' => '',
             'adsense_code' => '',
@@ -56,8 +56,8 @@ class ProfessionalContentSeeder extends Seeder
                         'sort_order' => $index + 1,
                         'order' => $index + 1,
                         'image' => $this->seedImage(Str::slug($name), $name),
-                        'meta_title' => $name.' News | MILLENIUMNEWSROOM',
-                        'meta_description' => 'Latest '.$name.' news, updates and analysis from MILLENIUMNEWSROOM.',
+                        'meta_title' => $name.' News | MILLENNIUM NEWSROOM',
+                        'meta_description' => 'Latest '.$name.' news, updates and analysis from MILLENNIUM NEWSROOM.',
                         'is_active' => true,
                     ]
                 )];
@@ -89,7 +89,7 @@ class ProfessionalContentSeeder extends Seeder
                 'email' => Str::slug($author['name'], '.').'@milleniumnewsroom.test',
                 'designation' => $author['designation'],
                 'image' => $this->seedImage(Str::slug($author['name']), $author['name']),
-                'bio' => $author['name'].' covers high-impact developments for MILLENIUMNEWSROOM with a focus on context, clarity and reader value.',
+                'bio' => $author['name'].' covers high-impact developments for MILLENNIUM NEWSROOM with a focus on context, clarity and reader value.',
                 'social_links' => ['x' => 'https://x.com/'.Str::slug($author['name'], ''), 'linkedin' => 'https://linkedin.com/'],
                 'is_active' => true,
             ]
@@ -123,7 +123,7 @@ class ProfessionalContentSeeder extends Seeder
             $author = $authors->values()[$index % $authors->count()];
             $image = $this->seedImage($slug, $categoryName);
             $publishedAt = now()->subHours($index + 2);
-            $content = '<p>'.$excerpt.'</p><p>This MILLENIUMNEWSROOM report explains the context, market impact and next signals readers should watch. The story is built as demo content and can be managed fully from the admin panel.</p><h2>What readers should watch</h2><p>Editors can update this article with richer reporting, image galleries, SEO metadata, social distribution and related links.</p>';
+            $content = '<p>'.$excerpt.'</p><p>This MILLENNIUM NEWSROOM report explains the context, market impact and next signals readers should watch. The story is built as demo content and can be managed fully from the admin panel.</p><h2>What readers should watch</h2><p>Editors can update this article with richer reporting, image galleries, SEO metadata, social distribution and related links.</p>';
 
             $blog = Blog::updateOrCreate(['slug' => $slug], [
                 'user_id' => $admin?->id,
@@ -135,7 +135,7 @@ class ProfessionalContentSeeder extends Seeder
                 'image' => $image,
                 'featured_image' => $image,
                 'featured_image_alt' => $title,
-                'meta_title' => $title.' | MILLENIUMNEWSROOM',
+                'meta_title' => $title.' | MILLENNIUM NEWSROOM',
                 'meta_description' => $excerpt,
                 'meta_keywords' => implode(', ', $tags),
                 'robots_meta' => 'index,follow',
@@ -159,7 +159,7 @@ class ProfessionalContentSeeder extends Seeder
                 'category_id' => $category->id,
                 'subcategory_id' => $subcategory->id,
                 'author_id' => $author->id,
-                'meta_title' => $title.' | MILLENIUMNEWSROOM',
+                'meta_title' => $title.' | MILLENNIUM NEWSROOM',
                 'meta_description' => $excerpt,
                 'meta_keywords' => implode(', ', $tags),
                 'canonical_url' => url('/blog/'.$slug),
@@ -180,7 +180,7 @@ class ProfessionalContentSeeder extends Seeder
 
             SeoSetting::updateOrCreate(
                 ['seoable_type' => Post::class, 'seoable_id' => $post->id],
-                ['meta_title' => $title.' | MILLENIUMNEWSROOM', 'meta_description' => $excerpt, 'meta_keywords' => implode(', ', $tags), 'canonical_url' => url('/blog/'.$slug), 'robots_meta' => 'index,follow', 'og_title' => $title, 'og_description' => $excerpt, 'og_image' => $image, 'schema_type' => 'NewsArticle', 'include_in_sitemap' => true]
+                ['meta_title' => $title.' | MILLENNIUM NEWSROOM', 'meta_description' => $excerpt, 'meta_keywords' => implode(', ', $tags), 'canonical_url' => url('/blog/'.$slug), 'robots_meta' => 'index,follow', 'og_title' => $title, 'og_description' => $excerpt, 'og_image' => $image, 'schema_type' => 'NewsArticle', 'include_in_sitemap' => true]
             );
         }
 
@@ -201,11 +201,11 @@ class ProfessionalContentSeeder extends Seeder
         }
 
         FooterSetting::updateOrCreate(['id' => 1], [
-            'company_name' => 'MILLENIUMNEWSROOM',
+            'company_name' => 'MILLENNIUM NEWSROOM',
             'email' => 'newsroom@milleniumnewsroom.test',
             'phone' => '+91 9876543210',
             'address' => 'New Delhi, India',
-            'copyright_text' => '(c) '.date('Y').' MILLENIUMNEWSROOM. All rights reserved.',
+            'copyright_text' => '(c) '.date('Y').' MILLENNIUM NEWSROOM. All rights reserved.',
             'footer_menus' => ['About Us|/page/about-us', 'Privacy Policy|/page/privacy-policy', 'Terms|/page/terms'],
             'category_links' => $categories->map(fn ($category) => $category->name.'|/category/'.$category->slug)->values()->all(),
             'social_links' => ['X|https://x.com/milleniumnewsroom', 'LinkedIn|https://linkedin.com/company/milleniumnewsroom', 'YouTube|https://youtube.com/@milleniumnewsroom'],
@@ -222,7 +222,7 @@ class ProfessionalContentSeeder extends Seeder
             Advertisement::updateOrCreate(['placement' => $ad['placement']], ['name' => $ad['name'], 'code' => null, 'is_responsive' => true, 'is_active' => true]);
         }
 
-        SocialAccount::updateOrCreate(['platform' => 'x', 'account_name' => 'MILLENIUMNEWSROOM'], ['platform_settings' => ['auto_hashtags' => true, 'default_hashtags' => ['news', 'markets']], 'auto_post' => false, 'is_active' => true]);
+        SocialAccount::updateOrCreate(['platform' => 'x', 'account_name' => 'MILLENNIUM NEWSROOM'], ['platform_settings' => ['auto_hashtags' => true, 'default_hashtags' => ['news', 'markets']], 'auto_post' => false, 'is_active' => true]);
 
         cache()->forget('frontend.home.payload');
         cache()->forget('admin.dashboard.payload');
@@ -239,7 +239,7 @@ class ProfessionalContentSeeder extends Seeder
   <rect width="1200" height="760" fill="url(#g)"/>
   <circle cx="990" cy="120" r="220" fill="#fff" opacity=".08"/>
   <circle cx="160" cy="690" r="260" fill="#000" opacity=".18"/>
-  <text x="76" y="116" fill="#f4d26b" font-family="Arial, sans-serif" font-size="34" font-weight="700">MILLENIUMNEWSROOM</text>
+  <text x="76" y="116" fill="#f4d26b" font-family="Arial, sans-serif" font-size="34" font-weight="700">MILLENNIUM NEWSROOM</text>
   <text x="76" y="420" fill="#fff8e7" font-family="Georgia, serif" font-size="72" font-weight="700">{$safe}</text>
 </svg>
 SVG);

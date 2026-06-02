@@ -13,7 +13,7 @@
             @php($image = $post->featured_image ?: $post->image)
             <article class="list-card">
                 @if($image)<img src="{{ asset($image) }}" alt="{{ $post->featured_image_alt ?: $post->title }}" loading="lazy" decoding="async">@endif
-                <div><span>{{ $post->category?->name }}</span><h3><a href="{{ route('blog.show', ['blog' => $post->slug]) }}">{{ $post->title }}</a></h3><p>{{ $post->excerpt }}</p></div>
+                <div><span>{{ $post->category?->name }}</span><h3><a href="{{ $post->publicUrl() }}">{{ $post->title }}</a></h3><p>{{ $post->excerpt }}</p></div>
             </article>
         @empty
             <div class="card empty-state"><h2>No results found</h2><p>Try another keyword or category.</p></div>

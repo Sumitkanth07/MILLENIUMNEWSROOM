@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Blog;
+use App\Models\Category;
 
 class BlogController extends Controller
 {
@@ -15,16 +16,22 @@ class BlogController extends Controller
                 ->latest('published_at')
                 ->paginate(9),
 
-            'metaTitle' => 'Latest News | MILLENIUMNEWSROOM',
+            'metaTitle' => 'Latest News | MILLENNIUM NEWSROOM',
 
-            'metaDescription' => 'Latest news, analysis and opinion from MILLENIUMNEWSROOM.',
+            'metaDescription' => 'Latest news, analysis and opinion from MILLENNIUM NEWSROOM.',
 
         ]);
     }
 
-    public function show(Blog $blog)
+    public function redirectLegacy(Blog $blog)
+    {
+        return redirect()->to($blog->load('category')->publicUrl(), 301);
+    }
+
+    public function show(Category $category, Blog $blog)
     {
         abort_unless($blog->is_published, 404);
+        abort_unless((int) $blog->category_id === (int) $category->id, 404);
 
         $blog->increment('views_count');
 
@@ -53,7 +60,7 @@ class BlogController extends Controller
                 ->get(),
 
             'metaTitle' => $blog->meta_title
-                ?: $blog->title.' | MILLENIUMNEWSROOM',
+                ?: $blog->title.' | MILLENNIUM NEWSROOM',
 
             'metaDescription' => $blog->meta_description
                 ?: $blog->excerpt,
@@ -62,12 +69,12 @@ class BlogController extends Controller
                 ?: 'index,follow',
 
             'canonicalUrl' => $blog->canonical_url
-                ?: route('blog.show', $blog),
+                ?: $blog->publicUrl(),
 
             'ogType' => 'article',
 
             'ogImage' => ($blog->featured_image || $blog->image)
-                ? url('/'.($blog->featured_image ?: $blog->image))
+                ? url(asset($blog->featured_image ?: $blog->image))
                 : null,
 
         ]);

@@ -3,7 +3,7 @@
     <url><loc>{{ url('/') }}</loc></url>
     <url><loc>{{ route('blog.index') }}</loc></url>
     @foreach($blogs as $blog)
-        <url><loc>{{ route('blog.show', $blog) }}</loc><lastmod>{{ $blog->updated_at->toDateString() }}</lastmod></url>
+        <url><loc>{{ $blog->publicUrl() }}</loc><lastmod>{{ $blog->updated_at->toDateString() }}</lastmod></url>
     @endforeach
     @foreach($categories ?? [] as $category)
         <url><loc>{{ route('category.show', $category) }}</loc><lastmod>{{ $category->updated_at->toDateString() }}</lastmod></url>

@@ -107,6 +107,14 @@ class Blog extends Model
         return $this->hasMany(PostView::class);
     }
 
+    public function publicUrl(): string
+    {
+        return route('blog.category.show', [
+            'category' => $this->category?->slug ?: 'news',
+            'blog' => $this->slug,
+        ]);
+    }
+
     /*
     |--------------------------------------------------------------------------
     | Generate Unique Slug

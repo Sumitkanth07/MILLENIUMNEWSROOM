@@ -27,6 +27,11 @@
         $article->slug
         ?? null;
 
+    $url =
+        method_exists($article, 'publicUrl')
+        ? $article->publicUrl()
+        : url('/'.str($category)->slug().'/'.$slug);
+
     $readTime =
         $article->reading_time
         ?? null;
@@ -55,7 +60,7 @@
 
         <a
             class="article-card__image"
-            href="{{ url('/blog/'.$slug) }}"
+            href="{{ $url }}"
         >
 
             <img
@@ -88,7 +93,7 @@
 
         <h3>
 
-            <a href="{{ url('/blog/'.$slug) }}">
+            <a href="{{ $url }}">
 
                 {{ $title }}
 

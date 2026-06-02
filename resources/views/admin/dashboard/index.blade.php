@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="admin-hero">
-    <div><span class="kicker">MILLENIUMNEWSROOM CMS</span><h2>Dashboard</h2><p>Manage publishing, SEO, media and homepage performance from one newsroom console.</p></div>
+    <div><span class="kicker">MILLENNIUM NEWSROOM CMS</span><h2>Dashboard</h2><p>Manage publishing, SEO, media and homepage performance from one newsroom console.</p></div>
     <a class="btn primary" href="{{ route('admin.blogs.create') }}">Create Story</a>
 </div>
 <div class="admin-grid dashboard-cards">

@@ -3,7 +3,7 @@
 @section('content')
 <div class="admin-title">
     <div><span class="kicker">Newsroom CMS</span><h2>{{ $blog->exists ? 'Edit Post' : 'Create Post' }}</h2></div>
-    @if($blog->exists)<a class="btn" href="{{ route('blog.show', $blog) }}" target="_blank">Live Preview</a>@endif
+    @if($blog->exists)<a class="btn" href="{{ $blog->publicUrl() }}" target="_blank">Live Preview</a>@endif
 </div>
 <form class="admin-form-grid" method="POST" action="{{ $blog->exists ? route('admin.blogs.update', $blog) : route('admin.blogs.store') }}" enctype="multipart/form-data">
     @csrf @if($blog->exists) @method('PUT') @endif
@@ -161,7 +161,7 @@
 
     <section class="panel form">
         <h3>SEO Preview</h3>
-        <div class="seo-preview"><strong>{{ old('meta_title', $blog->meta_title ?: $blog->title ?: 'SEO title preview') }}</strong><span>{{ old('canonical_url', $blog->canonical_url ?: url('/blog/'.$blog->slug)) }}</span><p>{{ old('meta_description', $blog->meta_description ?: $blog->excerpt ?: 'Meta description preview appears here.') }}</p></div>
+        <div class="seo-preview"><strong>{{ old('meta_title', $blog->meta_title ?: $blog->title ?: 'SEO title preview') }}</strong><span>{{ old('canonical_url', $blog->canonical_url ?: ($blog->exists ? $blog->publicUrl() : url('/category-slug/'.($blog->slug ?: 'post-slug')))) }}</span><p>{{ old('meta_description', $blog->meta_description ?: $blog->excerpt ?: 'Meta description preview appears here.') }}</p></div>
         <label>Meta title <input name="meta_title" value="{{ old('meta_title', $blog->meta_title) }}"></label>
         <label>Meta description <textarea name="meta_description" rows="3">{{ old('meta_description', $blog->meta_description) }}</textarea></label>
         <label>Meta keywords <input name="meta_keywords" value="{{ old('meta_keywords', $blog->meta_keywords) }}"></label>

@@ -26,7 +26,7 @@ Route::get('/category/{category:slug}', [FrontendController::class, 'category'])
 Route::get('/sitemap', [FrontendController::class, 'htmlSitemap'])->name('sitemap.page');
 Route::get('/page/{page:slug}', [FrontendController::class, 'page'])->name('page.show');
 Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
-Route::get('/blog/{blog:slug}', [BlogController::class, 'show'])->name('blog.show');
+Route::get('/blog/{blog:slug}', [BlogController::class, 'redirectLegacy'])->name('blog.show');
 Route::get('/savings-calculator', [CalculatorController::class, 'show'])->name('calculator.show');
 Route::get('/sitemap.xml', [FrontendController::class, 'sitemap'])->name('sitemap');
 Route::get('/news-sitemap.xml', [FrontendController::class, 'newsSitemap'])->name('news-sitemap');
@@ -65,3 +65,5 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('/uploads/images', [ImageUploadController::class, 'store'])->name('images.store');
     });
 });
+
+Route::get('/{category:slug}/{blog:slug}', [BlogController::class, 'show'])->name('blog.category.show');

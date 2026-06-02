@@ -23,6 +23,7 @@
     <meta property="og:url" content="{{ $canonicalUrl ?? url()->current() }}">
 
     <meta property="og:type" content="{{ $ogType ?? 'website' }}">
+    <meta property="og:site_name" content="{{ $siteName }}">
 
     <meta name="twitter:title" content="{{ $metaTitle ?? $siteTitle }}">
 
@@ -32,6 +33,7 @@
 
     @isset($ogImage)
         <meta property="og:image" content="{{ $ogImage }}">
+        <meta property="og:image:secure_url" content="{{ $ogImage }}">
     @endisset
 
     @isset($ogImage)
@@ -137,7 +139,7 @@
 
                     @foreach($breakingPosts as $post)
 
-                        <a href="{{ route('blog.show', ['blog' => $post->slug]) }}">
+                        <a href="{{ $post->publicUrl() }}">
                             {{ $post->title }}
                         </a>
 

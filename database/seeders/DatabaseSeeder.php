@@ -35,7 +35,7 @@ class DatabaseSeeder extends Seeder
 
         $admin = User::updateOrCreate(
             ['email' => 'Sumitkant7@gmail.com'],
-            ['name' => 'MILLENIUMNEWSROOM Admin', 'password' => Hash::make('Milleniums@2026#'), 'is_admin' => true]
+            ['name' => 'MILLENNIUM NEWSROOM Admin', 'password' => Hash::make('Milleniums@2026#'), 'is_admin' => true]
         );
         Admin::updateOrCreate(['user_id' => $admin->id], ['designation' => 'Super Administrator', 'is_active' => true]);
 
@@ -47,13 +47,13 @@ class DatabaseSeeder extends Seeder
         $admin->roles()->syncWithoutDetaching($adminRole->id);
 
         foreach ([
-            'site_name' => 'MILLENIUMNEWSROOM',
-            'site_title' => 'MILLENIUMNEWSROOM | Professional News Portal',
+            'site_name' => 'MILLENNIUM NEWSROOM',
+            'site_title' => 'MILLENNIUM NEWSROOM | Professional News Portal',
             'tagline' => 'Business, markets and technology journalism',
             'primary_color' => '#1f1a12',
             'secondary_color' => '#c79a2b',
             'logo' => '',
-            'meta_description' => 'MILLENIUMNEWSROOM delivers fast, professional coverage of news, markets, companies, politics, technology, sports, lifestyle and opinion.',
+            'meta_description' => 'MILLENNIUM NEWSROOM delivers fast, professional coverage of news, markets, companies, politics, technology, sports, lifestyle and opinion.',
             'robots_txt' => "User-agent: *\nAllow: /",
         ] as $key => $value) {
             Setting::setValue($key, $value);
@@ -73,22 +73,22 @@ class DatabaseSeeder extends Seeder
         }
 
         FooterSetting::updateOrCreate(['id' => 1], [
-            'company_name' => 'MILLENIUMNEWSROOM',
+            'company_name' => 'MILLENNIUM NEWSROOM',
             'email' => 'newsroom@milleniumnewsroom.test',
             'phone' => '+91 9876543210',
             'address' => 'New Delhi, India',
-            'copyright_text' => '(c) '.date('Y').' MILLENIUMNEWSROOM. All rights reserved.',
+            'copyright_text' => '(c) '.date('Y').' MILLENNIUM NEWSROOM. All rights reserved.',
         ]);
 
         $categories = collect(['News', 'Markets', 'Technology', 'Companies', 'Politics', 'Opinion', 'Sports', 'Lifestyle'])
             ->mapWithKeys(fn ($name, $index) => [$name => Category::updateOrCreate(
                 ['slug' => str($name)->slug()->toString()],
-                ['name' => $name, 'sort_order' => $index + 1, 'order' => $index + 1, 'is_active' => true, 'meta_title' => $name.' News | MILLENIUMNEWSROOM', 'meta_description' => 'Latest '.$name.' coverage from MILLENIUMNEWSROOM.']
+                ['name' => $name, 'sort_order' => $index + 1, 'order' => $index + 1, 'is_active' => true, 'meta_title' => $name.' News | MILLENNIUM NEWSROOM', 'meta_description' => 'Latest '.$name.' coverage from MILLENNIUM NEWSROOM.']
             )]);
 
         $author = Author::updateOrCreate(
             ['slug' => 'editorial-desk'],
-            ['name' => 'Editorial Desk', 'email' => 'newsroom@milleniumnewsroom.test', 'designation' => 'News Desk', 'social_links' => ['x' => 'https://x.com/', 'linkedin' => 'https://linkedin.com/'], 'bio' => 'The MILLENIUMNEWSROOM editorial desk covers business, policy, technology and culture with context and speed.', 'is_active' => true]
+            ['name' => 'Editorial Desk', 'email' => 'newsroom@milleniumnewsroom.test', 'designation' => 'News Desk', 'social_links' => ['x' => 'https://x.com/', 'linkedin' => 'https://linkedin.com/'], 'bio' => 'The MILLENNIUM NEWSROOM editorial desk covers business, policy, technology and culture with context and speed.', 'is_active' => true]
         );
 
         $aiSubcategory = Subcategory::updateOrCreate(
@@ -105,7 +105,7 @@ class DatabaseSeeder extends Seeder
                 'title' => 'AI Is Transforming The Future Of Digital Journalism',
                 'excerpt' => 'Artificial intelligence is reshaping reporting workflows, newsroom research, audience products and the economics of digital media.',
                 'content' => '<h2>Newsrooms are changing fast</h2><p>Artificial intelligence is moving from experiment to daily workflow inside modern newsrooms. Editors are using AI tools to speed up research, summarize documents, monitor live events and package stories for different audience formats.</p><p>The strongest use cases keep human editorial judgment at the center. Reporters still verify facts, add context and make final publishing decisions, while AI helps reduce repetitive production work.</p><h2>What it means for readers</h2><p>Readers can expect faster updates, richer explainers and more personalized news experiences. The challenge for publishers is transparency, accuracy and clear accountability whenever automation is involved.</p>',
-                'meta_title' => 'AI Is Transforming The Future Of Digital Journalism | MILLENIUMNEWSROOM',
+                'meta_title' => 'AI Is Transforming The Future Of Digital Journalism | MILLENNIUM NEWSROOM',
                 'meta_description' => 'A professional analysis of how AI is changing digital journalism, newsroom workflows and reader experiences.',
                 'meta_keywords' => 'AI journalism, digital media, newsroom technology',
                 'is_published' => true,
@@ -138,7 +138,7 @@ class DatabaseSeeder extends Seeder
                 'category_id' => $categories['Technology']->id,
                 'subcategory_id' => $aiSubcategory->id,
                 'author_id' => $author->id,
-                'meta_title' => 'AI Is Transforming The Future Of Digital Journalism | MILLENIUMNEWSROOM',
+                'meta_title' => 'AI Is Transforming The Future Of Digital Journalism | MILLENNIUM NEWSROOM',
                 'meta_description' => 'A professional analysis of how AI is changing digital journalism, newsroom workflows and reader experiences.',
                 'meta_keywords' => 'AI journalism, digital media, newsroom technology',
                 'canonical_url' => url('/blog/ai-is-transforming-the-future-of-digital-journalism'),
@@ -170,10 +170,10 @@ class DatabaseSeeder extends Seeder
                 'author_id' => $author->id,
                 'title' => $sample['title'],
                 'excerpt' => $sample['excerpt'],
-                'content' => '<p>'.$sample['excerpt'].'</p><p>MILLENIUMNEWSROOM explains the key context, stakeholder impact and next signals readers should watch. This sample story can be edited from the admin panel with images, SEO metadata, tags and scheduling.</p>',
-                'meta_title' => $sample['title'].' | MILLENIUMNEWSROOM',
+                'content' => '<p>'.$sample['excerpt'].'</p><p>MILLENNIUM NEWSROOM explains the key context, stakeholder impact and next signals readers should watch. This sample story can be edited from the admin panel with images, SEO metadata, tags and scheduling.</p>',
+                'meta_title' => $sample['title'].' | MILLENNIUM NEWSROOM',
                 'meta_description' => $sample['excerpt'],
-                'meta_keywords' => strtolower($sample['category']).', news, MILLENIUMNEWSROOM',
+                'meta_keywords' => strtolower($sample['category']).', news, MILLENNIUM NEWSROOM',
                 'robots_meta' => 'index,follow',
                 'is_published' => true,
                 'is_featured' => in_array($sample['category'], ['Markets', 'Opinion']),
@@ -192,9 +192,9 @@ class DatabaseSeeder extends Seeder
                 'content' => $sampleBlog->content,
                 'category_id' => $categories[$sample['category']]->id,
                 'author_id' => $author->id,
-                'meta_title' => $sample['title'].' | MILLENIUMNEWSROOM',
+                'meta_title' => $sample['title'].' | MILLENNIUM NEWSROOM',
                 'meta_description' => $sample['excerpt'],
-                'meta_keywords' => strtolower($sample['category']).', news, MILLENIUMNEWSROOM',
+                'meta_keywords' => strtolower($sample['category']).', news, MILLENNIUM NEWSROOM',
                 'schema_type' => 'NewsArticle',
                 'views' => $sample['views'],
                 'reading_time' => 2,
@@ -213,16 +213,16 @@ class DatabaseSeeder extends Seeder
         ] as $page) {
             Page::updateOrCreate(['slug' => $page['slug']], [
                 'title' => $page['title'],
-                'content' => '<p>MILLENIUMNEWSROOM is a professional digital news portal focused on clear, timely and useful journalism.</p>',
+                'content' => '<p>MILLENNIUM NEWSROOM is a professional digital news portal focused on clear, timely and useful journalism.</p>',
                 'is_published' => true,
-                'meta_title' => $page['title'].' | MILLENIUMNEWSROOM',
-                'meta_description' => $page['title'].' for MILLENIUMNEWSROOM.',
+                'meta_title' => $page['title'].' | MILLENNIUM NEWSROOM',
+                'meta_description' => $page['title'].' for MILLENNIUM NEWSROOM.',
             ]);
         }
 
         SeoSetting::updateOrCreate(
             ['seoable_type' => Page::class, 'seoable_id' => Page::where('slug', 'about-us')->value('id')],
-            ['meta_title' => 'About Us | MILLENIUMNEWSROOM', 'meta_description' => 'About MILLENIUMNEWSROOM digital newsroom.', 'robots_meta' => 'index,follow', 'schema_type' => 'WebPage']
+            ['meta_title' => 'About Us | MILLENNIUM NEWSROOM', 'meta_description' => 'About MILLENNIUM NEWSROOM digital newsroom.', 'robots_meta' => 'index,follow', 'schema_type' => 'WebPage']
         );
 
         foreach ([
@@ -265,7 +265,7 @@ class DatabaseSeeder extends Seeder
         }
 
         Newsletter::updateOrCreate(['email' => 'reader@example.com'], ['name' => 'Demo Reader', 'is_active' => true, 'subscribed_at' => now()]);
-        SocialAccount::updateOrCreate(['platform' => 'x', 'account_name' => 'MILLENIUMNEWSROOM'], ['platform_settings' => ['auto_hashtags' => true], 'auto_post' => false, 'is_active' => true]);
+        SocialAccount::updateOrCreate(['platform' => 'x', 'account_name' => 'MILLENNIUM NEWSROOM'], ['platform_settings' => ['auto_hashtags' => true], 'auto_post' => false, 'is_active' => true]);
         ContactMessage::firstOrCreate(['email' => 'reader@example.com', 'subject' => 'Demo enquiry'], ['name' => 'Demo Reader', 'message' => 'This is a sample contact message.', 'status' => 'new']);
     }
 }

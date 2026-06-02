@@ -23,7 +23,7 @@
 
                 <div class="hero-slide-copy">
                     <span class="badge gold">{{ $post->category?->name ?? 'Featured' }}</span>
-                    <h1><a href="{{ route('blog.show', ['blog' => $post->slug]) }}">{{ $post->title }}</a></h1>
+                    <h1><a href="{{ $post->publicUrl() }}">{{ $post->title }}</a></h1>
                     <p>{{ $post->excerpt }}</p>
                     <small>{{ optional($post->published_at)->format('M d, Y') }}</small>
                 </div>
@@ -36,14 +36,6 @@
 
     <div class="news-shell home-shell">
         <x-ad-slot :ads="$ads" placement="header_ad" label="Header responsive ad" />
-
-        <div class="market-strip">
-            <strong>Markets</strong>
-            <span>Nifty 50: 22,410.20</span>
-            <span>Sensex: 73,880.70</span>
-            <span>Gold: 72,450</span>
-            <span>USD/INR: 83.45</span>
-        </div>
 
         <section class="spotlight-grid reveal">
 
@@ -79,7 +71,7 @@
                             <div>
                                 <span>{{ $post->category?->name }}</span>
                                 <h3>
-                                    <a href="{{ route('blog.show', ['blog' => $post->slug]) }}">
+                                    <a href="{{ $post->publicUrl() }}">
                                         {{ $post->title }}
                                     </a>
                                 </h3>
@@ -98,7 +90,7 @@
 
                 @foreach($mostRead as $post)
 
-                    <a class="trend" href="{{ route('blog.show', ['blog' => $post->slug]) }}">
+                    <a class="trend" href="{{ $post->publicUrl() }}">
                         <strong>{{ $loop->iteration }}</strong>
 
                         <span>
@@ -139,7 +131,7 @@
 
                     <article class="fresh-card @if($loop->first) lead-fresh @endif">
 
-                        <a class="story-thumb @unless($freshImage) placeholder @endunless" href="{{ route('blog.show', ['blog' => $post->slug]) }}">
+                        <a class="story-thumb @unless($freshImage) placeholder @endunless" href="{{ $post->publicUrl() }}">
 
                             @if($freshImage)
 
@@ -168,7 +160,7 @@
                             </span>
 
                             <h3>
-                                <a href="{{ route('blog.show', ['blog' => $post->slug]) }}">
+                                <a href="{{ $post->publicUrl() }}">
                                     {{ $post->title }}
                                 </a>
                             </h3>

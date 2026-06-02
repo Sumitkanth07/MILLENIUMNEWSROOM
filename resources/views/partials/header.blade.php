@@ -34,7 +34,7 @@
 
     <div class="brand-bar">
         <div class="container brand-bar__inner">
-            <a class="brand-logo" href="{{ url('/') }}" aria-label="MILLENIUMNEWSROOM home">
+            <a class="brand-logo" href="{{ url('/') }}" aria-label="MILLENNIUM NEWSROOM home">
                 MILLENIUM<span>NEWSROOM</span>
             </a>
             <div class="brand-meta">

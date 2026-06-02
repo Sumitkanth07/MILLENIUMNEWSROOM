@@ -28,7 +28,7 @@
             ],
             'publisher' => [
                 '@type' => 'Organization',
-                'name' => 'MILLENIUMNEWSROOM',
+                'name' => 'MILLENNIUM NEWSROOM',
             ],
             'mainEntityOfPage' => $article['canonical'],
         ], JSON_UNESCAPED_SLASHES) !!}
@@ -136,33 +136,6 @@
                         </div>
                     </section>
 
-                    <section class="comments-panel" aria-labelledby="comments-heading">
-                        <div class="section-heading">
-                            <h2 id="comments-heading">Comments</h2>
-                            <a href="#">Community rules</a>
-                        </div>
-
-                        <form class="comment-form" action="#">
-                            <label for="comment-body">Join the conversation</label>
-                            <textarea id="comment-body" rows="4" placeholder="Write a respectful comment"></textarea>
-                            <div class="comment-form__actions">
-                                <input type="text" placeholder="Display name" aria-label="Display name">
-                                <button type="submit">Post comment</button>
-                            </div>
-                        </form>
-
-                        <div class="comment-list">
-                            @foreach ($comments as $comment)
-                                <article class="comment-card">
-                                    <div>
-                                        <strong>{{ $comment['name'] }}</strong>
-                                        <span>{{ $comment['time'] }}</span>
-                                    </div>
-                                    <p>{{ $comment['body'] }}</p>
-                                </article>
-                            @endforeach
-                        </div>
-                    </section>
                 </div>
             </div>
         </div>
@@ -180,7 +153,7 @@
             <section class="sidebar-widget sidebar-widget--premium">
                 <span class="section-kicker">Premium</span>
                 <h2>Unlock market insight</h2>
-                <p>Get deeper sector analysis, earnings explainers and portfolio ideas from the MILLENIUMNEWSROOM newsroom.</p>
+                <p>Get deeper sector analysis, earnings explainers and portfolio ideas from the MILLENNIUM NEWSROOM newsroom.</p>
                 <a class="button-gold" href="#">Subscribe now</a>
             </section>
 

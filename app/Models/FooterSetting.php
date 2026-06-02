@@ -31,11 +31,11 @@ class FooterSetting extends Model
     public static function current(): self
     {
         return static::firstOrCreate([], [
-            'company_name' => 'MILLENIUMNEWSROOM',
-            'email' => 'info@MILLENIUMNEWSROOM.com',
+            'company_name' => 'MILLENNIUM NEWSROOM',
+            'email' => 'info@millenniumnewsroom.com',
             'phone' => '+91 9876543210',
             'address' => 'New Delhi, India',
-            'copyright_text' => '(c) '.date('Y').' MILLENIUMNEWSROOM. All rights reserved.',
+            'copyright_text' => '(c) '.date('Y').' MILLENNIUM NEWSROOM. All rights reserved.',
         ]);
     }
 }

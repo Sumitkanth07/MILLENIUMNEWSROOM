@@ -1,32 +1,9 @@
 @extends('layouts.app')
 
-@section('title', 'MILLENIUMNEWSROOM - Premium Business News, Markets and Analysis')
+@section('title', 'MILLENNIUM NEWSROOM - Premium Business News, Markets and Analysis')
 @section('meta_description', 'A professional Laravel Blade news portal with markets, top headlines, technology, startups, opinion, videos and photo stories.')
 
 @section('content')
-    <section class="market-strip" aria-labelledby="markets-heading">
-        <div class="container">
-            <div class="section-heading section-heading--inline">
-                <h2 id="markets-heading">Markets & Business</h2>
-                <a href="#">Track markets</a>
-            </div>
-            <div class="market-strip__inner">
-                @foreach ($marketCards as $market)
-                    <a class="market-pill" href="#">
-                        <strong>{{ $market['name'] }}</strong>
-                        <span>{{ $market['value'] }}</span>
-                        <b class="{{ $market['positive'] ? 'text-positive' : 'text-negative' }}">{{ $market['change'] }}</b>
-                    </a>
-                @endforeach
-            </div>
-            <div class="business-briefs" aria-label="Business briefs">
-                @foreach ($businessBriefs as $brief)
-                    <a href="#">{{ $brief }}</a>
-                @endforeach
-            </div>
-        </div>
-    </section>
-
     <section class="container homepage-grid">
         <div class="homepage-main">
             <section class="hero-news-section" aria-labelledby="lead-story-heading">

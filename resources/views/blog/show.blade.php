@@ -34,7 +34,7 @@
         <h1>{{ $blog->title }}</h1>
 
         <p class="muted">
-            By {{ $blog->author?->name ?? 'MILLENIUMNEWSROOM Desk' }}
+            By {{ $blog->author?->name ?? 'MILLENNIUM NEWSROOM Desk' }}
             Â·
             {{ optional($blog->published_at)->format('M d, Y h:i A') }}
         </p>
@@ -91,7 +91,6 @@
             <strong>Table of contents</strong>
             <a href="#story">Story</a>
             <a href="#related">Related stories</a>
-            <a href="#comments">Comments</a>
         </aside>
 
         <div class="ad-slot">Advertisement</div>
@@ -152,7 +151,7 @@
                     <article class="card">
 
                         <h3>
-                            <a href="{{ route('blog.show', ['blog' => $post->slug]) }}">
+                            <a href="{{ $post->publicUrl() }}">
                                 {{ $post->title }}
                             </a>
                         </h3>
@@ -167,20 +166,6 @@
 
         </section>
 
-        <section id="comments" class="comments-ui premium-comments">
-
-            <h2>Join the conversation</h2>
-
-            <div class="comment-form-grid">
-                <input placeholder="Name">
-                <input placeholder="Email">
-                <textarea rows="5" placeholder="Share a thoughtful comment"></textarea>
-            </div>
-
-            <button class="btn primary">Post comment</button>
-
-        </section>
-
     </div>
 
     <aside class="sidebar">
@@ -189,7 +174,7 @@
 
         @foreach($trendingPosts as $post)
 
-            <a class="trend" href="{{ route('blog.show', ['blog' => $post->slug]) }}">
+            <a class="trend" href="{{ $post->publicUrl() }}">
 
                 <strong>{{ $loop->iteration }}</strong>
 
@@ -212,11 +197,11 @@
     'dateModified' => optional($blog->updated_at)->toAtomString(),
     'author' => [
         '@type' => 'Person',
-        'name' => $blog->author?->name ?? 'MILLENIUMNEWSROOM Desk'
+        'name' => $blog->author?->name ?? 'MILLENNIUM NEWSROOM Desk'
     ],
     'publisher' => [
         '@type' => 'Organization',
-        'name' => 'MILLENIUMNEWSROOM'
+        'name' => 'MILLENNIUM NEWSROOM'
     ],
     'image' => ($blog->featured_image || $blog->image)
         ? [asset($blog->featured_image ?: $blog->image)]

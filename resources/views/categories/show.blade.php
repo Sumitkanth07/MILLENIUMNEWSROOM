@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', $category['name'].' News - Latest Market Updates and Analysis | MILLENIUMNEWSROOM')
+@section('title', $category['name'].' News - Latest Market Updates and Analysis | MILLENNIUM NEWSROOM')
 @section('meta_description', $category['description'])
 @section('body_class', 'news-portal category-page-body')
 
@@ -120,7 +120,7 @@
             <section class="sidebar-widget sidebar-widget--premium">
                 <span class="section-kicker">Premium</span>
                 <h2>Deeper market intelligence</h2>
-                <p>Get analyst-backed explainers, sector insights and portfolio ideas from the MILLENIUMNEWSROOM newsroom.</p>
+                <p>Get analyst-backed explainers, sector insights and portfolio ideas from the MILLENNIUM NEWSROOM newsroom.</p>
                 <a class="button-gold" href="#">Subscribe now</a>
             </section>
         </aside>

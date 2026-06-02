@@ -1,6 +1,6 @@
-# MILLENIUMNEWSROOM
+# MILLENNIUM NEWSROOM
 
-MILLENIUMNEWSROOM is a Laravel-based premium news portal and CMS. It includes a modern public news frontend, dynamic article publishing, media management, SEO tooling, ad placement management, and an admin panel for editorial teams.
+MILLENNIUM NEWSROOM is a Laravel-based premium news portal and CMS. It includes a modern public news frontend, dynamic article publishing, media management, SEO tooling, ad placement management, and an admin panel for editorial teams.
 
 ## Features
 
@@ -184,7 +184,7 @@ Initialize and push to GitHub:
 ```bash
 git init
 git add .
-git commit -m "Prepare MILLENIUMNEWSROOM for production"
+git commit -m "Prepare MILLENNIUM NEWSROOM for production"
 git branch -M main
 git remote add origin https://github.com/YOUR_USERNAME/milleniumnewsroom.git
 git push -u origin main
@@ -236,4 +236,4 @@ php artisan view:clear
 
 ## License
 
-This project is prepared for the MILLENIUMNEWSROOM website. Add your preferred license before publishing publicly.
+This project is prepared for the MILLENNIUM NEWSROOM website. Add your preferred license before publishing publicly.

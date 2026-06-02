@@ -3,7 +3,7 @@
 @section('content')
 
 <section class="page-hero">
-    <p class="eyebrow">MILLENIUMNEWSROOM</p>
+    <p class="eyebrow">MILLENNIUM NEWSROOM</p>
 
     <h1>Latest News</h1>
 
@@ -33,7 +33,7 @@
                 <span>{{ $blog->category?->name }}</span>
 
                 <h2>
-                    <a href="{{ route('blog.show', $blog) }}">
+                    <a href="{{ $blog->publicUrl() }}">
                         {{ $blog->title }}
                     </a>
                 </h2>

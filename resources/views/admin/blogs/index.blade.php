@@ -8,7 +8,7 @@
         <div>
             <strong>{{ $blog->title }}</strong>
             <span>{{ $blog->category?->name ?? 'Uncategorized' }} · {{ $blog->author?->name ?? 'Staff desk' }} · {{ ucfirst($blog->status ?? ($blog->is_published ? 'published' : 'draft')) }}</span>
-            <span>/blog/{{ $blog->slug }}</span>
+            <span>{{ parse_url($blog->publicUrl(), PHP_URL_PATH) }}</span>
         </div>
         <div class="actions">
             @if($blog->is_featured)<span class="badge">Featured</span>@endif
