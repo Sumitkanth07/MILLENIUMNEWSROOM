@@ -38,7 +38,7 @@ class BlogController extends Controller
         $data['is_breaking'] = $request->boolean('is_breaking');
         $data['is_trending'] = $request->boolean('is_trending');
         $data['reading_time'] = $this->readingTime($data['content']);
-        unset($data['new_category_name'], $data['new_category_parent_id']);
+        unset($data['new_category_name'], $data['new_category_parent_id'], $data['remove_gallery_images']);
 
         $this->storeImages($request, $data);
 
@@ -66,7 +66,7 @@ class BlogController extends Controller
         $data['is_breaking'] = $request->boolean('is_breaking');
         $data['is_trending'] = $request->boolean('is_trending');
         $data['reading_time'] = $this->readingTime($data['content']);
-        unset($data['new_category_name'], $data['new_category_parent_id']);
+        unset($data['new_category_name'], $data['new_category_parent_id'], $data['remove_gallery_images']);
 
         $this->storeImages($request, $data, $blog);
         $blog->update($data);
@@ -106,6 +106,7 @@ class BlogController extends Controller
             'image' => ['nullable', 'image', 'max:4096'],
             'featured_image' => ['nullable', 'image', 'max:4096'],
             'gallery_images.*' => ['nullable', 'image', 'max:4096'],
+            'remove_gallery_images.*' => ['nullable', 'string'],
             'meta_title' => ['nullable', 'string', 'max:255'],
             'meta_description' => ['nullable', 'string'],
             'meta_keywords' => ['nullable', 'string', 'max:255'],
@@ -131,20 +132,22 @@ private function storeImages(Request $request, array &$data, ?Blog $blog = null)
     |--------------------------------------------------------------------------
     */
 
+    $uploadRoot = $this->publicUploadRoot();
+
     // Create upload folders if missing
-    if (!file_exists($_SERVER['DOCUMENT_ROOT'].'/uploads')) {
+    if (!file_exists($uploadRoot.'/uploads')) {
 
         mkdir(
-            $_SERVER['DOCUMENT_ROOT'].'/uploads',
+            $uploadRoot.'/uploads',
             0775,
             true
         );
     }
 
-    if (!file_exists($_SERVER['DOCUMENT_ROOT'].'/uploads/gallery')) {
+    if (!file_exists($uploadRoot.'/uploads/gallery')) {
 
         mkdir(
-            $_SERVER['DOCUMENT_ROOT'].'/uploads/gallery',
+            $uploadRoot.'/uploads/gallery',
             0775,
             true
         );
@@ -170,7 +173,7 @@ private function storeImages(Request $request, array &$data, ?Blog $blog = null)
             );
 
         $destination =
-            $_SERVER['DOCUMENT_ROOT'].'/uploads';
+            $uploadRoot.'/uploads';
 
         $file->move($destination, $filename);
 
@@ -198,7 +201,7 @@ private function storeImages(Request $request, array &$data, ?Blog $blog = null)
             );
 
         $destination =
-            $_SERVER['DOCUMENT_ROOT'].'/uploads';
+            $uploadRoot.'/uploads';
 
         $file->move($destination, $filename);
 
@@ -212,9 +215,17 @@ private function storeImages(Request $request, array &$data, ?Blog $blog = null)
     |--------------------------------------------------------------------------
     */
 
+    $galleryImages = $blog?->gallery_images ?: [];
+    $removeImages = $request->input('remove_gallery_images', []);
+
+    if (! empty($removeImages)) {
+        $galleryImages = array_values(array_diff($galleryImages, $removeImages));
+        $data['gallery_images'] = $galleryImages;
+    }
+
     if ($request->hasFile('gallery_images')) {
 
-        $galleryImages = [];
+        $galleryImages = $blog && empty($removeImages) ? ($blog->gallery_images ?: []) : $galleryImages;
 
         foreach ($request->file('gallery_images') as $file) {
 
@@ -228,18 +239,21 @@ private function storeImages(Request $request, array &$data, ?Blog $blog = null)
                 );
 
             $destination =
-                $_SERVER['DOCUMENT_ROOT'].'/uploads/gallery';
+                $uploadRoot.'/uploads/gallery';
 
             $file->move($destination, $filename);
 
             $galleryImages[] =
                 'uploads/gallery/'.$filename;
         }
-
-        // Replace old gallery fully
         $data['gallery_images'] = $galleryImages;
     }
 }
+
+    private function publicUploadRoot(): string
+    {
+        return ! empty($_SERVER['DOCUMENT_ROOT']) ? $_SERVER['DOCUMENT_ROOT'] : public_path();
+    }
     private function readingTime(string $content): int
     {
         return max(1, (int) ceil(str_word_count(strip_tags($content)) / 220));

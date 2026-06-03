@@ -189,24 +189,7 @@
 </article>
 
 <script type="application/ld+json">
-{!! json_encode([
-    '@context' => 'https://schema.org',
-    '@type' => 'NewsArticle',
-    'headline' => $blog->title,
-    'datePublished' => optional($blog->published_at)->toAtomString(),
-    'dateModified' => optional($blog->updated_at)->toAtomString(),
-    'author' => [
-        '@type' => 'Person',
-        'name' => $blog->author?->name ?? 'MILLENNIUM NEWSROOM Desk'
-    ],
-    'publisher' => [
-        '@type' => 'Organization',
-        'name' => 'MILLENNIUM NEWSROOM'
-    ],
-    'image' => ($blog->featured_image || $blog->image)
-        ? [asset($blog->featured_image ?: $blog->image)]
-        : [],
-], JSON_UNESCAPED_SLASHES) !!}
+{!! json_encode($articleSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
 </script>
 
 @endsection

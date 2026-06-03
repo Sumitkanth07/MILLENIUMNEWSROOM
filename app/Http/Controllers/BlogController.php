@@ -35,13 +35,14 @@ class BlogController extends Controller
 
         $blog->increment('views_count');
 
+        $blog->load(['category', 'author', 'tags']);
+        $canonicalUrl = $blog->canonical_url ?: $blog->publicUrl();
+        $description = $blog->meta_description ?: ($blog->excerpt ?: (string) str($blog->content)->stripTags()->limit(160));
+        $image = $this->absoluteAsset($blog->featured_image ?: $blog->image);
+
         return view('blog.show', [
 
-            'blog' => $blog->load([
-                'category',
-                'author',
-                'tags'
-            ]),
+            'blog' => $blog,
 
             'relatedPosts' => Blog::with([
                     'category',
@@ -63,20 +64,83 @@ class BlogController extends Controller
                 ?: $blog->title.' | MILLENNIUM NEWSROOM',
 
             'metaDescription' => $blog->meta_description
-                ?: $blog->excerpt,
+                ?: $description,
 
             'robotsMeta' => $blog->robots_meta
                 ?: 'index,follow',
 
             'canonicalUrl' => $blog->canonical_url
-                ?: $blog->publicUrl(),
+                ?: $canonicalUrl,
 
             'ogType' => 'article',
 
-            'ogImage' => ($blog->featured_image || $blog->image)
-                ? url(asset($blog->featured_image ?: $blog->image))
-                : null,
+            'ogImage' => $image,
+
+            'articleSchema' => $this->articleSchema($blog, $canonicalUrl, $description, $image),
 
         ]);
+    }
+
+    private function absoluteAsset(?string $path): ?string
+    {
+        return $path ? url(asset($path)) : null;
+    }
+
+    private function articleSchema(Blog $blog, string $canonicalUrl, string $description, ?string $image): array
+    {
+        $authorName = $blog->author?->name ?? 'MILLENNIUM NEWSROOM Desk';
+
+        return [
+            '@context' => 'https://schema.org',
+            '@graph' => [
+                [
+                    '@type' => ['NewsArticle', 'Article'],
+                    '@id' => $canonicalUrl.'#article',
+                    'mainEntityOfPage' => $canonicalUrl,
+                    'headline' => $blog->title,
+                    'description' => $description,
+                    'image' => $image ? [$image] : [],
+                    'datePublished' => optional($blog->published_at)->toAtomString(),
+                    'dateModified' => optional($blog->updated_at)->toAtomString(),
+                    'articleSection' => $blog->category?->name,
+                    'keywords' => $blog->tags->pluck('name')->implode(', '),
+                    'wordCount' => str_word_count(strip_tags($blog->content)),
+                    'author' => ['@id' => $canonicalUrl.'#author'],
+                    'publisher' => ['@id' => url('/').'#organization'],
+                    'isAccessibleForFree' => true,
+                ],
+                [
+                    '@type' => 'Person',
+                    '@id' => $canonicalUrl.'#author',
+                    'name' => $authorName,
+                    'description' => $blog->author?->bio,
+                    'image' => $this->absoluteAsset($blog->author?->image),
+                ],
+                [
+                    '@type' => 'BreadcrumbList',
+                    '@id' => $canonicalUrl.'#breadcrumb',
+                    'itemListElement' => array_values(array_filter([
+                        [
+                            '@type' => 'ListItem',
+                            'position' => 1,
+                            'name' => 'Home',
+                            'item' => route('home'),
+                        ],
+                        $blog->category ? [
+                            '@type' => 'ListItem',
+                            'position' => 2,
+                            'name' => $blog->category->name,
+                            'item' => route('category.show', $blog->category),
+                        ] : null,
+                        [
+                            '@type' => 'ListItem',
+                            'position' => 3,
+                            'name' => $blog->title,
+                            'item' => $canonicalUrl,
+                        ],
+                    ])),
+                ],
+            ],
+        ];
     }
 }

@@ -6,6 +6,10 @@
 
 window.addEventListener('load', () => {
 
+    if (!window.tinymce) {
+        return;
+    }
+
     tinymce.init({
 
         selector: '#content',
@@ -74,7 +78,7 @@ window.addEventListener('load', () => {
                     'X-CSRF-TOKEN',
                     document.querySelector(
                         'meta[name="csrf-token"]'
-                    ).content
+                    )?.content || ''
                 );
 
                 xhr.upload.onprogress = (event) => {
@@ -98,8 +102,19 @@ window.addEventListener('load', () => {
                         return;
                     }
 
-                    const json =
-                        JSON.parse(xhr.responseText);
+                    let json;
+
+                    try {
+                        json = JSON.parse(xhr.responseText);
+                    } catch (error) {
+                        reject('Upload response was not valid JSON.');
+                        return;
+                    }
+
+                    if (!json.location) {
+                        reject(json.message || 'Upload failed.');
+                        return;
+                    }
 
                     resolve(json.location);
                 };

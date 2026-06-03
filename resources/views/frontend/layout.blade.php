@@ -2,6 +2,9 @@
 <html lang="en">
 
 <head>
+    @php
+        $shareImage = $ogImage ?? ($logo ? url(asset($logo)) : null);
+    @endphp
 
     <meta charset="utf-8">
 
@@ -24,6 +27,7 @@
 
     <meta property="og:type" content="{{ $ogType ?? 'website' }}">
     <meta property="og:site_name" content="{{ $siteName }}">
+    <meta property="og:locale" content="en_IN">
 
     <meta name="twitter:title" content="{{ $metaTitle ?? $siteTitle }}">
 
@@ -31,14 +35,15 @@
 
     <meta name="twitter:card" content="summary_large_image">
 
-    @isset($ogImage)
-        <meta property="og:image" content="{{ $ogImage }}">
-        <meta property="og:image:secure_url" content="{{ $ogImage }}">
-    @endisset
+    @if($shareImage)
+        <meta property="og:image" content="{{ $shareImage }}">
+        <meta property="og:image:secure_url" content="{{ $shareImage }}">
+        <meta property="og:image:alt" content="{{ $metaTitle ?? $siteTitle }}">
+    @endif
 
-    @isset($ogImage)
-        <meta name="twitter:image" content="{{ $ogImage }}">
-    @endisset
+    @if($shareImage)
+        <meta name="twitter:image" content="{{ $shareImage }}">
+    @endif
 
     <link rel="preload" href="{{ asset('css/news.css') }}?v={{ $assetVersion }}" as="style">
 
@@ -54,6 +59,34 @@
             --secondary:{{ $secondaryColor }};
         }
     </style>
+
+    <script type="application/ld+json">
+    {!! json_encode([
+        '@context' => 'https://schema.org',
+        '@graph' => [
+            [
+                '@type' => 'Organization',
+                '@id' => url('/').'#organization',
+                'name' => $siteName,
+                'url' => url('/'),
+                'logo' => $logo ? url(asset($logo)) : url(asset('favicon.ico')),
+                'description' => $tagline,
+            ],
+            [
+                '@type' => 'WebSite',
+                '@id' => url('/').'#website',
+                'url' => url('/'),
+                'name' => $siteName,
+                'publisher' => ['@id' => url('/').'#organization'],
+                'potentialAction' => [
+                    '@type' => 'SearchAction',
+                    'target' => route('search').'?q={search_term_string}',
+                    'query-input' => 'required name=search_term_string',
+                ],
+            ],
+        ],
+    ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
+    </script>
 
 </head>
 
@@ -249,7 +282,9 @@
                 <span class="socials">
                     @foreach($footerSetting->social_links as $social)
                         @php
-                            [$label, $url] = array_pad(explode('|', $social, 2), 2, '#');
+                            $socialParts = array_pad(explode('|', $social, 2), 2, '#');
+                            $label = $socialParts[0];
+                            $url = $socialParts[1];
                         @endphp
                         <a href="{{ $url }}" target="_blank" rel="noopener">{{ $label }}</a>@if(!$loop->last) &middot; @endif
                     @endforeach

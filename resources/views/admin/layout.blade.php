@@ -10,7 +10,7 @@
 </head>
 <body class="admin-body">
     <aside class="admin-sidebar">
-        <h1><span>MILLENIUM</span><span>NEWSROOM</span></h1>
+        <h1><span>MILLENNIUM</span><span>NEWSROOM</span></h1>
         <button class="admin-mode-toggle" type="button" data-admin-theme-toggle>Toggle mode</button>
         <a href="{{ route('admin.dashboard') }}">Dashboard</a>
         <a href="{{ route('admin.homepage.index') }}">Homepage Sections</a>

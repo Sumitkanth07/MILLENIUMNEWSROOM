@@ -71,6 +71,9 @@ class FrontendController extends Controller
             ];
         });
 
+        $leadImage = $payload['leadStory']?->featured_image ?: $payload['leadStory']?->image;
+        $payload['ogImage'] = $leadImage ? url(asset($leadImage)) : null;
+
         return view('frontend.home', $payload);
     }
 
@@ -146,7 +149,7 @@ class FrontendController extends Controller
 
     public function sitemap(): Response
     {
-        $blogs = Blog::with('category')->where('is_published', true)->get(['id', 'category_id', 'slug', 'updated_at']);
+        $blogs = Blog::with('category')->where('is_published', true)->latest('updated_at')->get(['id', 'category_id', 'slug', 'updated_at']);
         $categories = Schema::hasTable('categories') ? Category::where('is_active', true)->get(['slug', 'updated_at']) : collect();
         $pages = Schema::hasTable('pages') ? Page::where('is_published', true)->get(['slug', 'updated_at']) : collect();
         $xml = view('frontend.sitemap', compact('blogs', 'categories', 'pages'))->render();
@@ -156,7 +159,13 @@ class FrontendController extends Controller
 
     public function newsSitemap(): Response
     {
-        $blogs = Blog::with('category')->where('is_published', true)->latest('published_at')->take(1000)->get(['id', 'category_id', 'slug', 'title', 'published_at']);
+        $blogs = Blog::with('category')
+            ->where('is_published', true)
+            ->whereNotNull('published_at')
+            ->where('published_at', '>=', now()->subDays(2))
+            ->latest('published_at')
+            ->take(1000)
+            ->get(['id', 'category_id', 'slug', 'title', 'published_at', 'updated_at']);
         $xml = view('frontend.news-sitemap', compact('blogs'))->render();
 
         return response($xml, 200)->header('Content-Type', 'application/xml');
@@ -164,7 +173,7 @@ class FrontendController extends Controller
 
     public function robots(): Response
     {
-        $rules = Setting::getValue('robots_txt', "User-agent: *\nAllow: /");
+        $rules = Setting::getValue('robots_txt', "User-agent: *\nAllow: /\nDisallow: /admin/\nDisallow: /login");
 
         return response($rules."\nSitemap: ".url('/sitemap.xml')."\nSitemap: ".url('/news-sitemap.xml')."\n", 200)
             ->header('Content-Type', 'text/plain');

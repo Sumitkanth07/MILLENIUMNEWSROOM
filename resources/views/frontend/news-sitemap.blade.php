@@ -8,7 +8,9 @@
                 <news:publication><news:name>MILLENNIUM NEWSROOM</news:name><news:language>en</news:language></news:publication>
                 <news:publication_date>{{ optional($blog->published_at)->toAtomString() }}</news:publication_date>
                 <news:title>{{ $blog->title }}</news:title>
+                <news:keywords>{{ $blog->category?->name }}</news:keywords>
             </news:news>
+            <lastmod>{{ optional($blog->updated_at)->toAtomString() }}</lastmod>
         </url>
     @endforeach
 </urlset>

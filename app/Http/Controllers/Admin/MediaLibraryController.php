@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\MediaItem;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class MediaLibraryController extends Controller
 {
@@ -22,13 +23,25 @@ class MediaLibraryController extends Controller
         ]);
 
         $file = $request->file('file');
-        $path = $file->store('uploads/media/'.trim($request->input('folder', 'news'), '/'), 'public');
+        $mimeType = $file->getMimeType();
+        $size = $file->getSize();
+        $folder = trim($request->input('folder', 'news'), '/') ?: 'news';
+        $directory = public_path('uploads/media/'.$folder);
+
+        if (! is_dir($directory)) {
+            mkdir($directory, 0775, true);
+        }
+
+        $filename = time().'_'.uniqid().'_'.Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)).'.'.$file->getClientOriginalExtension();
+        $file->move($directory, $filename);
+        $path = 'uploads/media/'.$folder.'/'.$filename;
+
         MediaItem::create([
             'name' => pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME),
             'path' => $path,
-            'mime_type' => $file->getMimeType(),
-            'size' => $file->getSize(),
-            'folder' => $request->input('folder', 'news'),
+            'mime_type' => $mimeType,
+            'size' => $size,
+            'folder' => $folder,
             'alt_text' => $request->input('alt_text'),
             'user_id' => $request->user()->id,
         ]);
