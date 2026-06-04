@@ -210,6 +210,7 @@ class DatabaseSeeder extends Seeder
             ['title' => 'About Us', 'slug' => 'about-us'],
             ['title' => 'Privacy Policy', 'slug' => 'privacy-policy'],
             ['title' => 'Terms', 'slug' => 'terms'],
+            ['title' => 'Contact', 'slug' => 'contact'],
         ] as $page) {
             Page::updateOrCreate(['slug' => $page['slug']], [
                 'title' => $page['title'],

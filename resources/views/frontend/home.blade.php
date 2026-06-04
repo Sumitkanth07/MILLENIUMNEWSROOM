@@ -2,9 +2,14 @@
 
 @section('content')
 <section class="portal-home">
+    @php
+        $sliderPosts = $featuredPosts->count() >= 3 ? $featuredPosts : $topHeadlines;
+        $sectionEnabled = fn (string $key) => $homepageSections->get($key)?->is_active ?? true;
+    @endphp
+    @if($sectionEnabled('hero'))
     <div class="hero-slider" data-slider>
-        @foreach(($featuredPosts->isNotEmpty() ? $featuredPosts : $topHeadlines)->take(5) as $post)
-            <article class="hero-slide @if($loop->first) active @endif">
+        @foreach($sliderPosts->take(5) as $post)
+            <article class="hero-slide @if($loop->first) active @endif" data-article-url="{{ $post->publicUrl() }}">
 
                 @php
                     $heroImage = $post->featured_image ?: $post->image;
@@ -16,6 +21,7 @@
     src="{{ asset($heroImage) }}"
     alt="{{ $post->featured_image_alt ?: $post->title }}"
     loading="{{ $loop->first ? 'eager' : 'lazy' }}"
+    fetchpriority="{{ $loop->first ? 'high' : 'auto' }}"
     decoding="async"
 >
 
@@ -33,10 +39,12 @@
         <button class="slider-btn prev" type="button" data-slide-prev aria-label="Previous story">&lsaquo;</button>
         <button class="slider-btn next" type="button" data-slide-next aria-label="Next story">&rsaquo;</button>
     </div>
+    @endif
 
     <div class="news-shell home-shell">
         <x-ad-slot :ads="$ads" placement="header_ad" label="Header responsive ad" />
 
+        @if($sectionEnabled('trending_posts'))
         <section class="spotlight-grid reveal">
 
             <div class="top-headlines-panel">
@@ -109,7 +117,9 @@
             </aside>
 
         </section>
+        @endif
 
+        @if($sectionEnabled('latest_news'))
         <section class="fresh-section reveal">
 
             <div class="section-head">
@@ -182,6 +192,7 @@
             </div>
 
         </section>
+        @endif
 
     </div>
 </section>

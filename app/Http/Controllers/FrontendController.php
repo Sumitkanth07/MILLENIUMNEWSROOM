@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\AdPlacement;
 use App\Models\Blog;
 use App\Models\Category;
+use App\Models\HomepageSection;
 use App\Models\Page;
 use App\Models\Setting;
 use App\Models\Tag;
@@ -42,6 +43,7 @@ class FrontendController extends Controller
                 'popularTags' => collect(),
                 'categories' => collect(),
                 'ads' => collect(),
+                'homepageSections' => collect(),
                 'metaTitle' => 'MILLENNIUM NEWSROOM | Professional News Portal',
                 'metaDescription' => 'MILLENNIUM NEWSROOM delivers business, markets and technology journalism.',
             ]);
@@ -73,6 +75,13 @@ class FrontendController extends Controller
 
         $leadImage = $payload['leadStory']?->featured_image ?: $payload['leadStory']?->image;
         $payload['ogImage'] = $leadImage ? url(asset($leadImage)) : null;
+        $payload['homepageSections'] = Schema::hasTable('homepage_sections')
+            ? HomepageSection::orderBy('sort_order')->get()->keyBy('key')
+            : collect();
+
+        if (($payload['homepageSections']['breaking_news']->is_active ?? true) === false) {
+            $payload['breakingPosts'] = collect();
+        }
 
         return view('frontend.home', $payload);
     }
@@ -177,5 +186,18 @@ class FrontendController extends Controller
 
         return response($rules."\nSitemap: ".url('/sitemap.xml')."\nSitemap: ".url('/news-sitemap.xml')."\n", 200)
             ->header('Content-Type', 'text/plain');
+    }
+
+    public function llms(): Response
+    {
+        $latestPosts = Blog::with('category')
+            ->where('is_published', true)
+            ->latest('published_at')
+            ->take(20)
+            ->get();
+
+        $content = view('frontend.llms', compact('latestPosts'))->render();
+
+        return response($content, 200)->header('Content-Type', 'text/plain; charset=UTF-8');
     }
 }

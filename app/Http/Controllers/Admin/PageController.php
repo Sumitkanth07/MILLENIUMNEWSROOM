@@ -25,7 +25,7 @@ class PageController extends Controller
         $data['slug'] = Str::slug($data['slug'] ?: $data['title']);
         $data['is_published'] = $request->boolean('is_published', true);
         if ($request->hasFile('banner_image')) {
-            $data['banner_image'] = $request->file('banner_image')->store('uploads/pages', 'public');
+            $data['banner_image'] = $this->storePublicUpload($request->file('banner_image'));
         }
         Page::create($data);
 
@@ -43,7 +43,7 @@ class PageController extends Controller
         $data['slug'] = Str::slug($data['slug'] ?: $data['title']);
         $data['is_published'] = $request->boolean('is_published');
         if ($request->hasFile('banner_image')) {
-            $data['banner_image'] = $request->file('banner_image')->store('uploads/pages', 'public');
+            $data['banner_image'] = $this->storePublicUpload($request->file('banner_image'));
         }
         $page->update($data);
 
@@ -67,5 +67,18 @@ class PageController extends Controller
             'meta_title' => ['nullable', 'string', 'max:255'],
             'meta_description' => ['nullable', 'string'],
         ]);
+    }
+
+    private function storePublicUpload($file): string
+    {
+        $directory = public_path('uploads/pages');
+        if (! is_dir($directory)) {
+            mkdir($directory, 0775, true);
+        }
+
+        $filename = time().'_'.uniqid().'_'.preg_replace('/[^A-Za-z0-9.\-_]/', '_', $file->getClientOriginalName());
+        $file->move($directory, $filename);
+
+        return 'uploads/pages/'.$filename;
     }
 }

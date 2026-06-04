@@ -43,7 +43,7 @@ class BrandingController extends Controller
                 time().'.'.$file->getClientOriginalExtension();
 
             $destination =
-                $_SERVER['DOCUMENT_ROOT'].'/uploads';
+                (! empty($_SERVER['DOCUMENT_ROOT']) ? $_SERVER['DOCUMENT_ROOT'] : public_path()).'/uploads';
 
             if (!file_exists($destination)) {
 

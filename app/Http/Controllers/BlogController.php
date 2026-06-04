@@ -76,6 +76,12 @@ class BlogController extends Controller
 
             'ogImage' => $image,
 
+            'articlePublishedTime' => optional($blog->published_at)->toAtomString(),
+
+            'articleModifiedTime' => optional($blog->updated_at)->toAtomString(),
+
+            'articleAuthor' => $blog->author?->name ?? 'MILLENNIUM NEWSROOM Desk',
+
             'articleSchema' => $this->articleSchema($blog, $canonicalUrl, $description, $image),
 
         ]);

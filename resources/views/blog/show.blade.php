@@ -66,7 +66,9 @@
                     src="{{ asset($blog->featured_image ?: $blog->image) }}"
                     alt="{{ $blog->featured_image_alt ?: $blog->title }}"
                     title="{{ $blog->featured_image_title ?: $blog->title }}"
-                    loading="eager">
+                    loading="eager"
+                    fetchpriority="high"
+                    decoding="async">
 
                 @if($blog->featured_image_caption)
                     <figcaption>

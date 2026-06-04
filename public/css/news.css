@@ -27,6 +27,10 @@ html[data-theme=dark] body.news-body{background:#0f0d0a;color:#f6ecd6}html[data-
     flex-wrap:wrap;
 }
 
+/* Only the visible hero slide may receive clicks. */
+.hero-slide{pointer-events:none}
+.hero-slide.active{pointer-events:auto}
+
 .brand{
     display:flex;
     align-items:center;

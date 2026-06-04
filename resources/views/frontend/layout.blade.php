@@ -28,6 +28,9 @@
     <meta property="og:type" content="{{ $ogType ?? 'website' }}">
     <meta property="og:site_name" content="{{ $siteName }}">
     <meta property="og:locale" content="en_IN">
+    @isset($articlePublishedTime)<meta property="article:published_time" content="{{ $articlePublishedTime }}">@endisset
+    @isset($articleModifiedTime)<meta property="article:modified_time" content="{{ $articleModifiedTime }}">@endisset
+    @isset($articleAuthor)<meta property="article:author" content="{{ $articleAuthor }}">@endisset
 
     <meta name="twitter:title" content="{{ $metaTitle ?? $siteTitle }}">
 
@@ -244,6 +247,10 @@
 
             <a href="{{ route('page.show', 'terms') }}">
                 Terms
+            </a>
+
+            <a href="{{ route('page.show', 'contact') }}">
+                Contact
             </a>
 
             <a href="{{ route('sitemap.page') }}">

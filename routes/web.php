@@ -31,6 +31,7 @@ Route::get('/savings-calculator', [CalculatorController::class, 'show'])->name('
 Route::get('/sitemap.xml', [FrontendController::class, 'sitemap'])->name('sitemap');
 Route::get('/news-sitemap.xml', [FrontendController::class, 'newsSitemap'])->name('news-sitemap');
 Route::get('/robots.txt', [FrontendController::class, 'robots'])->name('robots');
+Route::get('/llms.txt', [FrontendController::class, 'llms'])->name('llms');
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');

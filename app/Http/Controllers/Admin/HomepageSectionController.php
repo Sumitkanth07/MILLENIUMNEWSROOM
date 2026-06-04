@@ -34,7 +34,7 @@ class HomepageSectionController extends Controller
         $uploadedImage = $request->hasFile('image');
 
         if ($uploadedImage) {
-            $data['image'] = $request->file('image')->store('uploads', 'public');
+            $data['image'] = $this->storePublicUpload($request->file('image'), 'homepage');
         }
 
         $data['is_active'] = $request->boolean('is_active');
@@ -45,5 +45,18 @@ class HomepageSectionController extends Controller
             : 'Homepage section saved successfully.';
 
         return redirect()->route('admin.homepage.index')->with('status', $message);
+    }
+
+    private function storePublicUpload($file, string $folder): string
+    {
+        $directory = public_path('uploads/'.$folder);
+        if (! is_dir($directory)) {
+            mkdir($directory, 0775, true);
+        }
+
+        $filename = time().'_'.uniqid().'_'.preg_replace('/[^A-Za-z0-9.\-_]/', '_', $file->getClientOriginalName());
+        $file->move($directory, $filename);
+
+        return 'uploads/'.$folder.'/'.$filename;
     }
 }

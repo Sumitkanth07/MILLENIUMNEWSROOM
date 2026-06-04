@@ -13,7 +13,7 @@
     @if($section->image)
         <div class="preview-box">
             <span>Current image</span>
-            <img src="{{ asset('storage/'.$section->image) }}" alt="{{ $section->title }}">
+            <img src="{{ asset($section->image) }}" alt="{{ $section->title }}">
             <small>Saved as {{ $section->image }}</small>
         </div>
     @endif
