@@ -38,10 +38,10 @@ class ProfessionalContentSeeder extends Seeder
             'analytics_code' => '',
             'adsense_code' => '',
             'social_links' => json_encode([
-                'x' => 'https://x.com/milleniumnewsroom',
-                'linkedin' => 'https://linkedin.com/company/milleniumnewsroom',
-                'youtube' => 'https://youtube.com/@milleniumnewsroom',
-                'instagram' => 'https://instagram.com/milleniumnewsroom',
+                'x' => 'https://x.com/millenniumnewsroom',
+                'linkedin' => 'https://linkedin.com/company/millenniumnewsroom',
+                'youtube' => 'https://youtube.com/@millenniumnewsroom',
+                'instagram' => 'https://instagram.com/millenniumnewsroom',
             ]),
         ] as $key => $value) {
             Setting::setValue($key, $value);
@@ -86,7 +86,7 @@ class ProfessionalContentSeeder extends Seeder
             ['slug' => Str::slug($author['name'])],
             [
                 'name' => $author['name'],
-                'email' => Str::slug($author['name'], '.').'@milleniumnewsroom.test',
+                'email' => Str::slug($author['name'], '.').'@millenniumnewsroom.com',
                 'designation' => $author['designation'],
                 'image' => $this->seedImage(Str::slug($author['name']), $author['name']),
                 'bio' => $author['name'].' covers high-impact developments for MILLENNIUM NEWSROOM with a focus on context, clarity and reader value.',
@@ -202,13 +202,13 @@ class ProfessionalContentSeeder extends Seeder
 
         FooterSetting::updateOrCreate(['id' => 1], [
             'company_name' => 'MILLENNIUM NEWSROOM',
-            'email' => 'newsroom@milleniumnewsroom.test',
+            'email' => 'newsroom@millenniumnewsroom.com',
             'phone' => '+91 9876543210',
             'address' => 'New Delhi, India',
             'copyright_text' => '(c) '.date('Y').' MILLENNIUM NEWSROOM. All rights reserved.',
             'footer_menus' => ['About Us|/page/about-us', 'Privacy Policy|/page/privacy-policy', 'Terms|/page/terms'],
             'category_links' => $categories->map(fn ($category) => $category->name.'|/category/'.$category->slug)->values()->all(),
-            'social_links' => ['X|https://x.com/milleniumnewsroom', 'LinkedIn|https://linkedin.com/company/milleniumnewsroom', 'YouTube|https://youtube.com/@milleniumnewsroom'],
+            'social_links' => ['X|https://x.com/millenniumnewsroom', 'LinkedIn|https://linkedin.com/company/millenniumnewsroom', 'YouTube|https://youtube.com/@millenniumnewsroom'],
             'sitemap_links' => ['HTML Sitemap|/sitemap', 'XML Sitemap|/sitemap.xml', 'News Sitemap|/news-sitemap.xml'],
         ]);
 

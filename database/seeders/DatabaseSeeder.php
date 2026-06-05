@@ -31,7 +31,7 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        User::where('email', 'admin@milleniumnewsroom.test')->delete();
+        User::where('email', 'admin@millenniumnewsroom.com')->delete();
 
         $admin = User::updateOrCreate(
             ['email' => 'Sumitkant7@gmail.com'],
@@ -74,7 +74,7 @@ class DatabaseSeeder extends Seeder
 
         FooterSetting::updateOrCreate(['id' => 1], [
             'company_name' => 'MILLENNIUM NEWSROOM',
-            'email' => 'newsroom@milleniumnewsroom.test',
+            'email' => 'newsroom@millenniumnewsroom.com',
             'phone' => '+91 9876543210',
             'address' => 'New Delhi, India',
             'copyright_text' => '(c) '.date('Y').' MILLENNIUM NEWSROOM. All rights reserved.',
@@ -88,7 +88,7 @@ class DatabaseSeeder extends Seeder
 
         $author = Author::updateOrCreate(
             ['slug' => 'editorial-desk'],
-            ['name' => 'Editorial Desk', 'email' => 'newsroom@milleniumnewsroom.test', 'designation' => 'News Desk', 'social_links' => ['x' => 'https://x.com/', 'linkedin' => 'https://linkedin.com/'], 'bio' => 'The MILLENNIUM NEWSROOM editorial desk covers business, policy, technology and culture with context and speed.', 'is_active' => true]
+            ['name' => 'Editorial Desk', 'email' => 'newsroom@millenniumnewsroom.com', 'designation' => 'News Desk', 'social_links' => ['x' => 'https://x.com/', 'linkedin' => 'https://linkedin.com/'], 'bio' => 'The MILLENNIUM NEWSROOM editorial desk covers business, policy, technology and culture with context and speed.', 'is_active' => true]
         );
 
         $aiSubcategory = Subcategory::updateOrCreate(

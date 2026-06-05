@@ -85,7 +85,7 @@ class AppServiceProvider extends ServiceProvider
 
     private function brand(?string $value): string
     {
-        return str_ireplace('MILLENNIUM NEWSROOM', 'MILLENNIUM NEWSROOM', (string) $value);
+        return preg_replace('/MILLENI?UM\s*NEWSROOM/i', 'MILLENNIUMNEWSROOM', (string) $value);
     }
 
     private function navigationItems()

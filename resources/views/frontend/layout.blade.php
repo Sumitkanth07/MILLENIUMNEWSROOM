@@ -99,10 +99,6 @@
 
     <div class="utility-bar">
 
-        <span>ePaper</span>
-
-        <span>Subscribe</span>
-
         <a href="{{ route('search') }}">Search</a>
 
         <button class="mode-toggle" type="button" data-theme-toggle>
@@ -141,23 +137,14 @@
 
         <nav class="site-nav mega-nav">
 
-            @forelse($navigationItems as $item)
-
-                <a href="{{ url($item->url) }}" class="nav-link">
-                    {{ $item->label }}
-                </a>
-
-            @empty
-
-                @foreach(['News','Markets','Technology','Companies','Politics','Opinion','Sports','Lifestyle'] as $menu)
-
-                    <a href="{{ url('/category/'.str($menu)->slug()) }}" class="nav-link">
-                        {{ $menu }}
-                    </a>
-
-                @endforeach
-
-            @endforelse
+            <a href="{{ route('category.show', 'news') }}" class="nav-link">News</a>
+            <a href="{{ route('category.show', 'markets') }}" class="nav-link">Markets</a>
+            <a href="{{ route('category.show', 'technology') }}" class="nav-link">Technology</a>
+            <a href="{{ route('category.show', 'opinion') }}" class="nav-link">Opinion</a>
+            <a href="{{ route('page.show', 'about-us') }}" class="nav-link">About Us</a>
+            <a href="{{ route('page.show', 'privacy-policy') }}" class="nav-link">Privacy Policy</a>
+            <a href="{{ route('page.show', 'terms') }}" class="nav-link">Terms</a>
+            <a href="{{ route('page.show', 'contact') }}" class="nav-link">Contact</a>
 
         </nav>
 
@@ -307,7 +294,7 @@
     <script>
     (() => {
 
-        const key = 'millenium-theme';
+        const key = 'millennium-theme';
 
         const apply = theme =>
             document.documentElement.dataset.theme = theme;

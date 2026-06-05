@@ -47,7 +47,7 @@
 
     <div class="container footer-grid">
         <div class="footer-brand">
-            <a class="brand-logo brand-logo--footer" href="{{ url('/') }}">MILLENIUM<span>NEWSROOM</span></a>
+            <a class="brand-logo brand-logo--footer" href="{{ url('/') }}">MILLENNIUM<span>NEWSROOM</span></a>
             <p>Independent business journalism for markets, companies, policy, money and modern India.</p>
             <address>
                 MILLENNIUM NEWSROOM News Network<br>

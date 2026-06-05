@@ -36,7 +36,10 @@ class BlogController extends Controller
         $blog->increment('views_count');
 
         $blog->load(['category', 'author', 'tags']);
-        $canonicalUrl = $blog->canonical_url ?: $blog->publicUrl();
+        $canonicalUrl = $blog->canonical_url ?: $this->absoluteUrl(route('blog.category.show', [
+            'category' => $blog->category?->slug ?: 'news',
+            'blog' => $blog->slug,
+        ], false));
         $description = $blog->meta_description ?: ($blog->excerpt ?: (string) str($blog->content)->stripTags()->limit(160));
         $image = $this->absoluteAsset($blog->featured_image ?: $blog->image);
 
@@ -89,7 +92,20 @@ class BlogController extends Controller
 
     private function absoluteAsset(?string $path): ?string
     {
-        return $path ? url(asset($path)) : null;
+        if (! $path) {
+            return null;
+        }
+
+        if (str_starts_with($path, 'http://') || str_starts_with($path, 'https://')) {
+            return $path;
+        }
+
+        return $this->absoluteUrl('/'.ltrim($path, '/'));
+    }
+
+    private function absoluteUrl(string $path): string
+    {
+        return rtrim((string) config('app.url'), '/').'/'.ltrim($path, '/');
     }
 
     private function articleSchema(Blog $blog, string $canonicalUrl, string $description, ?string $image): array

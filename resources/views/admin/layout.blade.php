@@ -34,7 +34,7 @@
     <script src="{{ asset('js/app.js') }}?v={{ $assetVersion }}" defer></script>
     <script>
     (() => {
-        const key = 'millenium-admin-theme';
+        const key = 'millennium-admin-theme';
         document.documentElement.dataset.adminTheme = localStorage.getItem(key) || 'dark';
         document.querySelector('[data-admin-theme-toggle]')?.addEventListener('click', () => {
             const next = document.documentElement.dataset.adminTheme === 'dark' ? 'light' : 'dark';

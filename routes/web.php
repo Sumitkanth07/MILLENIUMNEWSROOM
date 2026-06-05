@@ -47,7 +47,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::middleware(['auth', 'admin'])->group(function () {
         Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
         Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
-        Route::resource('homepage', HomepageSectionController::class)->only(['index', 'edit', 'update']);
+        Route::resource('homepage', HomepageSectionController::class)->except(['show']);
         Route::resource('blogs', AdminBlogController::class)->except(['show']);
         Route::resource('categories', CategoryController::class)->except(['show']);
         Route::resource('authors', AuthorController::class)->except(['show']);

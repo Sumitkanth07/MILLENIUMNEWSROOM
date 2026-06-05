@@ -14,8 +14,6 @@
     <div class="utility-bar">
         <div class="container utility-bar__inner">
             <div class="utility-links" aria-label="Utility links">
-                <a href="#">ePaper</a>
-                <a href="#">Subscribe</a>
                 <a href="#">Newsletter</a>
             </div>
 
@@ -35,7 +33,7 @@
     <div class="brand-bar">
         <div class="container brand-bar__inner">
             <a class="brand-logo" href="{{ url('/') }}" aria-label="MILLENNIUM NEWSROOM home">
-                MILLENIUM<span>NEWSROOM</span>
+                MILLENNIUM<span>NEWSROOM</span>
             </a>
             <div class="brand-meta">
                 <span>{{ now()->format('l, d F Y') }}</span>
@@ -108,8 +106,6 @@
 
             <div class="mobile-menu" aria-label="Mobile navigation">
                 <div class="mobile-menu__top">
-                    <a href="#">ePaper</a>
-                    <a href="#">Subscribe</a>
                     <a href="#">Login</a>
                 </div>
 

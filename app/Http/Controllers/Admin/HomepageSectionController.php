@@ -13,6 +13,25 @@ class HomepageSectionController extends Controller
         return view('admin.homepage.index', ['sections' => HomepageSection::orderBy('sort_order')->get()]);
     }
 
+    public function create()
+    {
+        return view('admin.homepage.edit', ['section' => new HomepageSection()]);
+    }
+
+    public function store(Request $request)
+    {
+        $data = $this->validated($request);
+
+        if ($request->hasFile('image')) {
+            $data['image'] = $this->storePublicUpload($request->file('image'), 'homepage');
+        }
+
+        $data['is_active'] = $request->boolean('is_active');
+        HomepageSection::create($data);
+
+        return redirect()->route('admin.homepage.index')->with('status', 'Homepage section created.');
+    }
+
     public function edit(HomepageSection $homepage)
     {
         return view('admin.homepage.edit', ['section' => $homepage]);
@@ -20,16 +39,7 @@ class HomepageSectionController extends Controller
 
     public function update(Request $request, HomepageSection $homepage)
     {
-        $data = $request->validate([
-            'title' => ['nullable', 'string', 'max:255'],
-            'subtitle' => ['nullable', 'string', 'max:255'],
-            'content' => ['nullable', 'string'],
-            'button_text' => ['nullable', 'string', 'max:255'],
-            'button_url' => ['nullable', 'string', 'max:255'],
-            'sort_order' => ['required', 'integer', 'min:0'],
-            'is_active' => ['nullable', 'boolean'],
-            'image' => ['nullable', 'image', 'max:2048'],
-        ]);
+        $data = $this->validated($request, $homepage->id);
 
         $uploadedImage = $request->hasFile('image');
 
@@ -45,6 +55,28 @@ class HomepageSectionController extends Controller
             : 'Homepage section saved successfully.';
 
         return redirect()->route('admin.homepage.index')->with('status', $message);
+    }
+
+    public function destroy(HomepageSection $homepage)
+    {
+        $homepage->delete();
+
+        return redirect()->route('admin.homepage.index')->with('status', 'Homepage section deleted.');
+    }
+
+    private function validated(Request $request, ?int $ignoreId = null): array
+    {
+        return $request->validate([
+            'key' => ['required', 'string', 'max:120', 'unique:homepage_sections,key'.($ignoreId ? ','.$ignoreId : '')],
+            'title' => ['nullable', 'string', 'max:255'],
+            'subtitle' => ['nullable', 'string', 'max:255'],
+            'content' => ['nullable', 'string'],
+            'button_text' => ['nullable', 'string', 'max:255'],
+            'button_url' => ['nullable', 'string', 'max:255'],
+            'sort_order' => ['required', 'integer', 'min:0'],
+            'is_active' => ['nullable', 'boolean'],
+            'image' => ['nullable', 'image', 'max:2048'],
+        ]);
     }
 
     private function storePublicUpload($file, string $folder): string
