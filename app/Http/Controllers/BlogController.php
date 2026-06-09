@@ -128,7 +128,7 @@ class BlogController extends Controller
                     'keywords' => $blog->tags->pluck('name')->implode(', '),
                     'wordCount' => str_word_count(strip_tags($blog->content)),
                     'author' => ['@id' => $canonicalUrl.'#author'],
-                    'publisher' => ['@id' => url('/').'#organization'],
+                    'publisher' => ['@id' => $this->absoluteUrl('/').'#organization'],
                     'isAccessibleForFree' => true,
                 ],
                 [
@@ -146,13 +146,13 @@ class BlogController extends Controller
                             '@type' => 'ListItem',
                             'position' => 1,
                             'name' => 'Home',
-                            'item' => route('home'),
+                            'item' => $this->absoluteUrl('/'),
                         ],
                         $blog->category ? [
                             '@type' => 'ListItem',
                             'position' => 2,
                             'name' => $blog->category->name,
-                            'item' => route('category.show', $blog->category),
+                            'item' => $this->absoluteUrl('/category/'.$blog->category->slug),
                         ] : null,
                         [
                             '@type' => 'ListItem',

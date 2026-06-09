@@ -3,7 +3,12 @@
 
 <head>
     @php
+        $appUrl = rtrim(config('app.url'), '/');
         $shareImage = $ogImage ?? ($logo ? url(asset($logo)) : null);
+        if ($shareImage && !str_starts_with($shareImage, 'http://') && !str_starts_with($shareImage, 'https://')) {
+            $shareImage = $appUrl.'/'.ltrim($shareImage, '/');
+        }
+        $canonical = $canonicalUrl ?? $appUrl.'/'.ltrim(request()->path(), '/');
     @endphp
 
     <meta charset="utf-8">
@@ -17,13 +22,13 @@
 
     <meta name="robots" content="{{ $robotsMeta ?? 'index,follow' }}">
 
-    <link rel="canonical" href="{{ $canonicalUrl ?? url()->current() }}">
+    <link rel="canonical" href="{{ $canonical }}">
 
     <meta property="og:title" content="{{ $metaTitle ?? $siteTitle }}">
 
     <meta property="og:description" content="{{ $metaDescription ?? $tagline }}">
 
-    <meta property="og:url" content="{{ $canonicalUrl ?? url()->current() }}">
+    <meta property="og:url" content="{{ $canonical }}">
 
     <meta property="og:type" content="{{ $ogType ?? 'website' }}">
     <meta property="og:site_name" content="{{ $siteName }}">
@@ -69,21 +74,21 @@
         '@graph' => [
             [
                 '@type' => 'Organization',
-                '@id' => url('/').'#organization',
+                '@id' => $appUrl.'#organization',
                 'name' => $siteName,
-                'url' => url('/'),
-                'logo' => $logo ? url(asset($logo)) : url(asset('favicon.ico')),
+                'url' => $appUrl,
+                'logo' => $logo ? $appUrl.'/'.ltrim($logo, '/') : $appUrl.'/favicon.ico',
                 'description' => $tagline,
             ],
             [
                 '@type' => 'WebSite',
-                '@id' => url('/').'#website',
-                'url' => url('/'),
+                '@id' => $appUrl.'#website',
+                'url' => $appUrl,
                 'name' => $siteName,
-                'publisher' => ['@id' => url('/').'#organization'],
+                'publisher' => ['@id' => $appUrl.'#organization'],
                 'potentialAction' => [
                     '@type' => 'SearchAction',
-                    'target' => route('search').'?q={search_term_string}',
+                    'target' => $appUrl.'/search?q={search_term_string}',
                     'query-input' => 'required name=search_term_string',
                 ],
             ],

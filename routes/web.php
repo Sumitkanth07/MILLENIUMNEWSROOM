@@ -51,6 +51,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::resource('blogs', AdminBlogController::class)->except(['show']);
         Route::resource('categories', CategoryController::class)->except(['show']);
         Route::resource('authors', AuthorController::class)->except(['show']);
+        Route::patch('pages/{page}/toggle-publish', [AdminPageController::class, 'togglePublish'])->name('pages.toggle-publish');
         Route::resource('pages', AdminPageController::class)->except(['show']);
         Route::resource('media', MediaLibraryController::class)->only(['index', 'store', 'destroy']);
         Route::resource('ads', AdPlacementController::class)->except(['show']);

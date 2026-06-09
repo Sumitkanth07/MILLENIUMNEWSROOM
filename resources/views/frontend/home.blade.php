@@ -29,7 +29,11 @@
 
                 <div class="hero-slide-copy">
                     <span class="badge gold">{{ $post->category?->name ?? 'Featured' }}</span>
-                    <h1><a href="{{ $post->publicUrl() }}">{{ $post->title }}</a></h1>
+                    @if($loop->first)
+                        <h1><a href="{{ $post->publicUrl() }}">{{ $post->title }}</a></h1>
+                    @else
+                        <h2 class="hero-title"><a href="{{ $post->publicUrl() }}">{{ $post->title }}</a></h2>
+                    @endif
                     <p>{{ $post->excerpt }}</p>
                     <small>{{ optional($post->published_at)->format('M d, Y') }}</small>
                 </div>

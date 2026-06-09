@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\HomepageSection;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class HomepageSectionController extends Controller
 {
@@ -28,6 +29,7 @@ class HomepageSectionController extends Controller
 
         $data['is_active'] = $request->boolean('is_active');
         HomepageSection::create($data);
+        Cache::forget('frontend.home.payload');
 
         return redirect()->route('admin.homepage.index')->with('status', 'Homepage section created.');
     }
@@ -49,6 +51,7 @@ class HomepageSectionController extends Controller
 
         $data['is_active'] = $request->boolean('is_active');
         $homepage->update($data);
+        Cache::forget('frontend.home.payload');
 
         $message = $uploadedImage
             ? 'Homepage section saved and image uploaded successfully.'
@@ -60,6 +63,7 @@ class HomepageSectionController extends Controller
     public function destroy(HomepageSection $homepage)
     {
         $homepage->delete();
+        Cache::forget('frontend.home.payload');
 
         return redirect()->route('admin.homepage.index')->with('status', 'Homepage section deleted.');
     }

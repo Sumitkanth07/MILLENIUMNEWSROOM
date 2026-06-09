@@ -74,7 +74,7 @@ class FrontendController extends Controller
         });
 
         $leadImage = $payload['leadStory']?->featured_image ?: $payload['leadStory']?->image;
-        $payload['ogImage'] = $leadImage ? url(asset($leadImage)) : null;
+        $payload['ogImage'] = $leadImage ? $this->absoluteUrl($leadImage) : null;
         $payload['homepageSections'] = Schema::hasTable('homepage_sections')
             ? HomepageSection::orderBy('sort_order')->get()->keyBy('key')
             : collect();
@@ -184,7 +184,7 @@ class FrontendController extends Controller
     {
         $rules = Setting::getValue('robots_txt', "User-agent: *\nAllow: /\nDisallow: /admin/\nDisallow: /login");
 
-        return response($rules."\nSitemap: ".url('/sitemap.xml')."\nSitemap: ".url('/news-sitemap.xml')."\n", 200)
+        return response($rules."\nSitemap: ".$this->absoluteUrl('/sitemap.xml')."\nSitemap: ".$this->absoluteUrl('/news-sitemap.xml')."\n", 200)
             ->header('Content-Type', 'text/plain');
     }
 
@@ -199,5 +199,14 @@ class FrontendController extends Controller
         $content = view('frontend.llms', compact('latestPosts'))->render();
 
         return response($content, 200)->header('Content-Type', 'text/plain; charset=UTF-8');
+    }
+
+    private function absoluteUrl(string $path): string
+    {
+        if (str_starts_with($path, 'http://') || str_starts_with($path, 'https://')) {
+            return $path;
+        }
+
+        return rtrim((string) config('app.url'), '/').'/'.ltrim($path, '/');
     }
 }

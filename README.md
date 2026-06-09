@@ -34,8 +34,8 @@ MILLENNIUM NEWSROOM is a Laravel-based premium news portal and CMS. It includes 
 ## Local Installation
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/milleniumnewsroom.git
-cd milleniumnewsroom
+git clone https://github.com/YOUR_USERNAME/millenniumnewsroom.git
+cd millenniumnewsroom
 composer install
 cp .env.example .env
 php artisan key:generate
@@ -44,7 +44,7 @@ php artisan key:generate
 Create the MySQL database in phpMyAdmin or the MySQL CLI:
 
 ```bash
-mysql -u root -p -e "CREATE DATABASE milleniumnewsroom CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+mysql -u root -p -e "CREATE DATABASE millenniumnewsroom CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
 php artisan migrate --seed
 php artisan storage:link
 php artisan serve --host=127.0.0.1 --port=8000
@@ -83,7 +83,7 @@ For MySQL production, use:
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
 DB_PORT=3306
-DB_DATABASE=milleniumnewsroom
+DB_DATABASE=millenniumnewsroom
 DB_USERNAME=your_database_user
 DB_PASSWORD=your_secure_password
 ```
@@ -147,8 +147,8 @@ bootstrap/cache
 On a VPS or hosting server:
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/milleniumnewsroom.git
-cd milleniumnewsroom
+git clone https://github.com/YOUR_USERNAME/millenniumnewsroom.git
+cd millenniumnewsroom
 composer install --no-dev --optimize-autoloader
 cp .env.example .env
 php artisan key:generate
@@ -186,7 +186,7 @@ git init
 git add .
 git commit -m "Prepare MILLENNIUM NEWSROOM for production"
 git branch -M main
-git remote add origin https://github.com/YOUR_USERNAME/milleniumnewsroom.git
+git remote add origin https://github.com/YOUR_USERNAME/millenniumnewsroom.git
 git push -u origin main
 ```
 

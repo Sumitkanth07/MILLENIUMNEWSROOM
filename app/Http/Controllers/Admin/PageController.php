@@ -50,6 +50,13 @@ class PageController extends Controller
         return redirect()->route('admin.pages.index')->with('status', 'Page updated.');
     }
 
+    public function togglePublish(Page $page)
+    {
+        $page->update(['is_published' => ! $page->is_published]);
+
+        return back()->with('status', $page->is_published ? 'Page published.' : 'Page unpublished.');
+    }
+
     public function destroy(Page $page)
     {
         $page->delete();
@@ -61,7 +68,7 @@ class PageController extends Controller
     {
         return $request->validate([
             'title' => ['required', 'string', 'max:180'],
-            'slug' => ['nullable', 'string', 'max:200'],
+            'slug' => ['nullable', 'string', 'max:200', 'unique:pages,slug'.($request->route('page') ? ','.$request->route('page')->id : '')],
             'banner_image' => ['nullable', 'image', 'max:4096'],
             'content' => ['required', 'string'],
             'meta_title' => ['nullable', 'string', 'max:255'],

@@ -17,7 +17,7 @@
         <a href="{{ route('admin.blogs.index') }}">Post Management</a>
         <a href="{{ route('admin.categories.index') }}">Categories</a>
         <a href="{{ route('admin.authors.index') }}">Authors</a>
-        <a href="{{ route('admin.pages.index') }}">Page Builder</a>
+        <a href="{{ route('admin.pages.index') }}">Pages CMS</a>
         <a href="{{ route('admin.media.index') }}">Media Library</a>
         <a href="{{ route('admin.ads.index') }}">Ad Management</a>
         <a href="{{ route('admin.branding.edit') }}">Branding</a>

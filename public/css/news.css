@@ -289,3 +289,36 @@ html[data-theme=dark] .comment-form-grid input,html[data-theme=dark] .comment-fo
         top:auto !important;
     }
 }
+
+.portal-ad:empty{display:none!important}
+html,body.news-body{max-width:100%;overflow-x:hidden}
+.hero-slider{min-height:clamp(430px,62vh,590px)!important}
+.hero-slide-copy{max-width:min(760px,calc(100vw - 44px))!important;min-width:0!important}
+.hero-slide h1,.hero-slide .hero-title{max-width:100%!important;font-size:clamp(30px,4.8vw,60px)!important;line-height:1.08!important;display:-webkit-box!important;-webkit-line-clamp:3!important;-webkit-box-orient:vertical!important;overflow:hidden!important;overflow-wrap:anywhere!important;word-break:break-word!important}
+.hero-slide h1 a,.hero-slide .hero-title a,.mosaic-card h3 a,.fresh-copy h3 a,.list-card h3 a{display:block;max-width:100%;overflow-wrap:anywhere;word-break:break-word}
+.list-card h3{max-width:100%!important;overflow-wrap:anywhere!important;word-break:break-word!important}
+.article-list,.list-card,.list-card>div{min-width:0!important;max-width:100%!important}
+.hero-slide p{max-width:min(680px,100%)!important;display:-webkit-box!important;-webkit-line-clamp:2!important;-webkit-box-orient:vertical!important;overflow:hidden!important}
+.reveal{opacity:1!important;transform:none!important}
+.page-row-summary{display:flex;align-items:center;gap:12px;min-width:0}
+.page-row-summary img{width:72px;height:52px;object-fit:cover;border-radius:8px;flex:0 0 auto}
+.page-row-summary div{min-width:0}
+.page-row-summary small{display:block;color:#b9c7bd;overflow-wrap:anywhere}
+html[data-admin-theme=light] .page-row-summary small{color:#6f6048}
+@media(max-width:1024px){
+    .hero-slide-copy{margin:0 24px 52px!important}
+    .hero-slide h1,.hero-slide .hero-title{font-size:clamp(30px,7vw,48px)!important}
+    .hero-slide p{font-size:clamp(14px,2vw,17px)!important}
+}
+@media(max-width:640px){
+    .hero-slider{min-height:440px!important}
+    .hero-slide-copy{margin:0 18px 54px!important}
+    .hero-slide h1,.hero-slide .hero-title{width:min(248px,100%)!important;font-size:clamp(22px,7vw,27px)!important;display:block!important;-webkit-line-clamp:unset!important;overflow:visible!important;white-space:normal!important}
+    .hero-slide p{font-size:14px!important;-webkit-line-clamp:2!important}
+    .mosaic-card h3,.mosaic-card.large h3{font-size:26px!important;line-height:1.08!important}
+    .list-card h3{font-size:24px!important;line-height:1.12!important}
+    .list-card{width:100%!important;padding:14px!important}
+    .slider-btn{bottom:12px!important}
+    .row-line{align-items:flex-start;flex-direction:column}
+    .actions{flex-wrap:wrap}
+}

@@ -1,12 +1,13 @@
 # MILLENNIUM NEWSROOM
+@php($appUrl = rtrim(config('app.url'), '/'))
 
 > Independent coverage of business, markets, technology, companies, politics, opinion, sports and lifestyle.
 
 ## Primary URLs
-- Home: {{ route('home') }}
-- Search: {{ route('search') }}
-- Sitemap: {{ route('sitemap') }}
-- News sitemap: {{ route('news-sitemap') }}
+- Home: {{ $appUrl }}/
+- Search: {{ $appUrl }}/search
+- Sitemap: {{ $appUrl }}/sitemap.xml
+- News sitemap: {{ $appUrl }}/news-sitemap.xml
 
 ## Editorial Guidance
 - Articles identify their headline, category, publication date, modification date and author.
@@ -15,5 +16,5 @@
 
 ## Latest Articles
 @foreach($latestPosts as $post)
-- [{{ $post->title }}]({{ $post->publicUrl() }}): {{ $post->excerpt }}
+- [{{ $post->title }}]({{ $appUrl }}/{{ $post->category?->slug ?: 'news' }}/{{ $post->slug }}): {{ $post->excerpt }}
 @endforeach
