@@ -59,13 +59,12 @@ return [
     | Public Asset URL
     |--------------------------------------------------------------------------
     |
-    | GoDaddy serves the site from public_html while the Laravel project lives
-    | in public_html/MILLENIUMNEWSROOM. Point asset() to Laravel's own public
-    | directory so CSS/JS updates deploy with git pull, without copying files.
+    | The hosting document root serves the site's public assets directly.
+    | Keep asset URLs configurable so CSS/JS updates deploy without copying
+    | public directories or exposing project-internal paths.
     |
     */
 
-    // 'asset_url' => env('ASSET_URL', PHP_SAPI === 'cli-server' ? null : '/MILLENIUMNEWSROOM/public'),
     'asset_url' => env('ASSET_URL'),
 
     /*

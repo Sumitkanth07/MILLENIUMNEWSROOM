@@ -6,6 +6,7 @@ use App\Models\NavigationItem;
 use App\Models\FooterSetting;
 use App\Models\Setting;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 use Throwable;
@@ -25,6 +26,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        if (app()->environment('production') && ! in_array(request()->getHost(), ['127.0.0.1', 'localhost'], true)) {
+            URL::forceScheme('https');
+        }
+
         View::composer('*', function ($view) {
             static $shared = null;
 
